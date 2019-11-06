@@ -4,12 +4,17 @@ Lib for creating BCH codes and checking BCH codes
 
 #ifndef BCH_h
 #define BCH_h
-#endif
 
 class BCH{
-    //public functions
-    public:
 
-    //private functions
+    public:
+        bool checkBCH(long MessagePolynom, int messageLength, long generatorPolynom);
+        int getBinaryLength(int number);
+        int getBinaryLength(long number);
+
     private:
+        long polynomialDivision();
 };
+
+
+#endif
