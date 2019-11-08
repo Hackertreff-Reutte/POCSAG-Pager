@@ -31,6 +31,7 @@ long BCH::calculatePolynomialRemainder(long shiftedData, int fullLengthOfCode, l
     long remainder = 0;
     int generatorLength = getBinaryLength(generator);
 
+    //TODO change endpoint for more efficency
     for(int i = fullLengthOfCode; i > 0; i--){
 
         //append the remainder with the next bit of data from shiftedData
@@ -85,22 +86,68 @@ long BCH::generatePOCSAGCode(long data){
 }
 
 
-long BCH::singleBitCorrection(long code, int codeLength, long generator){
-    //TODO
+long BCH::singleBitCodeCorrection(long code, int codeLength, long generator){
+    long correctedCode = 0;
+
+    for(int i = -1; i < codeLength; i++){
+
+        correctedCode = code^(1<<i);
+
+        //to check if errors in the code even exists
+        if(i == -1){
+            correctedCode = code;
+        }
+
+        long remainder = calculatePolynomialRemainder(correctedCode, codeLength, generator);
+
+        if(remainder == 0){
+            return correctedCode;
+        }
+    }
+
+    //error correction failed
+    return 0;
 }
 
-long BCH::twoBitCorrection(long code, int codeLength, long generator){
-    //TODO
+long BCH::twoBitCodeCorrection(long code, int codeLength, long generator){
+    long correctedCode = 0;
+    long helperCode = 0; //needed for bit shifting
+
+    for(int x = 0; x < codeLength; x++) {
+        helperCode = code ^ (1 << x);
+        for (int i = -1; i < codeLength; i++) {
+            correctedCode = helperCode ^ (1 << i);
+
+            //used for -1 shift
+            if (i == -1) {
+                correctedCode = helperCode;
+            }
+
+            long remainder = calculatePolynomialRemainder(correctedCode, codeLength, generator);
+            if (remainder == 0) {
+                return correctedCode;
+            }
+        }
+    }
+      
+    //error corection failed
+    return 0;
 }
 
 
 //with this function you can correct up to 2 bit errors. 
-long BCH::codeCorrection(long code, int codeLength, long generator, bool twoBitCodeCorrection){
-    //TODO
+long BCH::codeCorrection(long code, int codeLength, long generator, bool twoBitCodeCorrectionEnable){
+    long correctedCode = singleBitCodeCorrection(code, codeLength, generator);
+
+    if(twoBitCodeCorrectionEnable == true && correctedCode != code){
+        correctedCode = twoBitCodeCorrection(code, codeLength, generator);
+    }
+
+    return correctedCode;
 }
 
-long BCH::POCSAGCodeCorrection(long code, bool twoBitCodeCorrection){
-    return codeCorrection(code, POCSAG_CODE_LENGTH, POCSAG_GENERATOR_POLYNOM, twoBitCodeCorrection);
+long BCH::POCSAGCodeCorrection(long code, bool twoBitCodeCorrectionEnable){
+    return codeCorrection(code, POCSAG_CODE_LENGTH, POCSAG_GENERATOR_POLYNOM, twoBitCodeCorrectionEnable);
 }
 
 bool BCH::checkBCH(long MessagePolynom, int messageLength, long generatorPolynom){

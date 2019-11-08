@@ -13,15 +13,15 @@ class BCH{
         long generatePOCSAGCode(long data);
         bool hasCodeErrors(long code, int codeLength, long generator);
         bool hasPOCSAGCodeErrors(long code);
-        long codeCorrection(long code, int codeLength, long generator, bool twoBitCodeCorrection);
-        long POCSAGCodeCorrection(long code, bool twoBitCodeCorrection);
+        long codeCorrection(long code, int codeLength, long generator, bool twoBitCodeCorrectionEnable);
+        long POCSAGCodeCorrection(long code, bool twoBitCodeCorrectionEnable);
 
     private:
         long calculatePolynomialRemainder(long shiftedData, int fullLengthOfCode, long generator);
         int getBinaryLength(long number);
         int getBinaryLength(int number);
-        long singleBitCorrection(long code, int codeLength, long generator);
-        long twoBitCorrection(long code, int codeLength, long generator);
+        long singleBitCodeCorrection(long code, int codeLength, long generator);
+        long twoBitCodeCorrection(long code, int codeLength, long generator);
 
 };
 
