@@ -46,6 +46,20 @@ long BCH::calculatePolynomialRemainder(long shiftedData, int fullLengthOfCode, l
     return remainder;
 }
 
+//check if the bch code has error 
+bool BCH::hasCodeErrors(long code, int codeLength, long generator){
+    long remainder = calculatePolynomialRemainder(code, codeLength, generator);
+
+    //if the remainder is zero return false (no errors)
+    return remainder != 0;
+}
+
+//same as hasCodeErrors but only for pocsag
+bool BCH::hasPOCSAGCodeErrors(long code){
+    return hasCodeErrors(code, POCSAG_CODE_LENGTH, POCSAG_GENERATOR_POLYNOM);
+}
+
+
 //generate the bch code and add it to the code
 long BCH::generateCode(long data, int dataLength, long generator){
 
