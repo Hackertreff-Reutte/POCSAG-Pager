@@ -84,8 +84,23 @@ long BCH::generatePOCSAGCode(long data){
     return generateCode(data, POCSAG_DATA_LENGTH, POCSAG_GENERATOR_POLYNOM);
 }
 
-long BCH::codeCorrection(long code, int codeLength, long generator, bool doubleCodeCorrection){
 
+long BCH::singleBitCorrection(long code, int codeLength, long generator){
+    //TODO
+}
+
+long BCH::twoBitCorrection(long code, int codeLength, long generator){
+    //TODO
+}
+
+
+//with this function you can correct up to 2 bit errors. 
+long BCH::codeCorrection(long code, int codeLength, long generator, bool twoBitCodeCorrection){
+    //TODO
+}
+
+long BCH::POCSAGCodeCorrection(long code, bool twoBitCodeCorrection){
+    return codeCorrection(code, POCSAG_CODE_LENGTH, POCSAG_GENERATOR_POLYNOM, twoBitCodeCorrection);
 }
 
 bool BCH::checkBCH(long MessagePolynom, int messageLength, long generatorPolynom){
