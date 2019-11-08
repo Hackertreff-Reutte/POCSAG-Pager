@@ -25,9 +25,53 @@ int BCH::getBinaryLength(long number){
 }
 
 
-long BCH::polynomialDivision(){
+//used to calculate the polynomial remainder of a given data binary code and a generator binary code
+long BCH::calculatePolynomialRemainder(long shiftedData, int fullLengthOfCode, long generator){
 
-    return 0;
+    long remainder = 0;
+    int generatorLength = getBinaryLength(generator);
+
+    for(int i = fullLengthOfCode; i > 0; i--){
+
+        //append the remainder with the next bit of data from shiftedData
+        remainder = (remainder << 1)^((shiftedData >> (i-1))&1);
+
+        //checks if the MSB of the remainder has the same location as the MSB of the generator
+        if((remainder >> (generatorLength - 1)&1) == 1){
+            //if yes -> XOR them
+            remainder = remainder^generator;
+        }
+
+    }
+    return remainder;
+}
+
+//generate the bch code and add it to the code
+long BCH::generateCode(long data, int dataLength, long generator){
+
+    //polynomDegree is the highest polynom in the polynom  (Ex:  x^4 + x^2 + 1 -> polynomDegree = 4)
+    int polynomDegree = getBinaryLength(generator) - 1; 
+
+    //the length of the code at the end
+    int fullLength = dataLength + polynomDegree;
+
+    long shiftedData = data << (polynomDegree);
+
+    long remainder = calculatePolynomialRemainder(shiftedData, fullLength, generator);
+
+    //return the generated code
+    return shiftedData^remainder;
+}
+
+//same as generateCode but used spesific for pocsag code
+long BCH::generatePOCSAGCode(long data){
+    //POCSAG_GENERATOR = generator polynom: x^10 + x^9 + x^8 + x^6 + x^5 + x^3 + 1
+    //POCSAG_DATA_LENGTH = 21 = length of the data
+    return generateCode(data, POCSAG_DATA_LENGTH, POCSAG_GENERATOR_POLYNOM);
+}
+
+long BCH::codeCorrection(long code, int codeLength, long generator, bool doubleCodeCorrection){
+
 }
 
 bool BCH::checkBCH(long MessagePolynom, int messageLength, long generatorPolynom){
