@@ -73,7 +73,7 @@ long BCH::generateCode(long data, int dataLength, long generator){
 }
 
 
-long BCH::singleBitCodeCorrection(long code, int codeLength, long generator){
+long BCH::singleBitErrorCorrection(long code, int codeLength, long generator){
     long correctedCode = 0;
 
     for(int i = -1; i < codeLength; i++){
@@ -96,41 +96,38 @@ long BCH::singleBitCodeCorrection(long code, int codeLength, long generator){
     return 0;
 }
 
-long BCH::twoBitCodeCorrection(long code, int codeLength, long generator){
-    long correctedCode = 0;
-    long helperCode = 0; //needed for bit shifting
-
-    for(int x = 0; x < codeLength; x++) {
-        helperCode = code ^ (1 << x);
-        for (int i = -1; i < codeLength; i++) {
-            correctedCode = helperCode ^ (1 << i);
-
-            //used for -1 shift
-            if (i == -1) {
-                correctedCode = helperCode;
+long BCH::errorCorrectionRecursion(long code, int codeLength, long generator, int depth){
+    //if zero just to catch some error if someone tries to set the iterations to zero
+    if(depth <= 0){
+        return 0;
+    }else if(depth == 1){
+        //calculate the single bit error correction
+        return singleBitErrorCorrection(code, codeLength, generator);
+    }else{
+        for(int i = -1; i < codeLength; i++){
+            long tempCode = code ^ (1 << i);
+            if(i == -1){
+                tempCode = code;
             }
+            //call the function again and go on iteration deeper
+            long correctedCode = errorCorrectionRecursion(tempCode, codeLength, generator, depth - 1);
 
-            long remainder = calculatePolynomialRemainder(correctedCode, codeLength, generator);
-            if (remainder == 0) {
+            if(correctedCode != 0){
                 return correctedCode;
             }
         }
     }
-      
-    //error corection failed
+
+    //return 0 if everything fails (no error correction possible)
     return 0;
+
 }
 
 
 //with this function you can correct up to 2 bit errors. 
-long BCH::codeCorrection(long code, int codeLength, long generator, bool twoBitCodeCorrectionEnable){
-    long correctedCode = singleBitCodeCorrection(code, codeLength, generator);
-
-    if(twoBitCodeCorrectionEnable == true && correctedCode != code){
-        correctedCode = twoBitCodeCorrection(code, codeLength, generator);
-    }
-
-    return correctedCode;
+long BCH::codeCorrection(long code, int codeLength, long generator, int numberOfErrors){
+    //numberOfErros = the number of errors you want to try to correct (1 == 1 Bit error correction)
+    return errorCorrectionRecursion(code, codeLength, generator, numberOfErrors);
 }
 
 
