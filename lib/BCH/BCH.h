@@ -10,11 +10,8 @@ class BCH{
     public:
         bool checkBCH(long MessagePolynom, int messageLength, long generatorPolynom);
         long generateCode(long data, int dataLength, long generator);
-        long generatePOCSAGCode(long data);
         bool hasCodeErrors(long code, int codeLength, long generator);
-        bool hasPOCSAGCodeErrors(long code);
         long codeCorrection(long code, int codeLength, long generator, bool twoBitCodeCorrectionEnable);
-        long POCSAGCodeCorrection(long code, bool twoBitCodeCorrectionEnable);
 
     private:
         long calculatePolynomialRemainder(long shiftedData, int fullLengthOfCode, long generator);

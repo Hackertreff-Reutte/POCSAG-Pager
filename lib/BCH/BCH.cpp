@@ -3,10 +3,7 @@
 #include "math.h"
 #include "BCH.h"
 
-//0b11101101001 = generator polynom used by pocsag: x^10 + x^9 + x^8 + x^6 + x^5 + x^3 + 1
-#define POCSAG_GENERATOR_POLYNOM 0b11101101001
-#define POCSAG_DATA_LENGTH 21
-#define POCSAG_CODE_LENGTH 31
+
 
 //get the binary length of an number from type int
 int BCH::getBinaryLength(int number){
@@ -55,10 +52,7 @@ bool BCH::hasCodeErrors(long code, int codeLength, long generator){
     return remainder != 0;
 }
 
-//same as hasCodeErrors but only for pocsag
-bool BCH::hasPOCSAGCodeErrors(long code){
-    return hasCodeErrors(code, POCSAG_CODE_LENGTH, POCSAG_GENERATOR_POLYNOM);
-}
+
 
 
 //generate the bch code and add it to the code
@@ -76,13 +70,6 @@ long BCH::generateCode(long data, int dataLength, long generator){
 
     //return the generated code
     return shiftedData^remainder;
-}
-
-//same as generateCode but used spesific for pocsag code
-long BCH::generatePOCSAGCode(long data){
-    //POCSAG_GENERATOR = generator polynom: x^10 + x^9 + x^8 + x^6 + x^5 + x^3 + 1
-    //POCSAG_DATA_LENGTH = 21 = length of the data
-    return generateCode(data, POCSAG_DATA_LENGTH, POCSAG_GENERATOR_POLYNOM);
 }
 
 
@@ -146,9 +133,6 @@ long BCH::codeCorrection(long code, int codeLength, long generator, bool twoBitC
     return correctedCode;
 }
 
-long BCH::POCSAGCodeCorrection(long code, bool twoBitCodeCorrectionEnable){
-    return codeCorrection(code, POCSAG_CODE_LENGTH, POCSAG_GENERATOR_POLYNOM, twoBitCodeCorrectionEnable);
-}
 
 bool BCH::checkBCH(long MessagePolynom, int messageLength, long generatorPolynom){
 
