@@ -9,7 +9,7 @@
 #define POCSAG_DATA_LENGTH 21
 #define POCSAG_CODE_LENGTH 31
 
-BCH bch;
+
 
 //same as hasCodeErrors but only for pocsag
 bool POCSAG::hasCodeErrors(long code){
