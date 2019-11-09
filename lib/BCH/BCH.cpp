@@ -25,11 +25,10 @@ int BCH::getBinaryLength(long number){
 //used to calculate the polynomial remainder of a given data binary code and a generator binary code
 long BCH::calculatePolynomialRemainder(long shiftedData, int fullLengthOfCode, long generator){
 
-    long remainder = 0;
     int generatorLength = getBinaryLength(generator);
+    long remainder =  shiftedData >> (fullLengthOfCode - generatorLength + 1);
 
-    //TODO change endpoint for more efficency
-    for(int i = fullLengthOfCode; i > 0; i--){
+    for(int i = fullLengthOfCode - generatorLength + 1; i > 0; i--){
 
         //append the remainder with the next bit of data from shiftedData
         remainder = (remainder << 1)^((shiftedData >> (i-1))&1);
