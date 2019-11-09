@@ -128,10 +128,3 @@ long BCH::codeCorrection(long code, int codeLength, long generator, int numberOf
     //numberOfErros = the number of errors you want to try to correct (1 == 1 Bit error correction)
     return errorCorrectionRecursion(code, codeLength, generator, numberOfErrors);
 }
-
-
-bool BCH::checkBCH(long MessagePolynom, int messageLength, long generatorPolynom){
-
-    //return just a placeholder for now
-    return true;
-}
