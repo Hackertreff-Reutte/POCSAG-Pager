@@ -95,13 +95,28 @@ long BCH::singleBitErrorCorrection(long code, int codeLength, long generator){
     return 0;
 }
 
-long BCH::errorCorrectionRecursion(long code, int codeLength, long generator, int depth){
+long BCH::errorCorrectionRecursion(long code, int codeLength, long generator, int depth, bool enableParityCheck, bool parity){
     //if zero just to catch some error if someone tries to set the iterations to zero
     if(depth <= 0){
         return 0;
     }else if(depth == 1){
         //calculate the single bit error correction
-        return singleBitErrorCorrection(code, codeLength, generator);
+        long singleBitErrorCorrectedCode = singleBitErrorCorrection(code, codeLength, generator);
+        
+        if(enableParityCheck){
+            //make a parity check
+            if(singleBitErrorCorrectedCode % 2 == parity){
+                //same parity
+                return singleBitErrorCorrectedCode;
+            }else{
+                //wrong parity = wrong corrected code = return 0
+                return 0;
+            }
+        }else{
+            //return singleBitErrorCorrectedCode without parity check
+            return singleBitErrorCorrectedCode;
+        }
+
     }else{
         for(int i = -1; i < codeLength; i++){
             long tempCode = code ^ (1 << i);
@@ -109,10 +124,23 @@ long BCH::errorCorrectionRecursion(long code, int codeLength, long generator, in
                 tempCode = code;
             }
             //call the function again and go on iteration deeper
-            long correctedCode = errorCorrectionRecursion(tempCode, codeLength, generator, depth - 1);
+            long correctedCode = errorCorrectionRecursion(tempCode, codeLength, generator, depth - 1, enableParityCheck, parity);
 
             if(correctedCode != 0){
-                return correctedCode;
+
+                if(enableParityCheck){
+                    //make parity check
+                    if(correctedCode % 2 == parity){
+                        //return correctedCode because parity is okay
+                        return correctedCode;
+                    }else{
+                        //return 0 because of wrong parity
+                        return 0;
+                    }
+                }else{
+                    //return correctedCode without parity check
+                    return correctedCode;
+                }
             }
         }
     }
@@ -126,5 +154,12 @@ long BCH::errorCorrectionRecursion(long code, int codeLength, long generator, in
 //with this function you can correct up to 2 bit errors. 
 long BCH::codeCorrection(long code, int codeLength, long generator, int numberOfErrors){
     //numberOfErros = the number of errors you want to try to correct (1 == 1 Bit error correction)
-    return errorCorrectionRecursion(code, codeLength, generator, numberOfErrors);
+    bool enableParityCheck = false;
+    return errorCorrectionRecursion(code, codeLength, generator, numberOfErrors, enableParityCheck, 0);
+}
+
+long BCH::codeCorrection(long code, int codeLength, long generator, int numberOfErrors, bool parity){
+    //numberOfErros = the number of errors you want to try to correct (1 == 1 Bit error correction)
+    bool enableParityCheck = true;
+    return errorCorrectionRecursion(code, codeLength, generator, numberOfErrors, enableParityCheck, parity);
 }

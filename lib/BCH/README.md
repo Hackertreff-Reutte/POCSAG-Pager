@@ -41,6 +41,8 @@ __return bool__ = returns 0 (false) if the code has no errors and 1 (true) if th
 ### codeCorrection
 ```
 long codeCorrection(long code, int codeLength, long generator, int numberOfErrors);
+
+long codeCorrection(long code, int codeLength, long generator, int numberOfErrors, bool parity);
 ```
 With this function it is possible to correct _numberOfErrors_ Errors in the Code.
 But be careful. You can only correct (Hammingdistance - 1) / 2.
@@ -53,5 +55,8 @@ __int codeLength__ = the full length of the code (length of the data bits + leng
 __long generator__ = the generator polynom in binary that was used to generate the code
 
 __int numberOfErrors__ = the number of errors you want to correct. Ex: if numberOfErrors is set to 3 it will first try to correct 1 error then 2 errors and then 3 errors. That means that you don't need to call it for 1, 2, 3 errors. it is sufficient to call it for 3. 
+
+__bool parity__ = here you can set the parity bit. if it is set it will be considered by the error correction and assumend to be correct. So if the correction has found an correct code it will only accept it if the parity of the new found code is the same as the parity bit set in the function (even parity)
+this is optional if you don't want it don't write a number (0 is a number)
 
 __return long__ = if the error correction is successful it will return the corrected code (data + bch bits) if not it will return 0
