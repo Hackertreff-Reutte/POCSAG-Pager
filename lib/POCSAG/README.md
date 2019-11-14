@@ -3,6 +3,11 @@
 ## Info
 This lib  is used to handle pocsag messages
 
+## Structure
+ - POCSAG.h -> Headerfile contains all the function definitions of the lib
+ - POCSAG_BCH.cpp -> contains all related to generation, checking and correction codes.
+
+
 ## Dependencies 
 This lib requires the BCH Lib (created by the HTR)
 
