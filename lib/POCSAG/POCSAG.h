@@ -8,14 +8,14 @@ Lib for creating and managing pocsag messages
 class POCSAG{
 
     public:
-        bool hasCodeErrors(long code);
-        long generateCodeWithBCH(long data);
-        long tryCodeErrorCorrection(long code, bool twoBitCodeCorrectionEnable);
-        long tryUnsecureCodeErrorCorrection(long code, int numberOfErrors);
-        long tryUnsecureCodeErrorCorrection(long code, int numberOfErrors, bool withParityCheck);
+        bool hasCodeErrors(unsigned long code);
+        unsigned long generateCodeWithBCH(unsigned long data);
+        unsigned long tryCodeErrorCorrection(unsigned long code, bool twoBitCodeCorrectionEnable);
+        unsigned long tryUnsecureCodeErrorCorrection(unsigned long code, int numberOfErrors);
+        unsigned long tryUnsecureCodeErrorCorrection(unsigned long code, int numberOfErrors, bool withParityCheck);
 
     private:
-        long calculateAndAddParity(long code);
+        unsigned long calculateAndAddParity(unsigned long code);
         BCH bch;
 
 };

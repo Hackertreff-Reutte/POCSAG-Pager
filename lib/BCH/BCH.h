@@ -8,17 +8,17 @@ Lib for creating BCH codes and checking BCH codes
 class BCH{
 
     public:
-        long generateCode(long data, int dataLength, long generator);
-        bool hasCodeErrors(long code, int codeLength, long generator);
-        long codeCorrection(long code, int codeLength, long generator, int numberOfErrors);
-        long codeCorrection(long code, int codeLength, long generator, int numberOfErrors, bool parity);
+        unsigned long generateCode(unsigned long data, int dataLength, unsigned long generator);
+        bool hasCodeErrors(unsigned long code, int codeLength, unsigned long generator);
+        unsigned long codeCorrection(unsigned long code, int codeLength, unsigned long generator, int numberOfErrors);
+        unsigned long codeCorrection(unsigned long code, int codeLength, unsigned long generator, int numberOfErrors, bool parity);
 
     private:
-        long calculatePolynomialRemainder(long shiftedData, int fullLengthOfCode, long generator);
-        int getBinaryLength(long number);
+        unsigned long calculatePolynomialRemainder(unsigned long shiftedData, int fullLengthOfCode, unsigned long generator);
+        int getBinaryLength(unsigned long number);
         int getBinaryLength(int number);
-        long singleBitErrorCorrection(long code, int codeLength, long generator);
-        long errorCorrectionRecursion(long code, int codeLength, long generator, int depth, bool enableParityCheck, bool parity);
+        unsigned long singleBitErrorCorrection(unsigned long code, int codeLength, unsigned long generator);
+        unsigned long errorCorrectionRecursion(unsigned long code, int codeLength, unsigned long generator, int depth, bool enableParityCheck, bool parity);
 
 };
 
