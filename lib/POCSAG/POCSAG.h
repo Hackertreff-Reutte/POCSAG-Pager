@@ -12,8 +12,10 @@ class POCSAG{
         long generateCodeWithBCH(long data);
         long tryCodeErrorCorrection(long code, bool twoBitCodeCorrectionEnable);
         long tryUnsecureCodeErrorCorrection(long code, int numberOfErrors);
+        long tryUnsecureCodeErrorCorrection(long code, int numberOfErrors, bool withParityCheck);
 
     private:
+        long calculateAndAddParity(long code);
         BCH bch;
 
 };
