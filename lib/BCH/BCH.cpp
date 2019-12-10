@@ -71,8 +71,9 @@ unsigned long BCH::generateCode(unsigned long data, int dataLength, unsigned lon
 }
 
 
-unsigned long BCH::singleBitErrorCorrection(unsigned long code, int codeLength, unsigned long generator){
+unsigned long * BCH::singleBitErrorCorrection(unsigned long code, int codeLength, unsigned long generator){
     unsigned long correctedCode = 0;
+    unsigned long* correctedCodeArray = new unsigned long[0];
 
     for(int i = -1; i < codeLength; i++){
 
@@ -86,34 +87,73 @@ unsigned long BCH::singleBitErrorCorrection(unsigned long code, int codeLength, 
         unsigned long remainder = calculatePolynomialRemainder(correctedCode, codeLength, generator);
 
         if(remainder == 0){
-            return correctedCode;
+            //create a by 1 bigger array
+            unsigned long* bufferArray = new unsigned long[sizeof(correctedCodeArray) + 1];
+            //copy the data from the "old" array to the buffer array
+            for(int j = 0; j < sizeof(correctedCodeArray); j++){
+                bufferArray[j] = correctedCodeArray[j];
+            }
+            //add the new entry to the buffer array
+            bufferArray[sizeof(correctedCodeArray)] = correctedCode;
+            //delelte the old array
+            delete[] correctedCodeArray;
+            //change the old array address to the new array
+            correctedCodeArray = bufferArray;
         }
     }
 
-    //error correction failed
-    return 0;
+    //return the corrected code array if no code is found the array has a length of zero; 
+    return correctedCodeArray;
 }
 
-unsigned long BCH::errorCorrectionRecursion(unsigned long code, int codeLength, unsigned long generator, int depth, bool enableParityCheck, bool parity){
+unsigned long * BCH::errorCorrectionRecursion(unsigned long code, int codeLength, unsigned long generator, int depth, bool enableParityCheck, bool parity){
+
+    //define the correctedCodeArray globaly so that it can be retuned later on;
+    unsigned long * correctedCodeArray = nullptr;
+
     //if zero just to catch some error if someone tries to set the iterations to zero
     if(depth <= 0){
-        return 0;
+        return nullptr;
     }else if(depth == 1){
         //calculate the single bit error correction
-        unsigned long singleBitErrorCorrectedCode = singleBitErrorCorrection(code, codeLength, generator);
+        unsigned long* singleBitErrorCorrectedCodeArray = singleBitErrorCorrection(code, codeLength, generator);
 
         if(enableParityCheck){
-            //make a parity check
-            if(singleBitErrorCorrectedCode % 2 == parity){
-                //same parity
-                return singleBitErrorCorrectedCode;
-            }else{
-                //wrong parity = wrong corrected code = return 0
-                return 0;
+            //make a parity check for each array element
+            unsigned long singleBitErrorCorrectedCode;
+            int sizeOfNewArray = 0;
+            for(int i = 0; i < sizeof(singleBitErrorCorrectedCodeArray); i++){
+                singleBitErrorCorrectedCode = singleBitErrorCorrectedCodeArray[i];
+
+                if(singleBitErrorCorrectedCode % 2 == parity){
+                    //same parity (code == okay)
+                    //increase the counter for the size of the new array
+                    sizeOfNewArray++;
+                }else{
+                    //wrong parity = wrong corrected code = set 0
+                    singleBitErrorCorrectedCodeArray[i] = 0;
+                }
+
+                //build a new array with only the accepted codes
+                unsigned long* bufferArray = new unsigned long[sizeOfNewArray];
+                //fill the new array
+                int indexCounter = 0;
+                for(int j = 0; j < sizeof(singleBitErrorCorrectedCodeArray); j++){
+                    if(singleBitErrorCorrectedCodeArray[j] != 0){
+                        bufferArray[indexCounter] = singleBitErrorCorrectedCodeArray[j];
+                        indexCounter++;
+                    }
+                }
+                
+                //delete the old array
+                delete[] singleBitErrorCorrectedCodeArray;
+                //change the old array address to the new array
+                singleBitErrorCorrectedCodeArray = bufferArray;
             }
+            return singleBitErrorCorrectedCodeArray;
         }else{
             //return singleBitErrorCorrectedCode without parity check
-            return singleBitErrorCorrectedCode;
+            return singleBitErrorCorrectedCodeArray;
         }
 
     }else{
@@ -123,41 +163,27 @@ unsigned long BCH::errorCorrectionRecursion(unsigned long code, int codeLength, 
                 tempCode = code;
             }
             //call the function again and go on iteration deeper
-            unsigned long correctedCode = errorCorrectionRecursion(tempCode, codeLength, generator, depth - 1, enableParityCheck, parity);
-
-            if(correctedCode != 0){
-
-                if(enableParityCheck){
-                    //make parity check
-                    if(correctedCode % 2 == parity){
-                        //return correctedCode because parity is okay
-                        return correctedCode;
-                    }else{
-                        //return 0 because of wrong parity
-                        return 0;
-                    }
-                }else{
-                    //return correctedCode without parity check
-                    return correctedCode;
-                }
-            }
+            correctedCodeArray = errorCorrectionRecursion(tempCode, codeLength, generator, depth - 1, enableParityCheck, parity);
         }
+
+        //return the correctedCodeArray
+        return correctedCodeArray;
     }
 
-    //return 0 if everything fails (no error correction possible)
-    return 0;
+    //return nullptr if something goes horribly wrong (should be unreachable code)
+    return nullptr;    
 
 }
 
 
 //with this function you can correct up to 2 bit errors. 
-unsigned long BCH::codeCorrection(unsigned long code, int codeLength, unsigned long generator, int numberOfErrors){
+unsigned long * BCH::codeCorrection(unsigned long code, int codeLength, unsigned long generator, int numberOfErrors){
     //numberOfErros = the number of errors you want to try to correct (1 == 1 Bit error correction)
     bool enableParityCheck = false;
     return errorCorrectionRecursion(code, codeLength, generator, numberOfErrors, enableParityCheck, 0);
 }
 
-unsigned long BCH::codeCorrection(unsigned long code, int codeLength, unsigned long generator, int numberOfErrors, bool parity){
+unsigned long * BCH::codeCorrection(unsigned long code, int codeLength, unsigned long generator, int numberOfErrors, bool parity){
     //numberOfErros = the number of errors you want to try to correct (1 == 1 Bit error correction)
     bool enableParityCheck = true;
     return errorCorrectionRecursion(code, codeLength, generator, numberOfErrors, enableParityCheck, parity);
