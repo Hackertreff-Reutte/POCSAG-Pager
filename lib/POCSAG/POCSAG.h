@@ -10,12 +10,13 @@ class POCSAG{
     public:
         bool hasCodeErrors(unsigned long code);
         unsigned long generateCodeWithBCH(unsigned long data);
-        unsigned long tryCodeErrorCorrection(unsigned long code, bool twoBitCodeCorrectionEnable);
-        unsigned long tryUnsecureCodeErrorCorrection(unsigned long code, int numberOfErrors);
-        unsigned long tryUnsecureCodeErrorCorrection(unsigned long code, int numberOfErrors, bool withParityCheck);
+        unsigned long * tryCodeErrorCorrection(unsigned long code, bool twoBitCodeCorrectionEnable);
+        unsigned long * tryUnsecureCodeErrorCorrection(unsigned long code, int numberOfErrors);
+        unsigned long * tryUnsecureCodeErrorCorrection(unsigned long code, int numberOfErrors, bool withParityCheck);
 
     private:
         unsigned long calculateAndAddParity(unsigned long code);
+        unsigned long * calculateAndAddParityToArray(unsigned long * codeArray);
         BCH bch;
 
 };
