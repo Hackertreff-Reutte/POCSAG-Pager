@@ -5,12 +5,12 @@ Lib for creating BCH codes and checking BCH codes
 #ifndef BCH_h
 #define BCH_h
 
-
+//include the file for the return types
+template <class T> class ArrayList;
 
 
 class BCH{
 
-    #include "ArrayList.h"
 
     public:
         unsigned long generateCode(unsigned long data, int dataLength, unsigned long generator);

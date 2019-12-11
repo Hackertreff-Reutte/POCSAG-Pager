@@ -2,11 +2,15 @@
 #include "BCH.h"
 #include "POCSAG.h"
 #include "stdbool.h"
+#include "ArrayList.h"
 
 //0b11101101001 = generator polynom used by pocsag: x^10 + x^9 + x^8 + x^6 + x^5 + x^3 + 1
 #define POCSAG_GENERATOR_POLYNOM 0b11101101001
 #define POCSAG_DATA_LENGTH 21
 #define POCSAG_CODE_LENGTH 31
+
+
+
 
 
 unsigned long POCSAG::calculateAndAddParity(unsigned long code){
@@ -17,11 +21,11 @@ unsigned long POCSAG::calculateAndAddParity(unsigned long code){
     return code;
 }
 
-unsigned long * POCSAG::calculateAndAddParityToArray(unsigned long * codeArray){
-    for(int i = 0; i < sizeof(codeArray); i++){
-        codeArray[i] = calculateAndAddParity(codeArray[i]);
+ArrayList<unsigned long> POCSAG::calculateAndAddParityToArray(ArrayList<unsigned long> codeArrayList){
+    for(int i = 0; i < codeArrayList.dataStruct.count; i++){
+        codeArrayList.dataStruct.pointer[i] = calculateAndAddParity(codeArrayList.dataStruct.pointer[i]);
     }
-    return codeArray;
+    return codeArrayList;
 }
 
 
@@ -48,32 +52,32 @@ unsigned long POCSAG::generateCodeWithBCH(unsigned long data){
 
 //this function can be used to correct more than 2 error but beware the hamming distance of the pocsag code is only 6 (2 Bit error correction)
 //so there is a good chance that you will get a wrong code back 
-unsigned long * POCSAG::tryUnsecureCodeErrorCorrection(unsigned long code, int numberOfErrors){
+ArrayList<unsigned long> POCSAG::tryUnsecureCodeErrorCorrection(unsigned long code, int numberOfErrors){
 
     //1 bit shift to remove parity bit
     code = code >> 1;
 
-    unsigned long * correctedCode = bch.codeCorrection(code, POCSAG_CODE_LENGTH, POCSAG_GENERATOR_POLYNOM, numberOfErrors);
+    ArrayList<unsigned long> correctedCodeList = bch.codeCorrection(code, POCSAG_CODE_LENGTH, POCSAG_GENERATOR_POLYNOM, numberOfErrors);
     
     //Add parity bit and return
-    return calculateAndAddParityToArray(correctedCode);
+    return calculateAndAddParityToArray(correctedCodeList);
 }
 
-unsigned long * POCSAG::tryUnsecureCodeErrorCorrection(unsigned long code, int numberOfErrors, bool withParityCheck){
+ArrayList<unsigned long> POCSAG::tryUnsecureCodeErrorCorrection(unsigned long code, int numberOfErrors, bool withParityCheck){
     //get parity bit
     bool parity = code & 0b1;
 
     //1 bit shift to remove parity bit
     code = code >> 1;
 
-    unsigned long * correctedCode = bch.codeCorrection(code, POCSAG_CODE_LENGTH, POCSAG_GENERATOR_POLYNOM, numberOfErrors, parity);
+    ArrayList<unsigned long> correctedCodeList = bch.codeCorrection(code, POCSAG_CODE_LENGTH, POCSAG_GENERATOR_POLYNOM, numberOfErrors, parity);
 
     //Add parity bit and return
-    return calculateAndAddParityToArray(correctedCode);
+    return calculateAndAddParityToArray(correctedCodeList);
 }
 
 
-unsigned long * POCSAG::tryCodeErrorCorrection(unsigned long code, bool twoBitCodeCorrectionEnable){
+ArrayList<unsigned long> POCSAG::tryCodeErrorCorrection(unsigned long code, bool twoBitCodeCorrectionEnable){
 
     //1 bit shift to remove parity bit
     code = code >> 1;
@@ -84,8 +88,8 @@ unsigned long * POCSAG::tryCodeErrorCorrection(unsigned long code, bool twoBitCo
         numberOfErrors = 2;
     }
 
-    unsigned long * correctedCode = bch.codeCorrection(code, POCSAG_CODE_LENGTH, POCSAG_GENERATOR_POLYNOM, numberOfErrors);
+    ArrayList<unsigned long> correctedCodeList = bch.codeCorrection(code, POCSAG_CODE_LENGTH, POCSAG_GENERATOR_POLYNOM, numberOfErrors);
 
     //Add parity bit and return
-    return calculateAndAddParityToArray(correctedCode);
+    return calculateAndAddParityToArray(correctedCodeList);
 }
