@@ -3,11 +3,11 @@ Lib for creating dynamic arrays
 */
 
 
-#ifndef ArrayList_H
-#define ArrayList_H
+#ifndef ARRAYLIST_H
+#define ARRAYLIST_H
 
-//include the file for the return types
-template <class T> class ArrayList{
+
+template <typename T> class ArrayList{
 
 
     public:
@@ -24,5 +24,6 @@ template <class T> class ArrayList{
          
 };
 
+#include "ArrayList.tpp"
 
 #endif

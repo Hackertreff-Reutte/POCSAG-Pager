@@ -1,12 +1,12 @@
-#include "ArrayList.h"
+//#include "ArrayList.h"
 
 
-template <class T> ArrayList<T>::ArrayList(T * pointer, int count){
+template <typename T> ArrayList<T>::ArrayList(T * pointer, int count){
    this->dataStruct.pointer = pointer;
    this->dataStruct.count = count;
 }
 
-template <class T> void ArrayList<T>::add(T data){
+template <typename T> void ArrayList<T>::add(T data){
 
    //create a new buffer array
    T * buffer = new T [this->dataStruct.count + 1];
@@ -24,7 +24,7 @@ template <class T> void ArrayList<T>::add(T data){
 }
 
 
-template <class T> void ArrayList<T>::appendWithArray(ArrayList<T> arrayList){
+template <typename T> void ArrayList<T>::appendWithArray(ArrayList<T> arrayList){
 
    T * buffer = new T [this->dataStruct.count + arrayList.dataStruct.count];
 
@@ -35,11 +35,11 @@ template <class T> void ArrayList<T>::appendWithArray(ArrayList<T> arrayList){
 
    //copy the content of the second array
    for(int i = 0; i < arrayList.dataStruct.count; i++){
-      buffer[this->dataStruct.count + i] = arrayList.pointer[i];
+      buffer[this->dataStruct.count + i] = arrayList.dataStruct.pointer[i];
    }
 
    //delete the old arrays
-   delete[] arrayList;
+   delete[] &arrayList;
    delete[] this->dataStruct.pointer;
 
    //asign the new array
@@ -48,7 +48,7 @@ template <class T> void ArrayList<T>::appendWithArray(ArrayList<T> arrayList){
 }
 
 
-template <class T> void ArrayList<T>::remove(int index){
+template <typename T> void ArrayList<T>::remove(int index){
    //TODO check this function
 
    //used to remove element from the array
@@ -71,11 +71,12 @@ template <class T> void ArrayList<T>::remove(int index){
 }
 
 
-template <class T> void ArrayList<T>::setNewArrayList(ArrayList<T> arrayList){
+template <typename T> void ArrayList<T>::setNewArrayList(ArrayList<T> arrayList){
    delete[] this->dataStruct.pointer;
    this->dataStruct.pointer = arrayList.dataStruct.pointer;
    this->dataStruct.count = arrayList.dataStruct.count;
 
    //delete the old object
-   delete arrayList;
+   delete &arrayList;
 }
+
