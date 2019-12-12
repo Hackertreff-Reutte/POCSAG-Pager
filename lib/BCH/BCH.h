@@ -5,13 +5,16 @@ Lib for creating BCH codes and checking BCH codes
 #ifndef BCH_h
 #define BCH_h
 
-//include the file for the return types
-template <class T> class ArrayList;
+
+
+#include <ArrayList.h>
+#include "stdbool.h"
+#include "math.h"
 
 
 class BCH{
 
-
+    
     public:
         unsigned long generateCode(unsigned long data, int dataLength, unsigned long generator);
         bool hasCodeErrors(unsigned long code, int codeLength, unsigned long generator);

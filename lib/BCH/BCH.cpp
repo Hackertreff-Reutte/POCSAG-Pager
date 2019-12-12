@@ -1,8 +1,6 @@
 
 #include "BCH.h"
-#include "ArrayList.h"
-#include "stdbool.h"
-#include "math.h"
+
 
 
 
@@ -158,6 +156,7 @@ ArrayList<unsigned long> BCH::errorCorrectionRecursion(unsigned long code, int c
                 tempCode = code;
             }
             //call the function again and go on iteration deeper and add the conent to the array list
+            //TODO change to return type pointer
             correctedCodeArrayList.appendWithArray(errorCorrectionRecursion(tempCode, codeLength, generator, depth - 1, enableParityCheck, parity));
         }
 
