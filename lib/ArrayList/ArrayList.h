@@ -11,15 +11,18 @@ template <typename T> class ArrayList{
 
 
     public:
-        ArrayList(T * pointer, int count);
+        ArrayList(T * arrayPointer, int size);
         void add(T data);
         void appendWithArray(ArrayList<T> arrayList);
         void remove(int index);
         void setNewArrayList(ArrayList<T> arrayList);
-        struct ArrayListStruct {T * pointer; int count;};
+        T * getArray();
+        int getSize();
+        void removeDoubleEntries();
+        
+    private:    
+        struct ArrayListStruct {T * arrayPointer; int size;};
         ArrayListStruct dataStruct;
-
-    private:
         
          
 };

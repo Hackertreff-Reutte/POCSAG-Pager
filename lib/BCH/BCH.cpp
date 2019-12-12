@@ -116,10 +116,10 @@ ArrayList<unsigned long> BCH::errorCorrectionRecursion(unsigned long code, int c
         if(enableParityCheck){
             //make a parity check for each array element
             unsigned long singleBitErrorCorrectedCode;
-            unsigned long * buffer = new unsigned long[singleBitErrorCorrectedCodeArrayList.dataStruct.count];
+            unsigned long * buffer = new unsigned long[singleBitErrorCorrectedCodeArrayList.getSize()];
 
-            for(int i = 0; i < singleBitErrorCorrectedCodeArrayList.dataStruct.count; i++){
-                singleBitErrorCorrectedCode = singleBitErrorCorrectedCodeArrayList.dataStruct.pointer[i];
+            for(int i = 0; i < singleBitErrorCorrectedCodeArrayList.getSize(); i++){
+                singleBitErrorCorrectedCode = singleBitErrorCorrectedCodeArrayList.getArray()[i];
 
                 if(singleBitErrorCorrectedCode % 2 != parity){
                     //same parity (code == okay)
@@ -132,7 +132,7 @@ ArrayList<unsigned long> BCH::errorCorrectionRecursion(unsigned long code, int c
             }
                 
             //needs to work from the back to the fronnt otherwise it will fail (array shrinks)
-            for(int i = singleBitErrorCorrectedCodeArrayList.dataStruct.count -1; i >= 0; i++){
+            for(int i = singleBitErrorCorrectedCodeArrayList.getSize() -1; i >= 0; i++){
                 //check if buffer array is zero
                 if(buffer == 0){
                     //remove the entry
@@ -156,7 +156,7 @@ ArrayList<unsigned long> BCH::errorCorrectionRecursion(unsigned long code, int c
                 tempCode = code;
             }
             //call the function again and go on iteration deeper and add the conent to the array list
-            //TODO change to return type pointer
+            
             correctedCodeArrayList.appendWithArray(errorCorrectionRecursion(tempCode, codeLength, generator, depth - 1, enableParityCheck, parity));
         }
 

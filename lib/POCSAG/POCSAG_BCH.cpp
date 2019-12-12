@@ -22,8 +22,8 @@ unsigned long POCSAG::calculateAndAddParity(unsigned long code){
 }
 
 ArrayList<unsigned long> POCSAG::calculateAndAddParityToArray(ArrayList<unsigned long> codeArrayList){
-    for(int i = 0; i < codeArrayList.dataStruct.count; i++){
-        codeArrayList.dataStruct.pointer[i] = calculateAndAddParity(codeArrayList.dataStruct.pointer[i]);
+    for(int i = 0; i < codeArrayList.getSize(); i++){
+        codeArrayList.getArray()[i] = calculateAndAddParity(codeArrayList.getArray()[i]);
     }
     return codeArrayList;
 }
