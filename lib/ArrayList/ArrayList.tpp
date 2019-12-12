@@ -92,5 +92,35 @@ template <typename T> int ArrayList<T>::getSize(){
 
 
 
+//remove all the double entries from the array
+template <typename T> void ArrayList<T>::removeDoubleEntries(){
+
+   T * tagArray = new T [this->dataStruct.size];
+
+   //init tagArray with -1
+   for(int i = 0; i < this->dataStruct.size; i++){
+      tagArray[i] = -1;
+   }
+
+   //check from back to front for each element check if it exist before (infront)
+   //if it exists write the current i (index of the outer loop) in the array
+   for(int i = this->dataStruct.size - 1; i >= 0; i--){
+      for(int j = 0; j < i; j++){
+         if(this->dataStruct.arrayPointer[i] == this->dataStruct.arrayPointer[j]){
+            tagArray[i] = i;
+         }
+      }
+   }
+
+   //from back to front remove all the flaged double entries
+   for(int i = this->dataStruct.size - 1; i >= 0; i--){
+      if(tagArray[i] != -1){
+         this->remove(i);
+      }
+   }
+
+   //some cleanup
+   delete[] tagArray;
+
 }
 

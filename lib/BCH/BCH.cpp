@@ -174,11 +174,27 @@ ArrayList<unsigned long> BCH::errorCorrectionRecursion(unsigned long code, int c
 ArrayList<unsigned long> BCH::codeCorrection(unsigned long code, int codeLength, unsigned long generator, int numberOfErrors){
     //numberOfErros = the number of errors you want to try to correct (1 == 1 Bit error correction)
     bool enableParityCheck = false;
-    return errorCorrectionRecursion(code, codeLength, generator, numberOfErrors, enableParityCheck, 0);
+
+    //get the corrected codes
+    ArrayList<unsigned long> resultCorrectedCodeArrayList = errorCorrectionRecursion(code, codeLength, generator, numberOfErrors, enableParityCheck, 0);
+
+    //remove all double entries
+    resultCorrectedCodeArrayList.removeDoubleEntries();
+
+    //return the code without double entries
+    return resultCorrectedCodeArrayList;
 }
 
 ArrayList<unsigned long> BCH::codeCorrection(unsigned long code, int codeLength, unsigned long generator, int numberOfErrors, bool parity){
     //numberOfErros = the number of errors you want to try to correct (1 == 1 Bit error correction)
     bool enableParityCheck = true;
-    return errorCorrectionRecursion(code, codeLength, generator, numberOfErrors, enableParityCheck, parity);
+
+    //get the coorected codes
+    ArrayList<unsigned long> resultCorrectedCodeArrayList = errorCorrectionRecursion(code, codeLength, generator, numberOfErrors, enableParityCheck, parity);
+
+    //remove all double entries
+    resultCorrectedCodeArrayList.removeDoubleEntries();
+
+    //return the code without double entries
+    return resultCorrectedCodeArrayList;
 }
