@@ -1,8 +1,8 @@
 
-#include "BCH.h"
 #include "POCSAG.h"
-#include "stdbool.h"
-#include "ArrayList.h"
+
+
+
 
 //0b11101101001 = generator polynom used by pocsag: x^10 + x^9 + x^8 + x^6 + x^5 + x^3 + 1
 #define POCSAG_GENERATOR_POLYNOM 0b11101101001

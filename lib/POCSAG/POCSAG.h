@@ -5,9 +5,15 @@ Lib for creating and managing pocsag messages
 #ifndef POCSAG_h
 #define POCSAG_h
 
-template <class T> class ArrayList;
+
+
+#include "ArrayList.h"
+#include "BCH.h"
+#include "stdbool.h"
 
 class POCSAG{
+
+    
 
     public:
         bool hasCodeErrors(unsigned long code);
