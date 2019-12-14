@@ -112,6 +112,10 @@ ArrayList<unsigned long> * BCH::errorCorrectionRecursion(unsigned long code, int
     if(depth <= 0){
         return correctedCodeArrayList;
     }else if(depth == 1){
+
+        //delete the outer array because it is not used (free memory) otherwise it would be a memory leak
+        correctedCodeArrayList->deleteObject();
+
         //calculate the single bit error correction
         ArrayList<unsigned long> * singleBitErrorCorrectedCodeArrayList = singleBitErrorCorrection(code, codeLength, generator);
 
