@@ -7,7 +7,7 @@ Lib for creating BCH codes and checking BCH codes
 
 
 
-#include <ArrayList.h>
+#include "ArrayList.h"
 #include "stdbool.h"
 #include "math.h"
 
