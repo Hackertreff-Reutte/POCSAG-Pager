@@ -72,12 +72,14 @@ template <typename T> void ArrayList<T>::remove(int index){
 
 
 template <typename T> void ArrayList<T>::setNewArrayList(ArrayList<T> arrayList){
+
    delete[] this->dataStruct.arrayPointer;
+   
    this->dataStruct.arrayPointer = arrayList.getArray();
    this->dataStruct.size = arrayList.getSize();
 
    //delete the old object
-   delete[] arrayList.dataStruct.arrayPointer;
+   delete[] arrayList.getArray();
 }
 
 //returns the pointer to the array of the arraylist
