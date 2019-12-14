@@ -158,6 +158,9 @@ ArrayList<unsigned long> BCH::errorCorrectionRecursion(unsigned long code, int c
             //call the function again and go on iteration deeper and add the conent to the array list
             
             correctedCodeArrayList.appendWithArray(errorCorrectionRecursion(tempCode, codeLength, generator, depth - 1, enableParityCheck, parity));
+
+            //remove the double enties so that it doesn't allocated to much ram otherwise the code will failt (out of memory)
+            correctedCodeArrayList.removeDoubleEntries();
         }
 
         //return the correctedCodeArray
