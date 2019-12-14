@@ -1,8 +1,12 @@
-
 #include "BCH.h"
 
-
-
+//this will activate the heap optimization so that less heap is used. 
+//if the bit error correction value (numberOfErrors) is greater.
+//this will affect performance because it will remove each double entry 
+//of a corrected code from the array each time singleBitErrorCorrection
+//is called
+//set to 0 to always enable it
+#define MAX_BIT_CODE_ERROR_CORRECTION_UNTIL_HEAP_OPTIMIZATION 2
 
 //get the binary length of an number from type int
 int BCH::getBinaryLength(int number){
@@ -156,10 +160,13 @@ ArrayList<unsigned long> * BCH::errorCorrectionRecursion(unsigned long code, int
             //call the function again and go on iteration deeper and add the conent to the array list
             correctedCodeArrayList->appendWithArray(errorCorrectionRecursion(tempCode, codeLength, generator, depth - 1, enableParityCheck, numberOfErrors, parity));
 
-            //remove the double enties so that it doesn't allocated to much ram otherwise the code will failt (out of memory)
-            correctedCodeArrayList.removeDoubleEntries();
-        }
 
+            //heap memory optimization
+            if(numberOfErrors > MAX_BIT_CODE_ERROR_CORRECTION_UNTIL_HEAP_OPTIMIZATION){
+                //remove the double enties so that it doesn't allocated to much ram otherwise the code will failt (out of memory)
+                correctedCodeArrayList->removeDoubleEntries();
+            }
+        }
         //return the correctedCodeArray
         return correctedCodeArrayList;
     }
