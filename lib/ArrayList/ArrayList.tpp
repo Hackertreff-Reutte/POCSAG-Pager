@@ -1,8 +1,7 @@
-//#include "ArrayList.h"
 
-template <typename T> ArrayList<T>::ArrayList(T * arrayPointer, int size){
-   this->dataStruct.arrayPointer = arrayPointer;
-   this->dataStruct.size = size;
+template <typename T> ArrayList<T>::ArrayList(){
+   this->dataStruct.arrayPointer = new unsigned long[0];
+   this->dataStruct.size = 0;
 }
 
 template <typename T> void ArrayList<T>::add(T data){
@@ -23,9 +22,9 @@ template <typename T> void ArrayList<T>::add(T data){
 }
 
 
-template <typename T> void ArrayList<T>::appendWithArray(ArrayList<T> arrayList){
+template <typename T> void ArrayList<T>::appendWithArray(ArrayList<T> * arrayList){
 
-   T * buffer = new T [this->dataStruct.size + arrayList.getSize()];;  
+   T * buffer = new T [this->dataStruct.size + arrayList->getSize()];  
  
    //copy the first array in the new buffer array
    for(int i = 0; i < this->dataStruct.size; i++){
@@ -33,17 +32,20 @@ template <typename T> void ArrayList<T>::appendWithArray(ArrayList<T> arrayList)
    }
 
    //copy the content of the second array
-   for(int i = 0; i < arrayList.dataStruct.size; i++){
-      buffer[this->dataStruct.size + i] = arrayList.getArray()[i];
+   for(int i = 0; i < arrayList->getSize(); i++){
+      buffer[this->dataStruct.size + i] = arrayList->getArray()[i];
    }
 
-   //delete the old arrays
+   //delete the old array of the current object
    delete[] this->dataStruct.arrayPointer;
-   delete[] arrayList.getArray();
 
+   
    //asign the new array and the new size
    this->dataStruct.arrayPointer = buffer;
-   this->dataStruct.size = this->dataStruct.size + arrayList.getSize();
+   this->dataStruct.size = this->dataStruct.size + arrayList->getSize();
+
+   //delete the object that was given as a parameter
+   arrayList->deleteObject();
 
 }
 
@@ -71,15 +73,15 @@ template <typename T> void ArrayList<T>::remove(int index){
 
 
 
-template <typename T> void ArrayList<T>::setNewArrayList(ArrayList<T> arrayList){
+template <typename T> void ArrayList<T>::setNewArrayList(ArrayList<T> * arrayList){
 
    delete[] this->dataStruct.arrayPointer;
    
-   this->dataStruct.arrayPointer = arrayList.getArray();
-   this->dataStruct.size = arrayList.getSize();
+   this->dataStruct.arrayPointer = arrayList->getArray();
+   this->dataStruct.size = arrayList->getSize();
 
    //delete the old object
-   delete[] arrayList.getArray();
+   arrayList->deleteObject();
 }
 
 //returns the pointer to the array of the arraylist
@@ -126,3 +128,8 @@ template <typename T> void ArrayList<T>::removeDoubleEntries(){
 
 }
 
+//free the memory and delete the object
+template <typename T> void ArrayList<T>::deleteObject(){
+   delete[] this->getArray();
+   delete this;
+}
