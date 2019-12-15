@@ -4,6 +4,15 @@
 This lib  is used to generate, check and correct messages that have bch codes
 
 
+## Structure
+ - BCH.h -> Headerfile contains all the function definitions of the lib
+ - BCH.cpp -> contains all related to generation, checking and correction of BCH codes.
+
+
+## Dependencies 
+This lib requires the ArrayList lib (created by the HTR)
+
+
 ## Functions
 
 ### generateCode()
@@ -42,7 +51,7 @@ This function is used to check if the code has errors. It return 1 (true) is the
 
 <br>
 
-### codeCorrection
+### codeCorrection()
 ```
 long codeCorrection(long code, int codeLength, long generator, int numberOfErrors);
 
@@ -65,4 +74,4 @@ It can work if you correct more but it can't be guaranteed that you will get the
 this is optional if you don't want it don't write a number (0 is a number) [optional]
 
 #### Return value: 
->__return unsigned long__ = if the error correction is successful it will return the corrected code (data + bch bits) if not it will return 0
+>__ArrayList<unsigned long> *__ = if the error correction is successful it will return an ArrayList<unsigned long> with all the corrected codes (data + bch bits) if not it will return an ArrayList with no entries
