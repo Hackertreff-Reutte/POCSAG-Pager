@@ -28,6 +28,7 @@ template <typename T> class ArrayList{
          
 };
 
+//include the rest of the template
 #include "ArrayList.tpp"
 
 #endif

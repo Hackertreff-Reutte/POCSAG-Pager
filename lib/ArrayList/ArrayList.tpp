@@ -1,3 +1,6 @@
+//ignore error ArrayList is no template it would normaly belong in the 
+//header file but i want it sperated
+
 
 template <typename T> ArrayList<T>::ArrayList(){
    this->dataStruct.arrayPointer = new unsigned long[0];

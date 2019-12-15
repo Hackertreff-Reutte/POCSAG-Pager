@@ -22,6 +22,8 @@ unsigned long POCSAG::calculateAndAddParity(unsigned long code){
 }
 
 ArrayList<unsigned long> * POCSAG::calculateAndAddParityToArray(ArrayList<unsigned long> * codeArrayList){
+
+    //loop through the array and add to each code its parity
     for(int i = 0; i < codeArrayList->getSize(); i++){
         codeArrayList->getArray()[i] = calculateAndAddParity(codeArrayList->getArray()[i]);
     }
@@ -51,7 +53,7 @@ unsigned long POCSAG::generateCodeWithBCH(unsigned long data){
 }
 
 //this function can be used to correct more than 2 error but beware the hamming distance of the pocsag code is only 6 (2 Bit error correction)
-//so there is a good chance that you will get a wrong code back 
+//so there is a good chance that you will get a wrong code back (wrong code ist still valid in sense of the polynomial division)
 ArrayList<unsigned long> * POCSAG::tryUnsecureCodeErrorCorrection(unsigned long code, int numberOfErrors){
 
     //1 bit shift to remove parity bit
