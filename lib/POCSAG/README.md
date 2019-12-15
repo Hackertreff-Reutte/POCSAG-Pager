@@ -3,13 +3,15 @@
 ## Info
 This lib  is used to handle pocsag messages
 
+
 ## Structure
  - POCSAG.h -> Headerfile contains all the function definitions of the lib
  - POCSAG_BCH.cpp -> contains all related to generation, checking and correction codes.
 
 
 ## Dependencies 
-This lib requires the BCH Lib (created by the HTR)
+This lib requires the BCH lib (created by the HTR) and the ArrayList lib (created by the HTR)
+
 
 ## Functions
 
@@ -59,7 +61,7 @@ Result = corrected code or 0 if the correction fails
 >__bool twoBitCodeCorrectionEnable__ = 1 (true) to use two and one bit error correction or 0 (false) to only use one bit error correction
 
 #### Return value: 
->__return unsigned long__ = if the error correction is successful it will return the corrected code (data + bch bits + parity bit) if not it will return 0
+>__ArrayList<unsigned long> *__ = if the error correction is successful it will return a ArrayList Pointer with the corrected codes (data + bch bits + parity bit) if not it will return a ArrayList with no entries
 
 <br>
 
@@ -79,4 +81,4 @@ This is the unsecure methode to correct a pocsag code. You can choose how many e
 >__bool withParityCheck__ = set this to 1 (true) if you want to only accept codes when the parity is okay. (if you set this the is a better chance to correct 3 Bit errors correctly) [optional]
 
 #### Return value: 
->__return unsigned long__ = if the error correction is successful it will return the corrected code (data + bch bits + parity bit) if not it will return 0
+>__ArrayList<unsigned long> *__ = if the error correction is successful it will return a ArrayList Pointer with the corrected codes (data + bch bits + parity bit) if not it will return a ArrayList with no entries
