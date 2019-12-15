@@ -13,7 +13,7 @@ template <typename T> class ArrayList{
     public:
         ArrayList();
         void add(T data);
-        void appendWithArray(ArrayList<T> * arrayList);
+        void appendWithArrayList(ArrayList<T> * arrayList);
         void remove(int index);
         void setNewArrayList(ArrayList<T> * arrayList);
         T * getArray();

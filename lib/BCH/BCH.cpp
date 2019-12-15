@@ -162,7 +162,7 @@ ArrayList<unsigned long> * BCH::errorCorrectionRecursion(unsigned long code, int
                 tempCode = code;
             }
             //call the function again and go on iteration deeper and add the conent to the array list
-            correctedCodeArrayList->appendWithArray(errorCorrectionRecursion(tempCode, codeLength, generator, depth - 1, enableParityCheck, numberOfErrors, parity));
+            correctedCodeArrayList->appendWithArrayList(errorCorrectionRecursion(tempCode, codeLength, generator, depth - 1, enableParityCheck, numberOfErrors, parity));
 
 
             //heap memory optimization

@@ -22,7 +22,7 @@ template <typename T> void ArrayList<T>::add(T data){
 }
 
 
-template <typename T> void ArrayList<T>::appendWithArray(ArrayList<T> * arrayList){
+template <typename T> void ArrayList<T>::appendWithArrayList(ArrayList<T> * arrayList){
 
    T * buffer = new T [this->dataStruct.size + arrayList->getSize()];  
  
