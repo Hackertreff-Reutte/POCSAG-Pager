@@ -127,7 +127,7 @@ ArrayList<unsigned long> * BCH::errorCorrectionRecursion(unsigned long code, int
             for(int i = 0; i < singleBitErrorCorrectedCodeArrayList->getSize(); i++){
                 singleBitErrorCorrectedCode = singleBitErrorCorrectedCodeArrayList->getArray()[i];
 
-                if(singleBitErrorCorrectedCode % 2 != parity){
+                if(singleBitErrorCorrectedCode % 2 == parity){
                     //same parity (code == okay)
                     //set to 1
                     buffer[i] = 1;
@@ -137,10 +137,10 @@ ArrayList<unsigned long> * BCH::errorCorrectionRecursion(unsigned long code, int
                 }
             }
                 
-            //needs to work from the back to the fronnt otherwise it will fail (array shrinks)
-            for(int i = singleBitErrorCorrectedCodeArrayList->getSize() -1; i >= 0; i++){
+            //needs to work from the back to the front otherwise it will fail (array shrinks)
+            for(int i = singleBitErrorCorrectedCodeArrayList->getSize() -1; i >= 0; i--){
                 //check if buffer array is zero
-                if(buffer == 0){
+                if(buffer[i] == 0){
                     //remove the entry
                     singleBitErrorCorrectedCodeArrayList->remove(i);
                 }
@@ -181,8 +181,9 @@ ArrayList<unsigned long> * BCH::errorCorrectionRecursion(unsigned long code, int
 }
 
 
-//with this function you can correct up to 2 bit errors. 
+//with this function you can correct codes
 ArrayList<unsigned long> * BCH::codeCorrection(unsigned long code, int codeLength, unsigned long generator, int numberOfErrors){
+
     //numberOfErros = the number of errors you want to try to correct (1 == 1 Bit error correction)
     bool enableParityCheck = false;
 
