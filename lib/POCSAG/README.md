@@ -51,6 +51,7 @@ With this function you can generate the pocsag message (32 bit (with parity bit)
 
 ```
 unsigned long tryCodeErrorCorrection(unsigned long code, bool twoBitCodeCorrectionEnable);
+unsigned long tryCodeErrorCorrection(unsigned long code, bool twoBitCodeCorrectionEnable, bool withParityCheck);
 ```
 This is the save methode to correct a bch code. It will try to correct 1 or 2 errors (hammingdistance = 6) and return the result.
 Result = corrected code or 0 if the correction fails
@@ -59,6 +60,8 @@ Result = corrected code or 0 if the correction fails
 >__unsigned long code__ = the 32 (with parity bit) bit pocsag code that was received (message bits + bch bits + parity bit).
 
 >__bool twoBitCodeCorrectionEnable__ = 1 (true) to use two and one bit error correction or 0 (false) to only use one bit error correction
+
+>__bool withParityCheck__ = set this to 1 (true) if you want to only accept codes when the parity is okay. (if you set this there is a better chance to correct more Bit errors correctly, it would not be recommended to enable this for 1 or 2 bit error correct) Default = false [optional]
 
 #### Return value: 
 >__ArrayList<unsigned long> *__ = if the error correction is successful it will return a ArrayList Pointer with the corrected codes (data + bch bits + parity bit) if not it will return a ArrayList with no entries
@@ -78,7 +81,7 @@ This is the unsecure methode to correct a pocsag code. You can choose how many e
 
 >__int numberOfErrors__ = the number of errors you want to correct. Ex: if numberOfErrors is set to 3 it will first try to correct 1 error then 2 errors and then 3 errors. That means that you don't need to call it for 1, 2, 3 errors. it is sufficient to call it for 3. 
 
->__bool withParityCheck__ = set this to 1 (true) if you want to only accept codes when the parity is okay. (if you set this the is a better chance to correct 3 Bit errors correctly) [optional]
+>__bool withParityCheck__ = set this to 1 (true) if you want to only accept codes when the parity is okay. (if you set this there is a better chance to correct 3 Bit errors correctly) Default = true [optional]
 
 #### Return value: 
 >__ArrayList<unsigned long> *__ = if the error correction is successful it will return a ArrayList Pointer with the corrected codes (data + bch bits + parity bit) if not it will return a ArrayList with no entries
