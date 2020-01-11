@@ -197,6 +197,7 @@ ArrayList<unsigned long> * BCH::codeCorrection(unsigned long code, int codeLengt
     return resultCorrectedCodeArrayList;
 }
 
+//same as the other function but this looks at the parity and checks that
 ArrayList<unsigned long> * BCH::codeCorrection(unsigned long code, int codeLength, unsigned long generator, int numberOfErrors, bool parity){
     //numberOfErros = the number of errors you want to try to correct (1 == 1 Bit error correction)
     bool enableParityCheck = true;
