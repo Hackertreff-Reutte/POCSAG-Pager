@@ -54,15 +54,10 @@ unsigned long POCSAG::generateCodeWithBCH(unsigned long data){
 
 //this function can be used to correct more than 2 error but beware the hamming distance of the pocsag code is only 6 (2 Bit error correction)
 //so there is a good chance that you will get a wrong code back (wrong code ist still valid in sense of the polynomial division)
+//default is with parity check
 ArrayList<unsigned long> * POCSAG::tryUnsecureCodeErrorCorrection(unsigned long code, int numberOfErrors){
 
-    //1 bit shift to remove parity bit
-    code = code >> 1;
-
-    ArrayList<unsigned long> * correctedCodeList = bch.codeCorrection(code, POCSAG_CODE_LENGTH, POCSAG_GENERATOR_POLYNOM, numberOfErrors);
-    
-    //Add parity bit and return
-    return calculateAndAddParityToArray(correctedCodeList);
+    return tryUnsecureCodeErrorCorrection(code, numberOfErrors, true);
 }
 
 ArrayList<unsigned long> * POCSAG::tryUnsecureCodeErrorCorrection(unsigned long code, int numberOfErrors, bool withParityCheck){
@@ -72,14 +67,33 @@ ArrayList<unsigned long> * POCSAG::tryUnsecureCodeErrorCorrection(unsigned long 
     //1 bit shift to remove parity bit
     code = code >> 1;
 
-    ArrayList<unsigned long> * correctedCodeList = bch.codeCorrection(code, POCSAG_CODE_LENGTH, POCSAG_GENERATOR_POLYNOM, numberOfErrors, parity);
+    ArrayList<unsigned long> * correctedCodeList = nullptr;
+
+    if(withParityCheck){
+        //with parity check
+        correctedCodeList = bch.codeCorrection(code, POCSAG_CODE_LENGTH, POCSAG_GENERATOR_POLYNOM, numberOfErrors, parity);
+    }else{
+        //without parity check
+        correctedCodeList = bch.codeCorrection(code, POCSAG_CODE_LENGTH, POCSAG_GENERATOR_POLYNOM, numberOfErrors);
+    }
+    
 
     //Add parity bit and return
     return calculateAndAddParityToArray(correctedCodeList);
 }
 
-
+//uses the code error correction but the
+//default is with parity check = false -> due to the hamming distance
 ArrayList<unsigned long> * POCSAG::tryCodeErrorCorrection(unsigned long code, bool twoBitCodeCorrectionEnable){
+
+    return tryCodeErrorCorrection(code, twoBitCodeCorrectionEnable, false);
+}
+
+//default is with parity check 
+ArrayList<unsigned long> * POCSAG::tryCodeErrorCorrection(unsigned long code, bool twoBitCodeCorrectionEnable, bool withParityCheck){
+
+    //get parity bit
+    bool parity = code & 0b1;
 
     //1 bit shift to remove parity bit
     code = code >> 1;
@@ -90,8 +104,18 @@ ArrayList<unsigned long> * POCSAG::tryCodeErrorCorrection(unsigned long code, bo
         numberOfErrors = 2;
     }
 
-    ArrayList<unsigned long> * correctedCodeList = bch.codeCorrection(code, POCSAG_CODE_LENGTH, POCSAG_GENERATOR_POLYNOM, numberOfErrors);
+    ArrayList<unsigned long> * correctedCodeList = nullptr;
+
+    if(withParityCheck){
+        //with parity check
+        correctedCodeList = bch.codeCorrection(code, POCSAG_CODE_LENGTH, POCSAG_GENERATOR_POLYNOM, numberOfErrors, parity);
+    }else{
+        //without parity check
+        correctedCodeList = bch.codeCorrection(code, POCSAG_CODE_LENGTH, POCSAG_GENERATOR_POLYNOM, numberOfErrors);
+    }
 
     //Add parity bit and return
     return calculateAndAddParityToArray(correctedCodeList);
 }
+
+

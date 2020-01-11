@@ -19,6 +19,7 @@ class POCSAG{
         bool hasCodeErrors(unsigned long code);
         unsigned long generateCodeWithBCH(unsigned long data);
         ArrayList<unsigned long> * tryCodeErrorCorrection(unsigned long code, bool twoBitCodeCorrectionEnable);
+        ArrayList<unsigned long> * tryCodeErrorCorrection(unsigned long code, bool twoBitCodeCorrectionEnable, bool withParityCheck);
         ArrayList<unsigned long> * tryUnsecureCodeErrorCorrection(unsigned long code, int numberOfErrors);
         ArrayList<unsigned long> * tryUnsecureCodeErrorCorrection(unsigned long code, int numberOfErrors, bool withParityCheck);
 
