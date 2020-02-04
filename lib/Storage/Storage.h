@@ -15,10 +15,16 @@ class Storage{
 
     public:
         bool setup();
+        void close();
         ArrayList<String> * listDir(String dirName);
         bool mkDir(String path);
         bool rmDir(String path);
+        bool rmFile(String path);
+        bool rename(String path, String newPath);
+        bool move(String path, String newPath);
         File getFile(String path, const char* mode);
+        bool exists(String path);
+        //READ
         String readLine(File file);
         String readLine(String path, int line);
     private:

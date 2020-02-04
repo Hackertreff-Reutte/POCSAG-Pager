@@ -1,5 +1,12 @@
 #include "Storage.h"
 
+/*
+All the important functions where implemented,
+there are some functions missing and will be 
+implemented if needed.
+Functions: cardSize(); cardType(); totalBytes(); usedBytes();
+*/
+
 //use the VSPI
 SPIClass SDSPI(VSPI);
 
@@ -10,10 +17,16 @@ SPIClass SDSPI(VSPI);
 
 static bool cardIsMounted = false;
 
+//starts the storage and mounts the sd card
 bool Storage::setup(){
     SDSPI.begin(Storage_SPI_CLK, Storage_SPI_MISO, Storage_SPI_MOSI, -1);
     cardIsMounted = SD.begin(Storage_SPI_SS, SDSPI);
     return cardIsMounted;
+}
+
+//stops the storage and unmounts the sd card
+void Storage::close(){
+    SD.end();
 }
 
 //normaly you shouldn't use this function (know your directories)
@@ -77,8 +90,50 @@ bool Storage::rmDir(String path){
         return false;
     }
 
-    //remove director
+    //check if directory exists
+    if(!SD.exists(path)){
+        return false;
+    }
+
+    //remove directory
+    return SD.rmdir(path);
+}
+
+
+bool Storage::rmFile(String path){
+    //check if card is mounted
+    if(!cardIsMounted){
+        return false;
+    }
+
+    //check if file exists
+    if(!SD.exists(path)){
+        return false;
+    }
+
+    //removes file
     return SD.remove(path);
+}
+
+//works for files and directories
+bool Storage::rename(String path, String newPath){
+    //check if card is mounted
+    if(!cardIsMounted){
+        return false;
+    }
+
+    //checks if the "to be moved" file exists and check that the move 
+    //location is empty (no file exists at that path (no overwrite))
+    if(!SD.exists(path) || SD.exists(newPath)){
+        return false;
+    }
+
+    return SD.rename(path, newPath);
+}
+
+
+bool Storage::move(String path, String newPath){
+    return rename(path, newPath);
 }
 
 
@@ -97,3 +152,11 @@ File Storage::getFile(String path, const char* mode){
     return f;
 }
 
+bool Storage::exists(String path){
+    //check if card is mounted
+    if(!cardIsMounted){
+        return false;
+    }
+
+    return SD.exists(path);
+}
