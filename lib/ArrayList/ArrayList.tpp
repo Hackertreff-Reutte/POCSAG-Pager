@@ -3,7 +3,7 @@
 
 
 template <typename T> ArrayList<T>::ArrayList(){
-   this->dataStruct.arrayPointer = new unsigned long[0];
+   this->dataStruct.arrayPointer = new T[0];
    this->dataStruct.size = 0;
 }
 
