@@ -12,7 +12,7 @@ SPIClass SDSPI(VSPI);
 
 #define Storage_SPI_CLK 18
 #define Storage_SPI_MISO 19
-#define Storage_SPI_MOSI 22
+#define Storage_SPI_MOSI 23
 #define Storage_SPI_SS 5
 
 static bool cardIsMounted = false;
