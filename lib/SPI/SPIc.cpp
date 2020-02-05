@@ -8,6 +8,8 @@ getClockDivider(); setDataMode(); setBitOrder();
 Missing implementation (should be implemented and functionality documented)
 transferBits();  writePixels();  writePattern();
 INFO: transferBits is kind of broken (test signal before implementing (always 8 useless clk cycles))
+for HAL implementation of the spi look at:
+https://github.com/espressif/arduino-esp32/blob/master/cores/esp32/esp32-hal-spi.c
 */
 
 /*
@@ -60,6 +62,7 @@ void SPIc::write32(uint32_t data){
 }
 
 //for writing array 
+//do not forget to delete the data array (mem leak)
 void SPIc::writeArray8(uint8_t * data, uint32_t size){
     SPIcSPI.writeBytes(data, size);
 }
@@ -77,6 +80,9 @@ uint32_t SPIc::transfer32(uint32_t data){
     return SPIcSPI.transfer32(data);
 }
 
+//for read and writing arrays 
+//do not forget to delete the arrays (data + result) otherwise there will
+//be a mem leak
 uint8_t * SPIc::transferArray8(uint8_t * data, uint32_t size){
     uint8_t * result = nullptr;
     SPIcSPI.transferBytes(data, result, size);
