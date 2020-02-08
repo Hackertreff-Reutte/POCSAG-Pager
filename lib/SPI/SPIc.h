@@ -13,6 +13,7 @@ class SPIc{
 
     public:
        void setup();
+       bool isInitialized();
        void close();
        void beginTransaction(uint32_t maxSpeed, uint8_t bitOrder, uint8_t spiMode);
        void beginTransaction(SPISettings settings);
@@ -28,6 +29,8 @@ class SPIc{
        uint32_t transfer32(uint32_t data);
        uint8_t * transferArray8(uint8_t * data, uint32_t size);
     private:
+        //to keep track whether the spi is initialized of not
+        static bool initialized;
         
 
 };

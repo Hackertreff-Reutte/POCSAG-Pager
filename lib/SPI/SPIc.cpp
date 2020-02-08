@@ -27,12 +27,25 @@ SPIClass SPIcSPI(HSPI);
 
 #define SPIc_SPI_SS_1 15
 
+bool SPIc::initialized = false;
+
 void SPIc::setup(){
-    SPIcSPI.begin(SPIc_SPI_CLK, SPIc_SPI_MISO, SPIc_SPI_MOSI, -1);
+    //if not initialized do the setup
+    if(!initialized){
+        SPIcSPI.begin(SPIc_SPI_CLK, SPIc_SPI_MISO, SPIc_SPI_MOSI, -1);
+        initialized = true;
+    }
+}
+
+bool SPIc::isInitialized(){
+    return initialized;
 }
 
 void SPIc::close(){
-    SPIcSPI.end();
+    if(initialized){
+        SPIcSPI.end();
+        initialized = false;
+    }
 }
 
 void SPIc::beginTransaction(uint32_t maxSpeed, uint8_t bitOrder, uint8_t spiMode){
