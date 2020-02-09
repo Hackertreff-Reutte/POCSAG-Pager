@@ -1,6 +1,5 @@
 #include "SI4432.h"
 
-
 //for more infos on the chip and the spi look at the datasheet
 //https://www.silabs.com/documents/public/data-sheets/Si4430-31-32.pdf
 
@@ -9,7 +8,7 @@
 //the cip select pin (nSEL)
 #define CSpin 15
 
-static const uint32_t spiMaxSpeed = 1000000; // 1Mhz = 1000000;
+static const uint32_t spiMaxSpeed = 100000; // 1Mhz = 1000000; 100kHz = 100000 (for testing purpose ozi)
 static const uint8_t spiBitOrder = MSBFIRST;
 static const uint8_t spiMode = SPI_MODE0; //should be MODE 0 but should be checked again
 
@@ -68,6 +67,7 @@ void SI4432::spiWrite(uint8_t address, uint8_t data){
     digitalWrite(CSpin, LOW);
     
     //wait for 2 instructions (20ns setup time)
+    //should normaly not be needed and is just here to be sure
     __asm("nop");
     __asm("nop");
 
@@ -86,6 +86,7 @@ void SI4432::spiWrite(uint8_t address, uint8_t data){
 
     //8 nops so that the program will have the min high time of
     //the slave select ping (80ns)
+    //should normaly not be needed and is just here to be sure
     __asm("nop");
     __asm("nop");
     __asm("nop");
@@ -106,10 +107,11 @@ uint8_t SI4432::spiRead(uint8_t address){
 
     uint8_t spiData = address;
 
-
+    
     digitalWrite(CSpin, LOW);
     
     //wait for 2 instructions (20ns setup time)
+    //should normaly not be needed and is just here to be sure
     __asm("nop");
     __asm("nop");
 
@@ -117,11 +119,13 @@ uint8_t SI4432::spiRead(uint8_t address){
 
     if(si4432Transaction){
         //if the begin is already executed then just send the data
-        spiResponse = spi.transfer8(spiData);
+        spi.write8(spiData);
+        spiResponse = spi.transfer8(0); //the type and value of the data that is transfered is irrelevant
     }else{
         //begin and end transaction if nothing is initalized
         beginTransaction();
-        spiResponse = spi.transfer8(spiData);
+        spi.write8(spiData);
+        spiResponse = spi.transfer8(0); //the type and value of the data that is transfered is irrelevant
         endTransaction();
 
     }
@@ -130,6 +134,7 @@ uint8_t SI4432::spiRead(uint8_t address){
 
     //8 nops so that the program will have the min high time of
     //the slave select ping (80ns)
+    //should normaly not be needed and is just here to be sure
     __asm("nop");
     __asm("nop");
     __asm("nop");
@@ -143,3 +148,111 @@ uint8_t SI4432::spiRead(uint8_t address){
 }
 
 
+void SI4432::spiBurstWrite(uint8_t address, uint8_t * data, uint32_t size){
+     
+    //check if adress is out of range
+    if(address > 127){
+        return;
+    }
+
+    //first block of data 
+    uint8_t spiData = 0b10000000;
+    spiData = spiData ^ address;
+
+
+    digitalWrite(CSpin, LOW);
+    
+    //wait for 2 instructions (20ns setup time)
+    //should normaly not be needed and is just here to be sure
+    __asm("nop");
+    __asm("nop");
+
+
+    if(si4432Transaction){
+        //if the begin is already executed then just send the data
+        spi.write8(spiData);
+        spi.writeArray8(data, size);
+    }else{
+        //begin and end transaction if nothing is initalized
+        beginTransaction();
+        spi.write8(spiData);
+        spi.writeArray8(data, size);
+        endTransaction();
+
+    }
+
+    digitalWrite(CSpin, HIGH);
+
+    //8 nops so that the program will have the min high time of
+    //the slave select ping (80ns) 
+    //should normaly not be needed and is just here to be sure
+    __asm("nop");
+    __asm("nop");
+    __asm("nop");
+    __asm("nop");
+    __asm("nop");
+    __asm("nop");
+    __asm("nop");
+    __asm("nop");
+}
+
+
+//don't foget to delete the pointer / array (mem leak)
+uint8_t * SI4432::spiBurstRead(uint8_t address, uint32_t size){
+    
+    //check if adress is out of range
+    if(address > 127){
+        return nullptr;
+    }
+
+    uint8_t spiData = address;
+
+
+    digitalWrite(CSpin, LOW);
+    
+    //wait for 2 instructions (20ns setup time)
+    //should normaly not be needed and is just here to be sure
+    __asm("nop");
+    __asm("nop");
+
+    uint8_t * spiResponse = nullptr;
+    uint8_t * placeholder = new uint8_t[size];
+
+    
+    //can be removed if it is too slow 
+    //is just here so that the signal looks pretty 
+    for(int i = 0; i < size; i++){
+        placeholder[i] = 0;
+    }
+
+    if(si4432Transaction){
+        //if the begin is already executed then just send the data
+        spi.write8(spiData);
+        spiResponse = spi.transferArray8(placeholder, size); //the type and value of the data that is transfered is irrelevant
+    }else{
+        //begin and end transaction if nothing is initalized
+        beginTransaction();
+        spi.write8(spiData);
+        spiResponse = spi.transferArray8(placeholder, size); //the type and value of the data that is transfered is irrelevant
+        endTransaction();
+    }
+
+    //delete otherwise memory leak 
+    delete[] placeholder;
+
+    digitalWrite(CSpin, HIGH);
+
+    //8 nops so that the program will have the min high time of
+    //the slave select ping (80ns)
+    //should normaly not be needed and is just here to be sure
+    __asm("nop");
+    __asm("nop");
+    __asm("nop");
+    __asm("nop");
+    __asm("nop");
+    __asm("nop");
+    __asm("nop");
+    __asm("nop");
+
+    return spiResponse;
+}
