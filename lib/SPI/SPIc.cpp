@@ -97,7 +97,7 @@ uint32_t SPIc::transfer32(uint32_t data){
 //do not forget to delete the arrays (data + result) otherwise there will
 //be a mem leak
 uint8_t * SPIc::transferArray8(uint8_t * data, uint32_t size){
-    uint8_t * result = nullptr;
+    uint8_t * result = new uint8_t[size];
     SPIcSPI.transferBytes(data, result, size);
     return result;
 }
