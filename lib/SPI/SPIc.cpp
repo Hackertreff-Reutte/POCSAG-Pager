@@ -8,6 +8,7 @@ getClockDivider(); setDataMode(); setBitOrder();
 Missing implementation (should be implemented and functionality documented)
 transferBits();  writePixels();  writePattern();
 INFO: transferBits is kind of broken (test signal before implementing (always 8 useless clk cycles))
+Github ISSUE: https://github.com/espressif/arduino-esp32/issues/3714
 for HAL implementation of the spi look at:
 https://github.com/espressif/arduino-esp32/blob/master/cores/esp32/esp32-hal-spi.c
 */
