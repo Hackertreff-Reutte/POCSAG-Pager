@@ -6,15 +6,19 @@ Lib for creating and managing pocsag messages
 #define SPIc_h
 
 #include "SPI.h"
+#include "Arduino.h"
 
 class SPIc{
 
     
 
     public:
-       void setup();
+       static bool transmitting;
+       void setup(uint8_t CSpin);
        bool isInitialized();
        void close();
+       void selectChip(uint8_t CSpin);
+       void deselectChip(uint8_t CSpin);
        void beginTransaction(uint32_t maxSpeed, uint8_t bitOrder, uint8_t spiMode);
        void beginTransaction(SPISettings settings);
        void endTransaction();
@@ -32,7 +36,6 @@ class SPIc{
         //to keep track whether the spi is initialized of not
         static bool initialized;
         
-
 };
 
 

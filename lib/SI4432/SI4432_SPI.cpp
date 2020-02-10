@@ -18,12 +18,9 @@ static bool si4432Transaction = false;
 //setup spi
 void SI4432::spiSetup(){
     if(!spiInitialized){
-        spi.setup();
+        spi.setup(CSpin);
         //check wether the spi initialization worked
         if(spi.isInitialized()){
-            //enable the CHIP select pins es output and set it high
-            pinMode(CSpin, OUTPUT);
-            digitalWrite(CSpin, HIGH);
             spiInitialized = true;
         }
     }
@@ -63,13 +60,8 @@ void SI4432::spiWrite(uint8_t address, uint8_t data){
     //add the data
     spiData = spiData ^ data;
     
-
-    digitalWrite(CSpin, LOW);
-    
-    //wait for 2 instructions (20ns setup time)
-    //should normaly not be needed and is just here to be sure
-    __asm("nop");
-    __asm("nop");
+    //enable / select the chip
+    spi.selectChip(CSpin);
 
     if(si4432Transaction){
         //if the begin is already executed then just send the data
@@ -82,19 +74,9 @@ void SI4432::spiWrite(uint8_t address, uint8_t data){
 
     }
 
-    digitalWrite(CSpin, HIGH);
+    //disable / deselect the chip
+    spi.deselectChip(CSpin);
 
-    //8 nops so that the program will have the min high time of
-    //the slave select ping (80ns)
-    //should normaly not be needed and is just here to be sure
-    __asm("nop");
-    __asm("nop");
-    __asm("nop");
-    __asm("nop");
-    __asm("nop");
-    __asm("nop");
-    __asm("nop");
-    __asm("nop");
 }
 
 
@@ -107,15 +89,10 @@ uint8_t SI4432::spiRead(uint8_t address){
 
     uint8_t spiData = address;
 
-    
-    digitalWrite(CSpin, LOW);
-    
-    //wait for 2 instructions (20ns setup time)
-    //should normaly not be needed and is just here to be sure
-    __asm("nop");
-    __asm("nop");
-
     uint8_t spiResponse;
+
+    //enable / select the chip
+    spi.selectChip(CSpin);
 
     if(si4432Transaction){
         //if the begin is already executed then just send the data
@@ -130,19 +107,8 @@ uint8_t SI4432::spiRead(uint8_t address){
 
     }
 
-    digitalWrite(CSpin, HIGH);
-
-    //8 nops so that the program will have the min high time of
-    //the slave select ping (80ns)
-    //should normaly not be needed and is just here to be sure
-    __asm("nop");
-    __asm("nop");
-    __asm("nop");
-    __asm("nop");
-    __asm("nop");
-    __asm("nop");
-    __asm("nop");
-    __asm("nop");
+    //disable / deselect the chip
+    spi.deselectChip(CSpin);
 
     return spiResponse;
 }
@@ -159,14 +125,8 @@ void SI4432::spiBurstWrite(uint8_t address, uint8_t * data, uint32_t size){
     uint8_t spiData = 0b10000000;
     spiData = spiData ^ address;
 
-
-    digitalWrite(CSpin, LOW);
-    
-    //wait for 2 instructions (20ns setup time)
-    //should normaly not be needed and is just here to be sure
-    __asm("nop");
-    __asm("nop");
-
+    //enable / select the chip
+    spi.selectChip(CSpin);
 
     if(si4432Transaction){
         //if the begin is already executed then just send the data
@@ -181,19 +141,9 @@ void SI4432::spiBurstWrite(uint8_t address, uint8_t * data, uint32_t size){
 
     }
 
-    digitalWrite(CSpin, HIGH);
+    //disable / deselect the chip
+    spi.deselectChip(CSpin);
 
-    //8 nops so that the program will have the min high time of
-    //the slave select ping (80ns) 
-    //should normaly not be needed and is just here to be sure
-    __asm("nop");
-    __asm("nop");
-    __asm("nop");
-    __asm("nop");
-    __asm("nop");
-    __asm("nop");
-    __asm("nop");
-    __asm("nop");
 }
 
 
@@ -208,13 +158,6 @@ uint8_t * SI4432::spiBurstRead(uint8_t address, uint32_t size){
     uint8_t spiData = address;
 
 
-    digitalWrite(CSpin, LOW);
-    
-    //wait for 2 instructions (20ns setup time)
-    //should normaly not be needed and is just here to be sure
-    __asm("nop");
-    __asm("nop");
-
     uint8_t * spiResponse = nullptr;
     uint8_t * placeholder = new uint8_t[size];
 
@@ -224,6 +167,9 @@ uint8_t * SI4432::spiBurstRead(uint8_t address, uint32_t size){
     for(int i = 0; i < size; i++){
         placeholder[i] = 0;
     }
+
+    //enable / select the chip
+    spi.selectChip(CSpin);
 
     if(si4432Transaction){
         //if the begin is already executed then just send the data
@@ -237,22 +183,11 @@ uint8_t * SI4432::spiBurstRead(uint8_t address, uint32_t size){
         endTransaction();
     }
 
+    //disable / deselect the chip
+    spi.deselectChip(CSpin);
+
     //delete otherwise memory leak 
     delete[] placeholder;
-
-    digitalWrite(CSpin, HIGH);
-
-    //8 nops so that the program will have the min high time of
-    //the slave select ping (80ns)
-    //should normaly not be needed and is just here to be sure
-    __asm("nop");
-    __asm("nop");
-    __asm("nop");
-    __asm("nop");
-    __asm("nop");
-    __asm("nop");
-    __asm("nop");
-    __asm("nop");
 
     return spiResponse;
 }

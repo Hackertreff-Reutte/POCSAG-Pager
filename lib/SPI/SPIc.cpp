@@ -29,8 +29,13 @@ SPIClass SPIcSPI(HSPI);
 #define SPIc_SPI_SS_1 15
 
 bool SPIc::initialized = false;
+bool SPIc::transmitting = false;
 
-void SPIc::setup(){
+void SPIc::setup(uint8_t CSpin){
+
+    pinMode(CSpin, OUTPUT);
+    digitalWrite(CSpin, HIGH);
+
     //if not initialized do the setup
     if(!initialized){
         SPIcSPI.begin(SPIc_SPI_CLK, SPIc_SPI_MISO, SPIc_SPI_MOSI, -1);
@@ -49,16 +54,47 @@ void SPIc::close(){
     }
 }
 
+void SPIc::selectChip(uint8_t CSpin){
+    
+    digitalWrite(CSpin, LOW);
+    
+    //wait for 2 instructions (20ns setup time)
+    //should normaly not be needed and is just here to be sure
+    __asm("nop");
+    __asm("nop");
+}
+
+    
+void SPIc::deselectChip(uint8_t CSpin){
+    
+    digitalWrite(CSpin, HIGH);
+
+    //8 nops so that the program will have the min high time of
+    //the slave select ping (80ns)
+    //should normaly not be needed and is just here to be sure
+    __asm("nop");
+    __asm("nop");
+    __asm("nop");
+    __asm("nop");
+    __asm("nop");
+    __asm("nop");
+    __asm("nop");
+    __asm("nop");
+}
+
+//overloaded function (will call the other one)
 void SPIc::beginTransaction(uint32_t maxSpeed, uint8_t bitOrder, uint8_t spiMode){
-    SPIcSPI.beginTransaction(SPISettings(maxSpeed, bitOrder, spiMode));
+    beginTransaction(SPISettings(maxSpeed, bitOrder, spiMode));
 }
 
 void SPIc::beginTransaction(SPISettings settings){
+    transmitting = true;
     SPIcSPI.beginTransaction(settings);
 }
 
 void SPIc::endTransaction(){
     SPIcSPI.endTransaction();
+    transmitting = false;
 }
 
 
