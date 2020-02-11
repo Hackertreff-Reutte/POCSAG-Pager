@@ -20,6 +20,10 @@ This lib  is used to read, write and manage and SD Card via the SPI interface
 
 ## Functions
 
+<!-- 
+Here start the STOARGE BASIC FUNCTIONS
+-->
+
 ### setup()
 
 ```
@@ -112,6 +116,7 @@ This function is used to rename files. You must give this functions 2 absolute p
 
 #### Arguments: 
 >__String path__ = the absolute path to the file that should be renamed
+
 >__String newPath__ = the absolute path to file + the file with the new name
 
 #### Return value: 
@@ -129,6 +134,7 @@ This function is used to move files. You must give this functions 2 absolute pat
 
 #### Arguments: 
 >__String path__ = the absolute path to the file that should be moved
+
 >__String newPath__ = the absolute path to new location + the file 
 
 #### Return value: 
@@ -145,10 +151,11 @@ This function will open file in an selected mode (Read / Write / Append) and ret
 
 #### Arguments: 
 >__String path__ = the absolute path to the file that should be opened
+
 >__const char * mode__ = the mode in which the file should be opened ((FILE_READ / "r"), (FILE_WRITE / "w"), (FILE_APPEND / "a"))
 
 #### Return value: 
->__return File = returns the file
+>__return File__ = returns the file
 
 <br>
 
@@ -162,6 +169,57 @@ This functions checks if a file exists or not
 >__String path__ = the absolute path to the file that should be checked for existence 
 
 #### Return value: 
->__return bool = returns true (1) if the file exists and false (0) if it doesn't.
+>__return bool__ = returns true (1) if the file exists and false (0) if it doesn't.
 
 <br>
+
+<!-- 
+Here start the STOARGE READ FUNCTIONS
+-->
+
+
+### readLine()
+```
+String readLine(File file);
+String readLine(String path, size_t line)
+```
+This function will read the line from the current line pointer and put the line pointer to the next line. With this function it is possible to read the file line by line, you just need to call it x-times (x-times = amount of lines). It is also possible to read a spesific line of a file, for that the absolute path to the file must be given to the functions and the line number.
+(Will alway read until the next "\n")
+
+#### Arguments: 
+>__File file__ = the file that should be read from (obtainable via the getFile() function) [Option 1]
+
+>__String path__ = absolute path to the file that should be read from (eg. /testDir/file.txt) [Option 2]
+
+>__size_t line__ = the line number that should be read from the selected file (path) [Option 2]
+
+#### Return value: 
+>__return String__ = return the line from the line pointer location of the currently read file or the line specified by (size_t line) 
+
+<br>
+
+### readBytes()
+```
+byte * readBytes(File file, size_t length);
+byte * readBytes(String path, size_t start, size_t length);
+```
+This functions will read the number given by length bytes and returns them in an byte array. If the function is called more than one time (first functions) it will start reading where the last one left off. The other function will start reading given by length number bytes after it has read the number by start given bytes. So it will only read the number given by length bytes after the number by start given bytes offset (start is given in bytes  (start = 2 -> 2 bytes offset))
+
+#### Arguments: 
+>__File file__ = the file that should be read from [Option 1]
+
+>__size_t length__ = the number of bytes that should be read [Option 1] [Option 2]
+
+>__String path__ = the absolute path to the file that should be read from
+
+>__size_t start__ = offset of bytes. the functions will only start reading after the by start defined bytes (start = read offset)
+
+
+#### Return value: 
+>__return byte *__ = returns an pointer to an byte array containing the read bytes from the file
+
+<br>
+
+<!-- 
+Here start the STOARGE WRITE FUNCTIONS
+-->
