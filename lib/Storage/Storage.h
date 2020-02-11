@@ -28,7 +28,7 @@ class Storage{
         String readLine(File file);
         String readLine(String path, size_t line);
         byte * readBytes(File file, size_t length);
-        byte * readBytes(File file, size_t start, size_t length);
+        byte * readBytes(String path, size_t start, size_t length);
     private:
         
 

@@ -54,11 +54,13 @@ byte * Storage::readBytes(File file, size_t length){
 
 
 //start is given in bytes, so it will start reading after 8 * start bits
-byte * Storage::readBytes(File file, size_t start, size_t length){
+byte * Storage::readBytes(String path, size_t start, size_t length){
     
+    File file = getFile(path, FILE_READ);
     if(!file.available()){
         return nullptr;
     }
+    
     byte * buffer;
 
     for(int i = 0; i < start; i++){
