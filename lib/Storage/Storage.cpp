@@ -27,17 +27,18 @@ bool Storage::setup(){
 //stops the storage and unmounts the sd card
 void Storage::close(){
     SD.end();
+    SDSPI.end();
 }
 
 //normaly you shouldn't use this function (know your directories)
-ArrayList<String> * Storage::listDir(String dirName){
+ArrayList<String> * Storage::listDir(String path){
 
     //check if card is mounted
     if(!cardIsMounted){
         return nullptr;
     }
     
-    File root = SD.open(dirName);
+    File root = SD.open(path);
     //check if directory can be opened
     if(!root){
         return nullptr;
@@ -140,7 +141,7 @@ bool Storage::move(String path, String newPath){
 /* 
  *  Modes: FILE_WRITE, FILE_READ, FILE_APPEND 
  */
-File Storage::getFile(String path, const char* mode){
+File Storage::getFile(String path, const char * mode){
     //check if card is mounted
     File f;
     if(!cardIsMounted){

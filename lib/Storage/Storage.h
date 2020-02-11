@@ -16,7 +16,7 @@ class Storage{
     public:
         bool setup();
         void close();
-        ArrayList<String> * listDir(String dirName);
+        ArrayList<String> * listDir(String path);
         bool mkDir(String path);
         bool rmDir(String path);
         bool rmFile(String path);
