@@ -65,6 +65,9 @@ void SI4432::spiWrite(uint8_t address, uint8_t data){
 
     if(si4432Transaction){
         //if the begin is already executed then just send the data
+
+        //send the address of the register you want to write to ( MSB - 1 until MSB - 8)
+        //plus the data (last 8 bit) (MSB must be 1 (write operation))
         spi.write16(spiData);
     }else{
         //begin and end transaction if nothing is initalized
@@ -96,12 +99,20 @@ uint8_t SI4432::spiRead(uint8_t address){
 
     if(si4432Transaction){
         //if the begin is already executed then just send the data
+
+        //send the address of the register you want to read from
         spi.write8(spiData);
+
+        //get the response of the chip (contents of the register)
         spiResponse = spi.read8();
     }else{
         //begin and end transaction if nothing is initalized
         beginTransaction();
+
+         //send the address of the register you want to read from
         spi.write8(spiData);
+
+        //get the response of the chip (contents of the register)
         spiResponse = spi.read8();
         endTransaction();
 
@@ -130,12 +141,20 @@ void SI4432::spiBurstWrite(uint8_t address, uint8_t * data, uint32_t size){
 
     if(si4432Transaction){
         //if the begin is already executed then just send the data
+
+        //write the address (register you want to write to (start address))
         spi.write8(spiData);
+
+        //write the data in the registers
         spi.writeArray8(data, size);
     }else{
         //begin and end transaction if nothing is initalized
         beginTransaction();
-        spi.write8(spiData);
+        
+        //write the address (register you want to write to (start address))
+        spi.write8(spiData); 
+
+        //write the data registers
         spi.writeArray8(data, size);
         endTransaction();
 
@@ -165,12 +184,20 @@ uint8_t * SI4432::spiBurstRead(uint8_t address, uint32_t size){
 
     if(si4432Transaction){
         //if the begin is already executed then just send the data
+
+        //write the address (register you want to read from (start address))
         spi.write8(spiData);
+
+        //the data that will be read from the registers
         spiResponse = spi.readArray8(size); //the type and value of the data that is transfered is irrelevant
     }else{
         //begin and end transaction if nothing is initalized
         beginTransaction();
+
+        //write the address (register you want to read from (start address))
         spi.write8(spiData);
+
+        //the data that will be read from the registers
         spiResponse = spi.readArray8(size); //the type and value of the data that is transfered is irrelevant
         endTransaction();
     }
