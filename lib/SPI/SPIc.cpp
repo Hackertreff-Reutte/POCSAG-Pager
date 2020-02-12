@@ -26,6 +26,7 @@ SPIClass SPIcSPI(HSPI);
 #define SPIc_SPI_MISO 12
 #define SPIc_SPI_MOSI 13
 
+//ignored at the moment
 #define SPIc_SPI_SS_1 15
 
 bool SPIc::initialized = false;

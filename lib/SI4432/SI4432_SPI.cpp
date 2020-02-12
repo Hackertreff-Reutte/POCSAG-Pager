@@ -60,11 +60,12 @@ void SI4432::spiWrite(uint8_t address, uint8_t data){
     //add the data
     spiData = spiData ^ data;
     
-    //enable / select the chip
-    spi.selectChip(CSpin);
 
     if(si4432Transaction){
         //if the begin is already executed then just send the data
+
+        //enable / select the chip
+        spi.selectChip(CSpin);
 
         //send the address of the register you want to write to ( MSB - 1 until MSB - 8)
         //plus the data (last 8 bit) (MSB must be 1 (write operation))
@@ -72,6 +73,10 @@ void SI4432::spiWrite(uint8_t address, uint8_t data){
     }else{
         //begin and end transaction if nothing is initalized
         beginTransaction();
+
+        //enable / select the chip
+        spi.selectChip(CSpin);
+
         spi.write16(spiData);
         endTransaction();
 
@@ -94,11 +99,11 @@ uint8_t SI4432::spiRead(uint8_t address){
 
     uint8_t spiResponse;
 
-    //enable / select the chip
-    spi.selectChip(CSpin);
-
     if(si4432Transaction){
         //if the begin is already executed then just send the data
+
+        //enable / select the chip
+        spi.selectChip(CSpin);
 
         //send the address of the register you want to read from
         spi.write8(spiData);
@@ -108,6 +113,9 @@ uint8_t SI4432::spiRead(uint8_t address){
     }else{
         //begin and end transaction if nothing is initalized
         beginTransaction();
+
+        //enable / select the chip
+        spi.selectChip(CSpin);
 
          //send the address of the register you want to read from
         spi.write8(spiData);
@@ -136,11 +144,12 @@ void SI4432::spiBurstWrite(uint8_t address, uint8_t * data, uint32_t size){
     uint8_t spiData = 0b10000000;
     spiData = spiData ^ address;
 
-    //enable / select the chip
-    spi.selectChip(CSpin);
 
     if(si4432Transaction){
         //if the begin is already executed then just send the data
+
+        //enable / select the chip
+        spi.selectChip(CSpin);
 
         //write the address (register you want to write to (start address))
         spi.write8(spiData);
@@ -151,6 +160,9 @@ void SI4432::spiBurstWrite(uint8_t address, uint8_t * data, uint32_t size){
         //begin and end transaction if nothing is initalized
         beginTransaction();
         
+        //enable / select the chip
+        spi.selectChip(CSpin);
+
         //write the address (register you want to write to (start address))
         spi.write8(spiData); 
 
@@ -179,11 +191,11 @@ uint8_t * SI4432::spiBurstRead(uint8_t address, uint32_t size){
 
     uint8_t * spiResponse = nullptr;
 
-    //enable / select the chip
-    spi.selectChip(CSpin);
-
     if(si4432Transaction){
         //if the begin is already executed then just send the data
+
+        //enable / select the chip
+        spi.selectChip(CSpin);
 
         //write the address (register you want to read from (start address))
         spi.write8(spiData);
@@ -193,6 +205,9 @@ uint8_t * SI4432::spiBurstRead(uint8_t address, uint32_t size){
     }else{
         //begin and end transaction if nothing is initalized
         beginTransaction();
+
+        //enable / select the chip
+        spi.selectChip(CSpin);
 
         //write the address (register you want to read from (start address))
         spi.write8(spiData);
