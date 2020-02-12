@@ -111,6 +111,55 @@ Ends an transmission that was started by the function beginTransaction(). The cu
 Here start the SPI WRITE FUNCTIONS
 -->
 
+### write8()
+
+```
+void write8(uint8_t data);
+```
+Sends 8 bit of data out the MOSI pin.
+
+#### Arguments: 
+>__uint8_t data__ = the 8 bit of data that will be sent.
+
+<br>
+
+### write16()
+
+```
+void write16(uint16_t data);
+```
+Sends 16 bit of data out the MOSI pin.
+
+#### Arguments: 
+>__uint16_t data__ = the 16 bit of data that will be sent.
+
+<br>
+
+### write32()
+
+```
+void write32(uint32_t data);
+```
+Sends 32 bit of data out the MOSI pin.
+
+#### Arguments: 
+>__uint32_t data__ = the 32 bit of data that will be sent.
+
+<br>
+
+### writeArray8()
+
+```
+void writeArray8(uint8_t * data, uint32_t size);
+```
+Sends an 8 bit array (byte array) out of the MOSI pin. This functions is used when a lot of bits need to be sent. You can only send a multiple of 8 bit of data with this functions (bytes)
+
+#### Arguments: 
+>__uint8_t * data__ = a pointer to an array that contains the data that should be sent
+
+>__uint32_t size__ = the size of the array or the amout that should be sent. (Should not be bigger than the amount of entries in the array itself) (eg. size = 4 sends 4 bytes (4 * 8 bits))
+
+<br>
 
 <!-- 
 Here start the SPI TRANSFER FUNCTIONS
