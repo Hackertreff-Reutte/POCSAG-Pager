@@ -176,7 +176,7 @@ This functions transfers 8 bit of data through the MOSI pin and reads at the sam
 >__uint8_t data__ = the data that will be sent (8 bit)
 
 #### Return value: 
->__return uint8_t__ = 
+>__return uint8_t__ = the data that was read from the MISO pin (8 bit)
 
 <br>
 
@@ -191,7 +191,7 @@ This functions transfers 16 bit of data through the MOSI pin and reads at the sa
 >__uint16_t data__ = the data that will be sent (16 bit)
 
 #### Return value: 
->__return uint16_t__ = 
+>__return uint16_t__ = the data that was read from the MISO pin (16 bit)
 
 <br>
 
@@ -206,7 +206,7 @@ This functions transfers 32 bit of data through the MOSI pin and reads at the sa
 >__uint32_t data__ = the data that will be sent (32 bit)
 
 #### Return value: 
->__return uint32_t__ = 
+>__return uint32_t__ = the data that was read from the MISO pin (32 bit)
 
 <br>
 
@@ -230,3 +230,54 @@ This function sends an byte array through the MSOI pin. The amount of bytes bein
 <!-- 
 Here start the SPI READ FUNCTIONS
 -->
+
+### read8()
+
+```
+uint8_t read8();
+```
+This function will read 8 bits from the MISO pin and return it. The MOSI pin will be 0 the entire time.
+
+#### Return value: 
+>__return uint8_t__ = returns the data (8 bit) that was read be the SPI on the MISO pin
+
+<br>
+
+### read16()
+
+```
+uint16_t read16();
+```
+This function will read 16 bits from the MISO pin and return it. The MOSI pin will be 0 the entire time.
+
+#### Return value: 
+>__return uint16_t__ = returns the data (16 bit) that was read be the SPI on the MISO pin
+
+<br>
+
+### read32()
+
+```
+uint32_t read32();
+```
+This function will read 32 bits from the MISO pin and return it. The MOSI pin will be 0 the entire time.
+
+#### Return value: 
+>__return uint32_t__ = returns the data (32 bit) that was read be the SPI on the MISO pin
+
+<br>
+
+### readArray8()
+
+```
+uint8_t * readArray8(uint32_t size);
+```
+This functions will read the amount given by size bytes (1 byte = 8 bit) from the MISO pin. The MOSI pin will be zero the entire time.
+
+#### Arguments: 
+>__uint32_t size__ = the amount of bytes that should be read
+
+#### Return value: 
+>__return uint8_t *__ = returns the pointer to an array which contains the read bytes. The array has the same size as the given variable size
+
+<br>
