@@ -165,6 +165,67 @@ Sends an 8 bit array (byte array) out of the MOSI pin. This functions is used wh
 Here start the SPI TRANSFER FUNCTIONS
 -->
 
+### transfer8()
+
+```
+uint8_t transfer8(uint8_t data);
+```
+This functions transfers 8 bit of data through the MOSI pin and reads at the same moment 8 bit from the MISO and returns them. (Both operations are executet at the same time)
+
+#### Arguments: 
+>__uint8_t data__ = the data that will be sent (8 bit)
+
+#### Return value: 
+>__return uint8_t__ = 
+
+<br>
+
+### transfer16()
+
+```
+uint16_t transfer16(uint16_t data);
+```
+This functions transfers 16 bit of data through the MOSI pin and reads at the same moment 16 bit from the MISO and returns them. (Both operations are executet at the same time)
+
+#### Arguments: 
+>__uint16_t data__ = the data that will be sent (16 bit)
+
+#### Return value: 
+>__return uint16_t__ = 
+
+<br>
+
+### transfer32()
+
+```
+uint32_t transfer32(uint32_t data);
+```
+This functions transfers 32 bit of data through the MOSI pin and reads at the same moment 32 bit from the MISO and returns them. (Both operations are executet at the same time)
+
+#### Arguments: 
+>__uint32_t data__ = the data that will be sent (32 bit)
+
+#### Return value: 
+>__return uint32_t__ = 
+
+<br>
+
+### transferArray8()
+
+```
+uint8_t * transftransferArray8er32(uint8_t * data, uint32_t size);
+```
+This function sends an byte array through the MSOI pin. The amount of bytes being sent is defined by the size var. The data that will be sent is located at the data pointer. The size variable must not exceed the size of the array (data). While the data is sent the SPI controller will read all incoming bits on the MISO pin and store them in an array with the size of the size variable. The function will return a pointer to the received data. (Both operations (send and receive) are executet at the same time)
+
+#### Arguments: 
+>__uint8_t * data__ = a pointer to the array which contains the data that will be sent
+
+>__uint32_t size__ = the size of the array or the amount of data that should be sent in bytes (3 bytes = 3 * 8 bits)
+
+#### Return value: 
+>__return uint8_t *__ = returns an pointer to an array which contains the data that was received (MISO) simultaneously to the sent data. The size of that array is the same as the value of the variable size
+
+<br>
 
 <!-- 
 Here start the SPI READ FUNCTIONS
