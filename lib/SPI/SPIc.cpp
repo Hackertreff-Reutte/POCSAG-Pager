@@ -138,3 +138,40 @@ uint8_t * SPIc::transferArray8(uint8_t * data, uint32_t size){
     SPIcSPI.transferBytes(data, result, size);
     return result;
 }
+
+
+//for reading 
+uint8_t SPIc::read8(){
+    //transfers a zero signal (MOSI)
+    return transfer8(0);
+}
+
+uint16_t SPIc::read16(){
+    //transfers a zero signal (MOSI)
+    return transfer16(0);
+}
+
+uint32_t SPIc::read32(){
+    //transfers a zero signal (MOSI)
+    return transfer32(0);
+}
+
+//for read arrays 
+//do not forget to delete the array (result) otherwise there will
+//be a mem leak
+uint8_t * SPIc::readArray8(uint32_t size){
+
+    uint8_t * result = nullptr;
+    uint8_t * data = new uint8_t[size];
+
+    //is used so that the MOSI data is constantly zero (pretty signal and less confusing)
+    //maybe removed if speed is an issue but should only have a minimum effect
+    for(int i = 0; i < size; i++){
+        data[i] = 0;
+    }
+
+    result = transferArray8(data, size);
+    
+    delete[] data;
+    return result;
+}

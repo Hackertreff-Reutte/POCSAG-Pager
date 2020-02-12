@@ -97,12 +97,12 @@ uint8_t SI4432::spiRead(uint8_t address){
     if(si4432Transaction){
         //if the begin is already executed then just send the data
         spi.write8(spiData);
-        spiResponse = spi.transfer8(0); //the type and value of the data that is transfered is irrelevant
+        spiResponse = spi.read8();
     }else{
         //begin and end transaction if nothing is initalized
         beginTransaction();
         spi.write8(spiData);
-        spiResponse = spi.transfer8(0); //the type and value of the data that is transfered is irrelevant
+        spiResponse = spi.read8();
         endTransaction();
 
     }
@@ -159,14 +159,6 @@ uint8_t * SI4432::spiBurstRead(uint8_t address, uint32_t size){
 
 
     uint8_t * spiResponse = nullptr;
-    uint8_t * placeholder = new uint8_t[size];
-
-    
-    //can be removed if it is too slow 
-    //is just here so that the signal looks pretty 
-    for(int i = 0; i < size; i++){
-        placeholder[i] = 0;
-    }
 
     //enable / select the chip
     spi.selectChip(CSpin);
@@ -174,20 +166,18 @@ uint8_t * SI4432::spiBurstRead(uint8_t address, uint32_t size){
     if(si4432Transaction){
         //if the begin is already executed then just send the data
         spi.write8(spiData);
-        spiResponse = spi.transferArray8(placeholder, size); //the type and value of the data that is transfered is irrelevant
+        spiResponse = spi.readArray8(size); //the type and value of the data that is transfered is irrelevant
     }else{
         //begin and end transaction if nothing is initalized
         beginTransaction();
         spi.write8(spiData);
-        spiResponse = spi.transferArray8(placeholder, size); //the type and value of the data that is transfered is irrelevant
+        spiResponse = spi.readArray8(size); //the type and value of the data that is transfered is irrelevant
         endTransaction();
     }
 
     //disable / deselect the chip
     spi.deselectChip(CSpin);
 
-    //delete otherwise memory leak 
-    delete[] placeholder;
 
     return spiResponse;
 }

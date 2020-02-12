@@ -32,6 +32,12 @@ class SPIc{
        uint16_t transfer16(uint16_t data);
        uint32_t transfer32(uint32_t data);
        uint8_t * transferArray8(uint8_t * data, uint32_t size);
+       //read functions
+       uint8_t read8();
+       uint16_t read16();
+       uint32_t read32();
+       uint8_t * readArray8(uint32_t size);
+
     private:
         //to keep track whether the spi is initialized of not
         static bool initialized;
