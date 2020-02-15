@@ -7,7 +7,8 @@ getClockDivider(); setDataMode(); setBitOrder();
 
 Missing implementation (should be implemented and functionality documented)
 transferBits();  writePixels();  writePattern();
-INFO: transferBits is kind of broken (test signal before implementing (always 8 useless clk cycles))
+INFO: transferBits is kind of broken (test signal before implementing 
+(always 8 useless clk cycles))
 Github ISSUE: https://github.com/espressif/arduino-esp32/issues/3714
 for HAL implementation of the spi look at:
 https://github.com/espressif/arduino-esp32/blob/master/cores/esp32/esp32-hal-spi.c
@@ -99,36 +100,26 @@ void SPIc::endTransaction(){
 }
 
 
-//for writing (sending data to the slave)
-void SPIc::write8(uint8_t data){
-    SPIcSPI.write(data);
-}
-
-void SPIc::write16(uint16_t data){
-    SPIcSPI.write16(data);
-}
-
-void SPIc::write32(uint32_t data){
-    SPIcSPI.write32(data);
-}
-
-//for writing array 
-//do not forget to delete the data array (mem leak)
-void SPIc::writeArray8(uint8_t * data, uint32_t size){
-    SPIcSPI.writeBytes(data, size);
-}
-
 //for read writing (sending data to the slave and receiving a response)
 uint8_t SPIc::transfer8(uint8_t data){
-    return SPIcSPI.transfer(data);
+    //needs to be volatile so that the compiler does optimize the read 
+    //operation of the read register away
+    volatile uint8_t result = SPIcSPI.transfer(data);
+    return result;
 }
 
 uint16_t SPIc::transfer16(uint16_t data){
-    return SPIcSPI.transfer16(data);
+    //needs to be volatile so that the compiler does optimize the read 
+    //operation of the read register away
+    volatile uint16_t result = SPIcSPI.transfer16(data);
+    return result;
 }
 
 uint32_t SPIc::transfer32(uint32_t data){
-    return SPIcSPI.transfer32(data);
+    //needs to be volatile so that the compiler does optimize the read 
+    //operation of the read register away
+    volatile uint32_t result = SPIcSPI.transfer32(data);
+    return result;
 }
 
 //for read and writing arrays 
@@ -139,6 +130,28 @@ uint8_t * SPIc::transferArray8(uint8_t * data, uint32_t size){
     SPIcSPI.transferBytes(data, result, size);
     return result;
 }
+
+
+//for writing (sending data to the slave)
+void SPIc::write8(uint8_t data){
+    transfer8(data);
+}
+
+void SPIc::write16(uint16_t data){
+    transfer16(data);
+}
+
+void SPIc::write32(uint32_t data){
+    transfer32(data);
+}
+
+//for writing array 
+//do not forget to delete the data array (mem leak)
+void SPIc::writeArray8(uint8_t * data, uint32_t size){
+    uint8_t * result = transferArray8(data, size);
+    delete[] result;
+}
+
 
 
 //for reading 
@@ -165,7 +178,8 @@ uint8_t * SPIc::readArray8(uint32_t size){
     uint8_t * result = nullptr;
     uint8_t * data = new uint8_t[size];
 
-    //is used so that the MOSI data is constantly zero (pretty signal and less confusing)
+    //is used so that the MOSI data is constantly zero 
+    //(pretty signal and less confusing)
     //maybe removed if speed is an issue but should only have a minimum effect
     for(int i = 0; i < size; i++){
         data[i] = 0;
