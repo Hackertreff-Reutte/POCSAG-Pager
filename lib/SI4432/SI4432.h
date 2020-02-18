@@ -13,6 +13,10 @@ class SI4432{
 
     
     public:
+        //device managment functions
+        uint8_t getDeviceTypeCode();
+        uint8_t getVersionCode();
+        uint8_t getDeviceStatus();
         
     private:
         //spi instance
@@ -26,7 +30,6 @@ class SI4432{
         uint8_t * spiBurstRead(uint8_t address, uint32_t size);
         void beginTransaction();
         void endTransaction();
-        
 
 };
 
