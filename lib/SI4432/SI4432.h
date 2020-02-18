@@ -17,6 +17,12 @@ class SI4432{
         uint8_t getDeviceTypeCode();
         uint8_t getVersionCode();
         uint8_t getDeviceStatus();
+        uint8_t getInterruptStatus1();
+        uint8_t getInterruptStatus2();
+        uint8_t getInterruptEnable1();
+        void setInterruptEnable1(uint8_t data);
+        uint8_t getInterruptEnable2();
+        void setInterruptEnable2(uint8_t data);
         
     private:
         //spi instance
