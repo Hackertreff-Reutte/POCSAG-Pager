@@ -13,7 +13,9 @@ class SI4432{
 
     
     public:
-        //device managment functions
+        //device managment register functions 
+        //(you can use those but only if you know what your are doing)
+        //those functions will write directly to the register without checking
         uint8_t getDeviceTypeCode();
         uint8_t getVersionCode();
         uint8_t getDeviceStatus();
@@ -23,6 +25,8 @@ class SI4432{
         void setInterruptEnable1(uint8_t data);
         uint8_t getInterruptEnable2();
         void setInterruptEnable2(uint8_t data);
+        uint8_t getOperationModeAndFunctionControl1();
+        void setOperationModeAndFunctionControl1(uint8_t data);
         
     private:
         //spi instance

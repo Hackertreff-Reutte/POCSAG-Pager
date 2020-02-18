@@ -149,7 +149,7 @@ void SI4432::setInterruptEnable1(uint8_t data){
 }
 
 /*
-
+BIT     FUNCTION:
 7       enswdet (R) Enable Sync Word Detected.
         When mpreadet =1 the Preamble Detected Interrupt will be enabled.
 
@@ -183,3 +183,51 @@ void SI4432::setInterruptEnable2(uint8_t data){
         spiWrite(0x06, data);
 }
 
+
+/*
+BIT     FUNCTION:
+7       swres (R/W) Software Register Reset Bit.
+        This bit may be used to reset all registers simultaneously to a 
+        DEFAULT state, without the need for sequentially writing to each 
+        individual register. The RESET is accomplished by setting swres = 1. 
+        This bit will be automatically cleared.
+
+6       enlbd (R/W) Enable Low Battery Detect.
+        When this bit is set to 1 the Low Battery Detector circuit and threshold 
+        comparison will be enabled.
+
+5       enwt (R/W) Enable Wake-Up-Timer.
+        Enabled when enwt = 1. If the Wake-up-Timer function is enabled it will 
+        operate in any mode and notify the microcontroller through the GPIO 
+        interrupt when the timer expires.
+
+4       x32ksel (R/W) 32,768 kHz Crystal Oscillator Select.
+                0: RC oscillator
+                1: 32 kHz crystal
+
+3       txon (R/W) TX on in Manual Transmit Mode.
+        Automatically cleared in FIFO mode once the packet is sent. 
+        Transmission can be aborted during packet transmission, however, when 
+        no data has been sent yet, transmission can only be aborted after the 
+        device is programmed to “unmodulated carrier” 
+        ("Register 71h. Modulation Mode Control 2").
+
+2       rxon (R/W) RX on in Manual Receiver Mode.
+        Automatically cleared if Multiple Packets config. is disabled and a 
+        valid packet received.
+
+1       pllon (R/W) TUNE Mode (PLL is ON).
+        When pllon = 1 the PLL will remain enabled in Idle State. This will for 
+        faster turn-around time at the cost of increased current consumption in 
+        Idle State.
+
+0       xton (R/W) READY Mode (Xtal is ON).
+*/
+uint8_t SI4432::getOperationModeAndFunctionControl1(){
+        return spiRead(0x07);
+}
+
+//look at the functions above for the BIT documentation
+void SI4432::setOperationModeAndFunctionControl1(uint8_t data){
+        spiWrite(0x07, data);
+}
