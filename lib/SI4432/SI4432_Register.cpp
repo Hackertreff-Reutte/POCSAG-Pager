@@ -636,3 +636,111 @@ uint8_t SI4432::getADCConfiguration(){
 void SI4432::setADCConfiguration(uint8_t data){
         spiWrite(0x0F, data);
 }
+
+
+/*
+REGISTERNAME: ADC Sensor Amplifier Offset
+REGISTER: 0x10 / 10h
+
+BIT     FUNCTION:
+7:4     Reserved (R) Reserved.
+
+3:0     adcoffs[3:0] (R/W) ADC Sensor Amplifier Offset.
+        The offset can be calculated as Offset = adcoffs[2:0] x VDD / 1000; 
+        MSB = adcoffs[3] = Sign bit.
+*/
+uint8_t SI4432::getADCSensorAmplifierOffset(){
+        return spiRead(0x10);
+}
+
+//look at the functions above for the BIT documentation
+void SI4432::setADCSensorAmplifierOffset(uint8_t data){
+        spiWrite(0x10, data);
+}
+
+
+/*
+REGISTERNAME: ADC Value
+REGISTER: 0x11 / 11h
+
+BIT     FUNCTION:
+7:0     adc[7:0] (R) Internal 8 bit ADC Output Value.
+*/
+uint8_t SI4432::getADCValue(){
+        return spiRead(0x11);
+}
+
+
+/*
+REGISTERNAME: Temperature Sensor Calibration
+REGISTER: 0x12 / 12h
+
+BIT     FUNCTION:
+7:6     tsrange[1:0] (R/W) Temperature Sensor Range Selection.
+        (FS range is 0..1024 mV)
+                00:     –40 °C .. 64 °C (full operating range), with 0.5 °C 
+                        resolution (1 LSB in the 8-bit ADC)
+                01:     –40 °C .. 85 °C, with 1 °C resolution 
+                        (1 LSB in the 8-bit ADC)
+                11:     0 °C .. 85 °C, with 0.5 °C resolution 
+                        (1 LSB in the 8-bit ADC)
+                10:     –40 °F .. 216 °F, with 1 °F resolution 
+                        (1 LSB in the 8-bit ADC)
+
+5       entsoffs (R/W) Temperature Sensor Offset to Convert from K to °C.
+
+4       entstrim (R/W) Temperature Sensor Trim Enable.
+
+3:0     tstrim[3:0] (R/W) Temperature Sensor Trim Value.
+*/
+uint8_t SI4432::getTemperatureSensorCalibration(){
+        return spiRead(0x12);
+}
+
+//look at the functions above for the BIT documentation
+void SI4432::setTemperatureSensorCalibration(uint8_t data){
+        spiWrite(0x12, data);
+}
+
+
+/*
+REGISTERNAME: Temperature Value Offset
+REGISTER: 0x13 / 13h
+
+BIT     FUNCTION:
+7:0     tvoffs[7:0] (R/W) Temperature Value Offset.
+        This value is added to the measured temperature value. 
+        (MSB, tvoffs[8]: sign bit)
+*/
+uint8_t SI4432::getTemperatureValueOffset(){
+        return spiRead(0x13);
+}
+
+//look at the functions above for the BIT documentation
+void SI4432::setTemperatureValueOffset(uint8_t data){
+        spiWrite(0x13, data);
+}
+
+
+/*
+REGISTERNAME: Wake-Up Timer Period 1
+REGISTER: 0x14 / 14h
+
+BIT     FUNCTION:
+7:6     Reserved (R/W) Reserved.
+
+5:2     wtr[3:0] (R/W) Wake Up Timer Exponent (R) Value*.
+
+1:0     wtd[3:0] (R/W) Wake Up Timer Exponent (D) Value*.
+
+*Note: The period of the wake-up timer can be calculated as 
+TWUT = (32 x M x 2R-D) / 32.768 ms.
+*/
+uint8_t SI4432::getWakeUpTimerPeriod1(){
+        return spiRead(0x14);
+}
+
+//look at the functions above for the BIT documentation
+void SI4432::setWakeUpTimerPeriod1(uint8_t data){
+        spiWrite(0x14, data);
+}

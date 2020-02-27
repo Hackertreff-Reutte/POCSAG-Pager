@@ -43,7 +43,16 @@ class SI4432{
         void setIOPortConfiguration(uint8_t data);
         uint8_t getADCConfiguration();
         void setADCConfiguration(uint8_t data);
-        
+        uint8_t getADCSensorAmplifierOffset();
+        void setADCSensorAmplifierOffset(uint8_t data);
+        uint8_t getADCValue();
+        uint8_t getTemperatureSensorCalibration();
+        void setTemperatureSensorCalibration(uint8_t data);
+        uint8_t getTemperatureValueOffset();
+        void setTemperatureValueOffset(uint8_t data);
+        uint8_t getWakeUpTimerPeriod1();
+        void setWakeUpTimerPeriod1(uint8_t data);
+
         
     private:
         //spi instance
