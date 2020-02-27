@@ -1,23 +1,32 @@
 #include "SI4432.h"
 
+/*
+REGISTER: 0x00 / 00h
 
-//data is not constistent through the datasheets so it is not possible
-//to say whats in this register
-//register address: 0x00
+data is not constistent through the datasheets so it is not possible
+to say whats in this register
+register address: 0x00
+*/
 uint8_t SI4432::getDeviceTypeCode(){
     return spiRead(0x00);
 }
 
-//returns the version code of the chip (bits 4:0) 
-//(7:5 are reservered and not used)
-//Rev X4 = 01      Rev V2: 02     Rev A0:  03
+/*
+REGISTER: 0x01 / 01h
+
+returns the version code of the chip (bits 4:0) 
+(7:5 are reservered and not used)
+Rev X4 = 01      Rev V2: 02     Rev A0:  03
+*/
 uint8_t SI4432::getVersionCode(){
-    return spiRead(0x00);
+    return spiRead(0x01);
 }
 
-//returns the satus of the device (errors and so on)
-//TODO: create functions to get those infos on their own
 /*
+REGISTER: 0x02 / 02h
+
+returns the satus of the device (errors and so on)
+
 BIT     FUNCTION:
 7       ffovfl (R) RX/TX FIFO Overflow Status.
 
@@ -43,6 +52,8 @@ uint8_t SI4432::getDeviceStatus(){
 }
 
 /*
+REGISTER: 0x03 / 03h
+
 BIT     FUNCTION:
 7       ifferr (R) FIFO Underflow/Overflow Error.
         When set to 1 the TX or RX FIFO has overflowed or underflowed.
@@ -77,6 +88,7 @@ uint8_t SI4432::getInterruptStatus1(){
 
 
 /*
+REGISTER: 0x04 / 04h
 
 BIT     FUNCTION:
 7       iswdet (R) Sync Word Detected.
@@ -114,6 +126,8 @@ uint8_t SI4432::getInterruptStatus2(){
 
 
 /*
+REGISTER: 0x05 / 05h
+
 BIT     FUNCTION:
 7       enfferr (R/W) Enable FIFO Underflow/Overflow.
         When set to 1 the FIFO Underflow/Overflow interrupt will be enabled.
@@ -149,6 +163,8 @@ void SI4432::setInterruptEnable1(uint8_t data){
 }
 
 /*
+REGISTER: 0x06 / 06h
+
 BIT     FUNCTION:
 7       enswdet (R) Enable Sync Word Detected.
         When mpreadet =1 the Preamble Detected Interrupt will be enabled.
@@ -185,6 +201,8 @@ void SI4432::setInterruptEnable2(uint8_t data){
 
 
 /*
+REGISTER: 0x07 / 07h
+
 BIT     FUNCTION:
 7       swres (R/W) Software Register Reset Bit.
         This bit may be used to reset all registers simultaneously to a 
