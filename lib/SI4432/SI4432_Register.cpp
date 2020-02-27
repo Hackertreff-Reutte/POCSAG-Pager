@@ -1,6 +1,7 @@
 #include "SI4432.h"
 
 /*
+REGISTERNAME: Device Type Code (DT)
 REGISTER: 0x00 / 00h
 
 data is not constistent through the datasheets so it is not possible
@@ -11,7 +12,9 @@ uint8_t SI4432::getDeviceTypeCode(){
     return spiRead(0x00);
 }
 
+
 /*
+REGISTERNAME: Version Code (VC)
 REGISTER: 0x01 / 01h
 
 returns the version code of the chip (bits 4:0) 
@@ -22,7 +25,9 @@ uint8_t SI4432::getVersionCode(){
     return spiRead(0x01);
 }
 
+
 /*
+REGISTERNAME: Device Status
 REGISTER: 0x02 / 02h
 
 returns the satus of the device (errors and so on)
@@ -51,7 +56,9 @@ uint8_t SI4432::getDeviceStatus(){
     return spiRead(0x02);
 }
 
+
 /*
+REGISTERNAME: Interrupt/Status 1
 REGISTER: 0x03 / 03h
 
 BIT     FUNCTION:
@@ -88,6 +95,7 @@ uint8_t SI4432::getInterruptStatus1(){
 
 
 /*
+REGISTERNAME: Interrupt/Status 2
 REGISTER: 0x04 / 04h
 
 BIT     FUNCTION:
@@ -126,6 +134,7 @@ uint8_t SI4432::getInterruptStatus2(){
 
 
 /*
+REGISTERNAME: Interrupt Enable 1
 REGISTER: 0x05 / 05h
 
 BIT     FUNCTION:
@@ -162,7 +171,9 @@ void SI4432::setInterruptEnable1(uint8_t data){
         spiWrite(0x05, data);
 }
 
+
 /*
+REGISTERNAME: Interrupt Enable 2
 REGISTER: 0x06 / 06h
 
 BIT     FUNCTION:
@@ -201,6 +212,7 @@ void SI4432::setInterruptEnable2(uint8_t data){
 
 
 /*
+REGISTERNAME: Operating Mode and Function Control 1
 REGISTER: 0x07 / 07h
 
 BIT     FUNCTION:
@@ -252,6 +264,7 @@ void SI4432::setOperationModeAndFunctionControl1(uint8_t data){
 
 
 /*
+REGISTERNAME: Operating Mode and Function Control 2
 REGISTER: 0x08 / 08h
 
 BIT     FUNCTION:
@@ -307,6 +320,7 @@ void SI4432::setOperationModeAndFunctionControl2(uint8_t data){
 
 
 /*
+REGISTERNAME: 30 MHz Crystal Oscillator Load Capacitance
 REGISTER: 0x09 / 09h
 
 for more info look at the point "5.8. Crystal Oscillator"
@@ -326,6 +340,7 @@ void SI4432::set30MHzCrystalOscillatorLoadCapacitance(uint8_t data){
 
 
 /*
+REGISTERNAME: Microcontroller Output Clock
 REGISTER: 0x0A / 0Ah
 
 BIT     FUNCTION:
@@ -373,6 +388,7 @@ void SI4432::setMicrocontrollerOutputClock(uint8_t data){
 }
 
 /*
+REGISTERNAME: GPIO Configuration 0
 REGISTER: 0x0B / 0Bh
 
 BIT     FUNCTION:
@@ -426,6 +442,7 @@ void SI4432::setGPIOConfiguration0(uint8_t data){
 
 
 /*
+REGISTERNAME: GPIO Configuration 1
 REGISTER: 0x0C / 0Ch
 
 BIT     FUNCTION:
@@ -479,6 +496,7 @@ void SI4432::setGPIOConfiguration1(uint8_t data){
 
 
 /*
+REGISTERNAME: GPIO Configuration 2
 REGISTER: 0x0D / 0Dh
 
 BIT     FUNCTION:
@@ -532,6 +550,7 @@ void SI4432::setGPIOConfiguration2(uint8_t data){
 
 
 /*
+REGISTERNAME: I/O Port Configuration
 REGISTER: 0x0E / 0Eh
 
 BIT     FUNCTION:
@@ -579,6 +598,7 @@ void SI4432::setIOPortConfiguration(uint8_t data){
 
 
 /*
+REGISTERNAME: ADC Configuration
 REGISTER: 0x0F / 0Fh
 
 BIT     FUNCTION:
