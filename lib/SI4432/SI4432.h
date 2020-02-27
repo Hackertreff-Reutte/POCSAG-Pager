@@ -56,6 +56,13 @@ class SI4432{
         void setWakeUpTimerPeriod2(uint8_t data);
         uint8_t getWakeUpTimerPeriod3();
         void setWakeUpTimerPeriod3(uint8_t data);
+        uint8_t getWakeUpTimerValue1();
+        uint8_t getWakeUpTimerValue2();
+        uint8_t getLowDutyCycleModeDuration();
+        void setLowDutyCycleModeDuration(uint8_t data);
+        uint8_t getLowBatteryDetectorThreshold();
+        void setLowBatteryDetectorThreshold(uint8_t data);
+        uint8_t getBatteryVoltageLevel();
 
         
     private:

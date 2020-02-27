@@ -792,3 +792,98 @@ uint8_t SI4432::getWakeUpTimerPeriod3(){
 void SI4432::setWakeUpTimerPeriod3(uint8_t data){
         spiWrite(0x16, data);
 }
+
+
+/*
+REGISTERNAME: Wake-Up Timer Value 1
+REGISTER: 0x17 / 17h
+
+for more info look at the section "8.6. Wake-Up Timer"
+
+BIT     FUNCTION:
+7:0     wtm[15:8] (R) Wake Up Timer Current Mantissa (M) Value*.
+
+*Note: The period of the wake-up timer can be calculated as 
+TWUT = (32 x M x 2R-D) / 32.768 ms.
+*/
+uint8_t SI4432::getWakeUpTimerValue1(){
+        return spiRead(0x17);
+}
+
+
+/*
+REGISTERNAME: Wake-Up Timer Value 2
+REGISTER: 0x18 / 18h
+
+for more info look at the section "8.6. Wake-Up Timer"
+
+BIT     FUNCTION:
+7:0     wtm[7:0] (R) Wake Up Timer Current Mantissa (M) Value*.
+
+*Note: The period of the wake-up timer can be calculated as 
+TWUT = (32 x M x 2R-D) / 32.768 ms.
+*/
+uint8_t SI4432::getWakeUpTimerValue2(){
+        return spiRead(0x18);
+}
+
+
+/*
+REGISTERNAME: Low-Duty Cycle Mode Duration
+REGISTER: 0x19 / 19h
+
+BIT     FUNCTION:
+7:0     ldc[7:0] (R/W) Low-Duty Cycle Mode Duration (LDC)*.
+
+*Note: The period of the low-duty cycle ON time can be calculated as 
+TLDC_ON = (32 x LDC x 2R-D) / 32.768 [ms] R and D values are the same as in the 
+wake-up timer setting in "Register 14h. Wake-Up Timer Period 1".
+*/
+uint8_t SI4432::getLowDutyCycleModeDuration(){
+        return spiRead(0x19);
+}
+
+//look at the functions above for the BIT documentation
+void SI4432::setLowDutyCycleModeDuration(uint8_t data){
+        spiWrite(0x19, data);
+}
+
+
+/*
+REGISTERNAME: Low Battery Detector Threshold
+REGISTER: 0x1A / 1Ah
+
+BIT     FUNCTION:
+7:5     Reserved (R) Reserved.
+
+4:0     lbdt[4:0] (R/W) Low Battery Detector Threshold.
+        This threshold is compared to Battery Voltage Level. 
+        If the Battery  Voltage is less than the threshold the Low Battery 
+        Interrupt is set. Default = 2.7 V.*
+
+*Note: The threshold can be calculated as Vthreshold = 1.7 + lbdt x 50 mV.
+*/
+uint8_t SI4432::getLowBatteryDetectorThreshold(){
+        return spiRead(0x1A);
+}
+
+//look at the functions above for the BIT documentation
+void SI4432::setLowBatteryDetectorThreshold(uint8_t data){
+        spiWrite(0x1A, data);
+}
+
+
+/*
+REGISTERNAME: Battery Voltage Level
+REGISTER: 0x1B / 1Bh
+
+BIT     FUNCTION:
+7:5     Reserved (R) Reserved.
+
+4:0     vbat[4:0] (R) Battery Voltage Level.
+        The battery voltage is converted by a 5 bit ADC. In Sleep Mode the 
+        register is updated in every 1 s. In other states it measures continuously
+*/
+uint8_t SI4432::getBatteryVoltageLevel(){
+        return spiRead(0x1B);
+}
