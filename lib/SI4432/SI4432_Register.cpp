@@ -371,3 +371,248 @@ uint8_t SI4432::getMicrocontrollerOutputClock(){
 void SI4432::setMicrocontrollerOutputClock(uint8_t data){
         spiWrite(0x0A, data);
 }
+
+/*
+REGISTER: 0x0B / 0Bh
+
+BIT     FUNCTION:
+7:6     gpiodrv0[1:0] (R/W) GPIO Driving Capability Setting.
+
+5       pup0 (R/W) Pullup Resistor Enable on GPIO0.
+        When set to 1 the a 200 kohm resistor is connected internally between VDD 
+        and the pin if the GPIO is configured as a digital input.
+
+4:0     gpio0[4:0] (R/W) GPIO0 pin Function Select.
+                00000: Power-On-Reset (output)
+                00001: Wake-Up Timer: 1 when WUT has expired (output)
+                00010: Low Battery Detect: 1 when battery is below threshold setting (output)
+                00011: Direct Digital Input
+                00100: External Interrupt, falling edge (input)
+                00101: External Interrupt, rising edge (input)
+                00110: External Interrupt, state change (input)
+                00111: ADC Analog Input
+                01000: Reserved (Analog Test N Input)
+                01001: Reserved (Analog Test P Input)
+                01010: Direct Digital Output
+                01011: Reserved (Digital Test Output)
+                01100: Reserved (Analog Test N Output)
+                01101: Reserved (Analog Test P Output)
+                01110: Reference Voltage (output)
+                01111: TX/RX Data CLK output to be used in conjunction with TX/RX Data pin (output)
+                10000: TX Data input for direct modulation (input)
+                10001: External Retransmission Request (input)
+                10010: TX State (output)
+                10011: TX FIFO Almost Full (output)
+                10100: RX Data (output)
+                10101: RX State (output)
+                10110: RX FIFO Almost Full (output)
+                10111: Antenna 1 Switch used for antenna diversity (output)
+                11000: Antenna 2 Switch used for antenna diversity (output)
+                11001: Valid Preamble Detected (output)
+                11010: Invalid Preamble Detected (output)
+                11011: Sync Word Detected (output)
+                11100: Clear Channel Assessment (output)
+                11101: VDD
+                else : GND
+*/
+uint8_t SI4432::getGPIOConfiguration0(){
+        return spiRead(0x0B);
+}
+
+//look at the functions above for the BIT documentation
+void SI4432::setGPIOConfiguration0(uint8_t data){
+        spiWrite(0x0B, data);
+}
+
+
+/*
+REGISTER: 0x0C / 0Ch
+
+BIT     FUNCTION:
+7:6     gpiodrv1[1:0] (R/W) GPIO Driving Capability Setting.
+
+5       pup1 (R/W) Pullup Resistor Enable on GPIO1.
+        When set to 1 the a 200 kohm resistor is connected internally between VDD 
+        and the pin if the GPIO is configured as a digital input.
+
+4:0     gpio1[4:0] (R/W) GPIO1 pin Function Select.
+                00000: Power-On-Reset (output)
+                00001: Wake-Up Timer: 1 when WUT has expired (output)
+                00010: Low Battery Detect: 1 when battery is below threshold setting (output)
+                00011: Direct Digital Input
+                00100: External Interrupt, falling edge (input)
+                00101: External Interrupt, rising edge (input)
+                00110: External Interrupt, state change (input)
+                00111: ADC Analog Input
+                01000: Reserved (Analog Test N Input)
+                01001: Reserved (Analog Test P Input)
+                01010: Direct Digital Output
+                01011: Reserved (Digital Test Output)
+                01100: Reserved (Analog Test N Output)
+                01101: Reserved (Analog Test P Output)
+                01110: Reference Voltage (output)
+                01111: TX/RX Data CLK output to be used in conjunction with TX/RX Data pin (output)
+                10000: TX Data input for direct modulation (input)
+                10001: External Retransmission Request (input)
+                10010: TX State (output)
+                10011: TX FIFO Almost Full (output)
+                10100: RX Data (output)
+                10101: RX State (output)
+                10110: RX FIFO Almost Full (output)
+                10111: Antenna 1 Switch used for antenna diversity (output)
+                11000: Antenna 2 Switch used for antenna diversity (output)
+                11001: Valid Preamble Detected (output)
+                11010: Invalid Preamble Detected (output)
+                11011: Sync Word Detected (output)
+                11100: Clear Channel Assessment (output)
+                11101: VDD
+                else : GND
+*/
+uint8_t SI4432::getGPIOConfiguration1(){
+        return spiRead(0x0C);
+}
+
+//look at the functions above for the BIT documentation
+void SI4432::setGPIOConfiguration1(uint8_t data){
+        spiWrite(0x0C, data);
+}
+
+
+/*
+REGISTER: 0x0D / 0Dh
+
+BIT     FUNCTION:
+7:6     gpiodrv2[1:0] (R/W) GPIO Driving Capability Setting.
+
+5       pup2 (R/W) Pullup Resistor Enable on GPIO2.
+        When set to 1 the a 200 kohm resistor is connected internally between VDD 
+        and the pin if the GPIO is configured as a digital input.
+
+4:0     gpio2[4:0] (R/W) GPIO2 pin Function Select.
+                00000: Power-On-Reset (output)
+                00001: Wake-Up Timer: 1 when WUT has expired (output)
+                00010: Low Battery Detect: 1 when battery is below threshold setting (output)
+                00011: Direct Digital Input
+                00100: External Interrupt, falling edge (input)
+                00101: External Interrupt, rising edge (input)
+                00110: External Interrupt, state change (input)
+                00111: ADC Analog Input
+                01000: Reserved (Analog Test N Input)
+                01001: Reserved (Analog Test P Input)
+                01010: Direct Digital Output
+                01011: Reserved (Digital Test Output)
+                01100: Reserved (Analog Test N Output)
+                01101: Reserved (Analog Test P Output)
+                01110: Reference Voltage (output)
+                01111: TX/RX Data CLK output to be used in conjunction with TX/RX Data pin (output)
+                10000: TX Data input for direct modulation (input)
+                10001: External Retransmission Request (input)
+                10010: TX State (output)
+                10011: TX FIFO Almost Full (output)
+                10100: RX Data (output)
+                10101: RX State (output)
+                10110: RX FIFO Almost Full (output)
+                10111: Antenna 1 Switch used for antenna diversity (output)
+                11000: Antenna 2 Switch used for antenna diversity (output)
+                11001: Valid Preamble Detected (output)
+                11010: Invalid Preamble Detected (output)
+                11011: Sync Word Detected (output)
+                11100: Clear Channel Assessment (output)
+                11101: VDD
+                else : GND
+*/
+uint8_t SI4432::getGPIOConfiguration2(){
+        return spiRead(0x0D);
+}
+
+//look at the functions above for the BIT documentation
+void SI4432::setGPIOConfiguration2(uint8_t data){
+        spiWrite(0x0D, data);
+}
+
+
+/*
+REGISTER: 0x0E / 0Eh
+
+BIT     FUNCTION:
+7       Reserved (R) Reserved.
+
+6       extitst[2] (R) External Interrupt Status.
+        If the GPIO2 is programmed to be external interrupt sources then the 
+        status can be read here.
+
+5       extitst[1] (R) External Interrupt Status.
+        If the GPIO1 is programmed to be external interrupt sources then the 
+        status can be read here.
+
+4       extitst[0] (R) External Interrupt Status.
+        If the GPIO0 is programmed to be external interrupt sources then the 
+        status can be read here.
+
+3       itsdo (R/W) Interrupt Request Output on the SDO Pin.
+        nIRQ output is present on the SDO pin if this bit is set and the nSEL 
+        input is inactive (high).
+
+2       dio2 (R/W) Direct I/O for GPIO2.
+        If the GPIO2 is configured to be a direct output then the value on the 
+        GPIO pin can be set here. If the GPIO2 is configured to be a direct 
+        input then the value of the pin can be read here.
+
+1       dio1 (R/W) Direct I/O for GPIO1.
+        If the GPIO1 is configured to be a direct output then the value on the 
+        GPIO pin can be set here. If the GPIO1 is configured to be a direct 
+        input then the value of the pin can be read here.
+
+0       dio0 (R/W) Direct I/O for GPIO0.
+        If the GPIO0 is configured to be a direct output then the value on the 
+        GPIO pin can be set here. If the GPIO0 is configured to be a direct 
+        input then the value of the pin can be read here.
+*/
+uint8_t SI4432::getIOPortConfiguration(){
+        return spiRead(0x0E);
+}
+
+//look at the functions above for the BIT documentation
+void SI4432::setIOPortConfiguration(uint8_t data){
+        spiWrite(0x0E, data);
+}
+
+
+/*
+REGISTER: 0x0F / 0Fh
+
+BIT     FUNCTION:
+7       adcstart/adcdone (R/W) ADC Measurement Start Bit.
+        Reading this bit gives 1 if the ADC measurement cycle has been finished.
+
+6:4     adcsel[2:0] (R/W) ADC Input Source Selection.
+        The internal 8-bit ADC input source can be selected as follows:
+                000: Internal Temperature Sensor
+                001: GPIO0, single-ended
+                010: GPIO1, single-ended
+                011: GPIO2, single-ended
+                100: GPIO0(+) – GPIO1(–), differential
+                101: GPIO1(+) – GPIO2(–), differential
+                110: GPIO0(+) – GPIO2(–), differential
+                111: GND
+
+3:2     adcref[1:0] (R/W) ADC Reference Voltage Selection.
+        The reference voltage of the internal 8-bit ADC can be selected as follows:
+                0X: bandgap voltage (1.2 V)
+                10: VDD / 3
+                11: VDD / 2
+
+1:0     adcgain[1:0] (R/W) ADC Sensor Amplifier Gain Selection.
+        The full scale range of the internal 8-bit ADC in differential mode 
+        (see adcsel) can be set as follows:
+                adcref[0] = 0: adcref[0] = 1:
+                FS = 0.014 x (adcgain[1:0] + 1) x VDD FS = 0.021 x (adcgain[1:0] + 1) x VDD
+*/
+uint8_t SI4432::getADCConfiguration(){
+        return spiRead(0x0F);
+}
+
+//look at the functions above for the BIT documentation
+void SI4432::setADCConfiguration(uint8_t data){
+        spiWrite(0x0F, data);
+}

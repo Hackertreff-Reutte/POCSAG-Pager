@@ -33,6 +33,17 @@ class SI4432{
         void set30MHzCrystalOscillatorLoadCapacitance(uint8_t data);
         uint8_t getMicrocontrollerOutputClock();
         void setMicrocontrollerOutputClock(uint8_t data);
+        uint8_t getGPIOConfiguration0();
+        void setGPIOConfiguration0(uint8_t data);
+        uint8_t getGPIOConfiguration1();
+        void setGPIOConfiguration1(uint8_t data);
+        uint8_t getGPIOConfiguration2();
+        void setGPIOConfiguration2(uint8_t data);
+        uint8_t getIOPortConfiguration();
+        void setIOPortConfiguration(uint8_t data);
+        uint8_t getADCConfiguration();
+        void setADCConfiguration(uint8_t data);
+        
         
     private:
         //spi instance
