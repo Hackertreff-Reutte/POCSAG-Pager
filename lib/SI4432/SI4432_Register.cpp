@@ -249,3 +249,125 @@ uint8_t SI4432::getOperationModeAndFunctionControl1(){
 void SI4432::setOperationModeAndFunctionControl1(uint8_t data){
         spiWrite(0x07, data);
 }
+
+
+/*
+REGISTER: 0x08 / 08h
+
+BIT     FUNCTION:
+7:5     antdiv[2:0] (R/W) Enable Antenna Diversity.
+        The GPIO must be configured for Antenna Diversity for the algorithm to 
+        work properly. 
+                RX/TX state     non RX/TX state
+                GPIO Ant1       GPIO Ant2       GPIO Ant1       GPIO Ant2
+        000:    0               1               0               0
+        001:    1               0               0               0
+        010:    0               1               1               1
+        011:    1               0               1               1
+        100:    antenna diversity algorithm     0               0
+        101:    antenna diversity algorithm     1               1
+        110:    ant. div. algorithm 
+                in beacon mode                  0               0
+        111:    ant. div. algorithm 
+                in beacon mode                  1               1
+
+4       rxmpk (R/W) RX Multi Packet.
+        When the chip is selected to use FIFO Mode (dtmod[1:0]) and RX Packet 
+        Handling (enpacrx) then it will fill up the FIFO with multiple valid 
+        packets if this bit is set, otherwise the transceiver will automatically
+        leave the RX State after the first valid packet has been received.
+
+3       autotx (R/W) Automatic Transmission.
+        When autotx = 1 the transceiver will enter automatically TX State when 
+        the FIFO is almost full. When the FIFO is empty it will automatically 
+        return to the Idle State.
+
+2       enldm (R/W) Enable Low Duty Cycle Mode.
+        If this bit is set to 1 then the chip turns on the RX regularly. 
+        The frequency should be set in the Wake-Up Timer Period register, 
+        while the minimum ON time should be set in the Low-Duty Cycle Mode 
+        Duration register. The FIFO mode should be enabled also.
+
+1       ffclrrx (R/W) RX FIFO Reset/Clear.
+        This has to be a two writes operation: Setting ffclrrx =1 followed by 
+        ffclrrx = 0 will clear the contents of the RX FIFO.
+
+0       ffclrtx (R/W) TX FIFO Reset/Clear.
+        This has to be a two writes operation: Setting ffclrtx =1 followed by 
+        ffclrtx = 0 will clear the contents of the TX FIFO.
+*/
+uint8_t SI4432::getOperationModeAndFunctionControl2(){
+        return spiRead(0x08);
+}
+
+//look at the functions above for the BIT documentation
+void SI4432::setOperationModeAndFunctionControl2(uint8_t data){
+        spiWrite(0x08, data);
+}
+
+
+/*
+REGISTER: 0x09 / 09h
+
+for more info look at the point "5.8. Crystal Oscillator"
+
+BIT     FUNCTION:
+7       xtalshft (R/W) Direct Control to Analog.
+6:0     xlc[6:0] (R/W) Tuning Capacitance for the 30 MHz XTAL
+*/
+uint8_t SI4432::get30MHzCrystalOscillatorLoadCapacitance(){
+        return spiRead(0x09);
+}
+
+//look at the functions above for the BIT documentation
+void SI4432::set30MHzCrystalOscillatorLoadCapacitance(uint8_t data){
+        spiWrite(0x09, data);
+}
+
+
+/*
+REGISTER: 0x0A / 0Ah
+
+BIT     FUNCTION:
+7:6     Reserved (R) Reserved.
+
+5:4     clkt[1:0] (R/W) Clock Tail.
+        If enlfc = 0 then it can be useful to provide a few extra cycles for 
+        the microcontroller to complete its operation. Setting the clkt[1:0] 
+        register will provide the addition cycles of the clock before it shuts 
+        off.
+                00:       0 cycle
+                01:     128 cycles
+                10:     256 cycles
+                11:     512 cycles
+
+3       enlfc (R/W) Enable Low Frequency Clock.
+        When enlfc = 1 and the chip is in Sleep mode then the 32.768 kHz clock 
+        will be provided to the microcontroller no matter what the selection of 
+        mclk[2:0] is. For example if mclk[2:0] = ‘000’, 30 MHz will be available
+        through the GPIO to output to the microcontroller in all Idle, TX, or RX 
+        states. When the chip is commanded to Sleep mode the 30 MHz clock will 
+        become 32.768 kHz.
+
+2:0     mclk[2:0] (R/W) Microcontroller Clock.
+        Different clock frequencies may be selected for configurable GPIO clock 
+        output. All clock frequencies are created by dividing the XTAL except 
+        for the 32 kHz clock which comes directly from the 32 kHz RC Oscillator.
+        The mclk[2:0] setting is only valid when xton = 1 except the 111.
+                000:    30 MHz
+                001:    15 MHz
+                010:    10 MHz
+                011:     4 MHz
+                100:     3 MHz
+                101:     2 MHz
+                110:     1 MHz
+                111:    32.768 kHz
+*/
+uint8_t SI4432::getMicrocontrollerOutputClock(){
+        return spiRead(0x0A);
+}
+
+//look at the functions above for the BIT documentation
+void SI4432::setMicrocontrollerOutputClock(uint8_t data){
+        spiWrite(0x0A, data);
+}

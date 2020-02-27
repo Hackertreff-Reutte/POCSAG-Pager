@@ -27,6 +27,12 @@ class SI4432{
         void setInterruptEnable2(uint8_t data);
         uint8_t getOperationModeAndFunctionControl1();
         void setOperationModeAndFunctionControl1(uint8_t data);
+        uint8_t getOperationModeAndFunctionControl2();
+        void setOperationModeAndFunctionControl2(uint8_t data);
+        uint8_t get30MHzCrystalOscillatorLoadCapacitance();
+        void set30MHzCrystalOscillatorLoadCapacitance(uint8_t data);
+        uint8_t getMicrocontrollerOutputClock();
+        void setMicrocontrollerOutputClock(uint8_t data);
         
     private:
         //spi instance
