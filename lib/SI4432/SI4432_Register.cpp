@@ -323,7 +323,7 @@ void SI4432::setOperationModeAndFunctionControl2(uint8_t data){
 REGISTERNAME: 30 MHz Crystal Oscillator Load Capacitance
 REGISTER: 0x09 / 09h
 
-for more info look at the point "5.8. Crystal Oscillator"
+for more info look at the section "5.8. Crystal Oscillator"
 
 BIT     FUNCTION:
 7       xtalshft (R/W) Direct Control to Analog.
@@ -726,6 +726,8 @@ void SI4432::setTemperatureValueOffset(uint8_t data){
 REGISTERNAME: Wake-Up Timer Period 1
 REGISTER: 0x14 / 14h
 
+for more info look at the section "8.6. Wake-Up Timer"
+
 BIT     FUNCTION:
 7:6     Reserved (R/W) Reserved.
 
@@ -743,4 +745,50 @@ uint8_t SI4432::getWakeUpTimerPeriod1(){
 //look at the functions above for the BIT documentation
 void SI4432::setWakeUpTimerPeriod1(uint8_t data){
         spiWrite(0x14, data);
+}
+
+
+/*
+REGISTERNAME: Wake-Up Timer Period 2
+REGISTER: 0x15 / 15h
+
+for more info look at the section "8.6. Wake-Up Timer"
+
+BIT     FUNCTION:
+7:0     wtm[15:8] (R/W) Wake Up Timer Mantissa (M) Value*.
+
+*Note: The period of the wake-up timer can be calculated as 
+TWUT = (32 x M x 2R-D) / 32.768 ms.
+
+*/
+uint8_t SI4432::getWakeUpTimerPeriod2(){
+        return spiRead(0x15);
+}
+
+//look at the functions above for the BIT documentation
+void SI4432::setWakeUpTimerPeriod2(uint8_t data){
+        spiWrite(0x15, data);
+}
+
+
+/*
+REGISTERNAME: Wake-Up Timer Period 3
+REGISTER: 0x16 / 16h
+
+for more info look at the section "8.6. Wake-Up Timer"
+
+BIT     FUNCTION:
+7:0     wtm[7:0] (R/W) Wake Up Timer Mantissa (M) Value*.
+
+*Note: The period of the wake-up timer can be calculated as 
+TWUT = (32 x M x 2R-D) / 32.768 ms.
+
+*/
+uint8_t SI4432::getWakeUpTimerPeriod3(){
+        return spiRead(0x16);
+}
+
+//look at the functions above for the BIT documentation
+void SI4432::setWakeUpTimerPeriod3(uint8_t data){
+        spiWrite(0x16, data);
 }

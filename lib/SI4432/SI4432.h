@@ -52,6 +52,10 @@ class SI4432{
         void setTemperatureValueOffset(uint8_t data);
         uint8_t getWakeUpTimerPeriod1();
         void setWakeUpTimerPeriod1(uint8_t data);
+        uint8_t getWakeUpTimerPeriod2();
+        void setWakeUpTimerPeriod2(uint8_t data);
+        uint8_t getWakeUpTimerPeriod3();
+        void setWakeUpTimerPeriod3(uint8_t data);
 
         
     private:
