@@ -64,6 +64,16 @@ class SI4432{
         void setLowBatteryDetectorThreshold(uint8_t data);
         uint8_t getBatteryVoltageLevel();
 
+        uint8_t getIFFilterBandwidth();
+        void setIFFilterBandwidth(uint8_t data);
+        uint8_t getAFCLoopGearshiftOverride();
+        void setAFCLoopGearshiftOverride(uint8_t data);
+        uint8_t getAFCTimingControl();
+        void setAFCTimingControl(uint8_t data);
+        uint8_t getClockRecoveryGearshiftOverride();
+        void setClockRecoveryGearshiftOverride(uint8_t data);
+        uint8_t getClockRecoveryOversamplingRate();
+        void setClockRecoveryOversamplingRate(uint8_t data);
         
     private:
         //spi instance
