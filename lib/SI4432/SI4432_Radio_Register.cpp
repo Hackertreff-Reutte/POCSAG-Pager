@@ -12,12 +12,12 @@ BIT     FUNCTION:
 3:0     filset[3:0] (R/W) IF Filter Coefficient Sets.
         Defaults are for Rb = 40 kbps and Fd = 20 kHz so Bw = 80 kHz.
 */
-uint8_t SI4432::getIFFilterBandwidth(){
+inline uint8_t SI4432::getIFFilterBandwidth(){
         return spiRead(0x1C);
 }
 
 //look at the functions above for the BIT documentation
-void SI4432::setIFFilterBandwidth(uint8_t data){
+inline void SI4432::setIFFilterBandwidth(uint8_t data){
         spiWrite(0x1C, data);
 }
 
@@ -35,12 +35,12 @@ BIT     FUNCTION:
 
 2:0     afcgearl[2:0] (R/W) AFC Low Gear Setting
 */
-uint8_t SI4432::getAFCLoopGearshiftOverride(){
+inline uint8_t SI4432::getAFCLoopGearshiftOverride(){
         return spiRead(0x1D);
 }
 
 //look at the functions above for the BIT documentation
-void SI4432::setAFCLoopGearshiftOverride(uint8_t data){
+inline void SI4432::setAFCLoopGearshiftOverride(uint8_t data){
         spiWrite(0x1D, data);
 }
 
@@ -61,12 +61,12 @@ BIT     FUNCTION:
         Used after preamble detected. Long wait = (RegValue + 1) x 2Tb. If set 
         to 0 then no AFC correction will occur after the preamble detect.
 */
-uint8_t SI4432::getAFCTimingControl(){
+inline uint8_t SI4432::getAFCTimingControl(){
         return spiRead(0x1E);
 }
 
 //look at the functions above for the BIT documentation
-void SI4432::setAFCTimingControl(uint8_t data){
+inline void SI4432::setAFCTimingControl(uint8_t data){
         spiWrite(0x1E, data);
 }
 
@@ -87,12 +87,12 @@ BIT     FUNCTION:
 
 2:0     crslow[2:0] (R/W) Clock Recovery Slow Gearshift Value.
 */
-uint8_t SI4432::getClockRecoveryGearshiftOverride(){
+inline uint8_t SI4432::getClockRecoveryGearshiftOverride(){
         return spiRead(0x1F);
 }
 
 //look at the functions above for the BIT documentation
-void SI4432::setClockRecoveryGearshiftOverride(uint8_t data){
+inline void SI4432::setClockRecoveryGearshiftOverride(uint8_t data){
         spiWrite(0x1F, data);
 }
 
@@ -106,11 +106,33 @@ BIT     FUNCTION:
         3 LSBs are the fraction, default = 0110 0100 = 12.5 clock cycles per 
         data bit
 */
-uint8_t SI4432::getClockRecoveryOversamplingRate(){
+inline uint8_t SI4432::getClockRecoveryOversamplingRate(){
         return spiRead(0x20);
 }
 
 //look at the functions above for the BIT documentation
-void SI4432::setClockRecoveryOversamplingRate(uint8_t data){
+inline void SI4432::setClockRecoveryOversamplingRate(uint8_t data){
         spiWrite(0x20, data);
+}
+
+
+/*
+REGISTERNAME: Clock Recovery Offset 2
+REGISTER: 0x21 / 21h
+
+BIT     FUNCTION:
+7:5     rxosr[10:8] (R/W) Oversampling Rate.
+        Upper bits.
+
+4       stallctrl (R/W) Used for BCR Purposes.
+
+3:0     ncoff[19:16] (R/W) NCO Offset.
+*/
+inline uint8_t SI4432::getClockRecoveryOffset2(){
+        return spiRead(0x21);
+}
+
+//look at the functions above for the BIT documentation
+inline void SI4432::setClockRecoveryOffset2(uint8_t data){
+        spiWrite(0x21, data);
 }

@@ -8,7 +8,7 @@ data is not constistent through the datasheets so it is not possible
 to say whats in this register
 register address: 0x00
 */
-uint8_t SI4432::getDeviceTypeCode(){
+inline uint8_t SI4432::getDeviceTypeCode(){
     return spiRead(0x00);
 }
 
@@ -21,7 +21,7 @@ returns the version code of the chip (bits 4:0)
 (7:5 are reservered and not used)
 Rev X4 = 01      Rev V2: 02     Rev A0:  03
 */
-uint8_t SI4432::getVersionCode(){
+inline uint8_t SI4432::getVersionCode(){
     return spiRead(0x01);
 }
 
@@ -52,7 +52,7 @@ BIT     FUNCTION:
             00:     Idle State
             01:     RX State10:TX State
 */
-uint8_t SI4432::getDeviceStatus(){
+inline uint8_t SI4432::getDeviceStatus(){
     return spiRead(0x02);
 }
 
@@ -89,7 +89,7 @@ BIT     FUNCTION:
 0       icrcerror (R) CRC Error.
         When set to 1 the cyclic redundancy check is failed.
 */
-uint8_t SI4432::getInterruptStatus1(){
+inline uint8_t SI4432::getInterruptStatus1(){
     return spiRead(0x03);
 }
 
@@ -128,7 +128,7 @@ BIT     FUNCTION:
         When the chip detects a Power on Reset above the desired setting this 
         bit will be set to 1.
 */
-uint8_t SI4432::getInterruptStatus2(){
+inline uint8_t SI4432::getInterruptStatus2(){
         return spiRead(0x04);
 }
 
@@ -162,12 +162,12 @@ BIT     FUNCTION:
 0       encrcerror (R/W) Enable CRC Error.
         When set to 1 the CRC Error interrupt will be enabled.
 */
-uint8_t SI4432::getInterruptEnable1(){
+inline uint8_t SI4432::getInterruptEnable1(){
         return spiRead(0x05);
 }
 
 //look at the functions above for the BIT documentation
-void SI4432::setInterruptEnable1(uint8_t data){
+inline void SI4432::setInterruptEnable1(uint8_t data){
         spiWrite(0x05, data);
 }
 
@@ -201,12 +201,12 @@ BIT     FUNCTION:
 0       enpor (R/W) Enable POR.
         When set to 1 the POR interrupt will be enabled.
 */
-uint8_t SI4432::getInterruptEnable2(){
+inline uint8_t SI4432::getInterruptEnable2(){
         return spiRead(0x06);
 }
 
 //look at the functions above for the BIT documentation
-void SI4432::setInterruptEnable2(uint8_t data){
+inline void SI4432::setInterruptEnable2(uint8_t data){
         spiWrite(0x06, data);
 }
 
@@ -253,12 +253,12 @@ BIT     FUNCTION:
 
 0       xton (R/W) READY Mode (Xtal is ON).
 */
-uint8_t SI4432::getOperationModeAndFunctionControl1(){
+inline uint8_t SI4432::getOperationModeAndFunctionControl1(){
         return spiRead(0x07);
 }
 
 //look at the functions above for the BIT documentation
-void SI4432::setOperationModeAndFunctionControl1(uint8_t data){
+inline void SI4432::setOperationModeAndFunctionControl1(uint8_t data){
         spiWrite(0x07, data);
 }
 
@@ -309,12 +309,12 @@ BIT     FUNCTION:
         This has to be a two writes operation: Setting ffclrtx =1 followed by 
         ffclrtx = 0 will clear the contents of the TX FIFO.
 */
-uint8_t SI4432::getOperationModeAndFunctionControl2(){
+inline uint8_t SI4432::getOperationModeAndFunctionControl2(){
         return spiRead(0x08);
 }
 
 //look at the functions above for the BIT documentation
-void SI4432::setOperationModeAndFunctionControl2(uint8_t data){
+inline void SI4432::setOperationModeAndFunctionControl2(uint8_t data){
         spiWrite(0x08, data);
 }
 
@@ -329,12 +329,12 @@ BIT     FUNCTION:
 7       xtalshft (R/W) Direct Control to Analog.
 6:0     xlc[6:0] (R/W) Tuning Capacitance for the 30 MHz XTAL
 */
-uint8_t SI4432::get30MHzCrystalOscillatorLoadCapacitance(){
+inline uint8_t SI4432::get30MHzCrystalOscillatorLoadCapacitance(){
         return spiRead(0x09);
 }
 
 //look at the functions above for the BIT documentation
-void SI4432::set30MHzCrystalOscillatorLoadCapacitance(uint8_t data){
+inline void SI4432::set30MHzCrystalOscillatorLoadCapacitance(uint8_t data){
         spiWrite(0x09, data);
 }
 
@@ -378,12 +378,12 @@ BIT     FUNCTION:
                 110:     1 MHz
                 111:    32.768 kHz
 */
-uint8_t SI4432::getMicrocontrollerOutputClock(){
+inline uint8_t SI4432::getMicrocontrollerOutputClock(){
         return spiRead(0x0A);
 }
 
 //look at the functions above for the BIT documentation
-void SI4432::setMicrocontrollerOutputClock(uint8_t data){
+inline void SI4432::setMicrocontrollerOutputClock(uint8_t data){
         spiWrite(0x0A, data);
 }
 
@@ -431,12 +431,12 @@ BIT     FUNCTION:
                 11101: VDD
                 else : GND
 */
-uint8_t SI4432::getGPIOConfiguration0(){
+inline uint8_t SI4432::getGPIOConfiguration0(){
         return spiRead(0x0B);
 }
 
 //look at the functions above for the BIT documentation
-void SI4432::setGPIOConfiguration0(uint8_t data){
+inline void SI4432::setGPIOConfiguration0(uint8_t data){
         spiWrite(0x0B, data);
 }
 
@@ -485,12 +485,12 @@ BIT     FUNCTION:
                 11101: VDD
                 else : GND
 */
-uint8_t SI4432::getGPIOConfiguration1(){
+inline uint8_t SI4432::getGPIOConfiguration1(){
         return spiRead(0x0C);
 }
 
 //look at the functions above for the BIT documentation
-void SI4432::setGPIOConfiguration1(uint8_t data){
+inline void SI4432::setGPIOConfiguration1(uint8_t data){
         spiWrite(0x0C, data);
 }
 
@@ -539,12 +539,12 @@ BIT     FUNCTION:
                 11101: VDD
                 else : GND
 */
-uint8_t SI4432::getGPIOConfiguration2(){
+inline uint8_t SI4432::getGPIOConfiguration2(){
         return spiRead(0x0D);
 }
 
 //look at the functions above for the BIT documentation
-void SI4432::setGPIOConfiguration2(uint8_t data){
+inline void SI4432::setGPIOConfiguration2(uint8_t data){
         spiWrite(0x0D, data);
 }
 
@@ -587,12 +587,12 @@ BIT     FUNCTION:
         GPIO pin can be set here. If the GPIO0 is configured to be a direct 
         input then the value of the pin can be read here.
 */
-uint8_t SI4432::getIOPortConfiguration(){
+inline uint8_t SI4432::getIOPortConfiguration(){
         return spiRead(0x0E);
 }
 
 //look at the functions above for the BIT documentation
-void SI4432::setIOPortConfiguration(uint8_t data){
+inline void SI4432::setIOPortConfiguration(uint8_t data){
         spiWrite(0x0E, data);
 }
 
@@ -628,12 +628,12 @@ BIT     FUNCTION:
                 adcref[0] = 0: adcref[0] = 1:
                 FS = 0.014 x (adcgain[1:0] + 1) x VDD FS = 0.021 x (adcgain[1:0] + 1) x VDD
 */
-uint8_t SI4432::getADCConfiguration(){
+inline uint8_t SI4432::getADCConfiguration(){
         return spiRead(0x0F);
 }
 
 //look at the functions above for the BIT documentation
-void SI4432::setADCConfiguration(uint8_t data){
+inline void SI4432::setADCConfiguration(uint8_t data){
         spiWrite(0x0F, data);
 }
 
@@ -649,12 +649,12 @@ BIT     FUNCTION:
         The offset can be calculated as Offset = adcoffs[2:0] x VDD / 1000; 
         MSB = adcoffs[3] = Sign bit.
 */
-uint8_t SI4432::getADCSensorAmplifierOffset(){
+inline uint8_t SI4432::getADCSensorAmplifierOffset(){
         return spiRead(0x10);
 }
 
 //look at the functions above for the BIT documentation
-void SI4432::setADCSensorAmplifierOffset(uint8_t data){
+inline void SI4432::setADCSensorAmplifierOffset(uint8_t data){
         spiWrite(0x10, data);
 }
 
@@ -666,7 +666,7 @@ REGISTER: 0x11 / 11h
 BIT     FUNCTION:
 7:0     adc[7:0] (R) Internal 8 bit ADC Output Value.
 */
-uint8_t SI4432::getADCValue(){
+inline uint8_t SI4432::getADCValue(){
         return spiRead(0x11);
 }
 
@@ -693,12 +693,12 @@ BIT     FUNCTION:
 
 3:0     tstrim[3:0] (R/W) Temperature Sensor Trim Value.
 */
-uint8_t SI4432::getTemperatureSensorCalibration(){
+inline uint8_t SI4432::getTemperatureSensorCalibration(){
         return spiRead(0x12);
 }
 
 //look at the functions above for the BIT documentation
-void SI4432::setTemperatureSensorCalibration(uint8_t data){
+inline void SI4432::setTemperatureSensorCalibration(uint8_t data){
         spiWrite(0x12, data);
 }
 
@@ -712,12 +712,12 @@ BIT     FUNCTION:
         This value is added to the measured temperature value. 
         (MSB, tvoffs[8]: sign bit)
 */
-uint8_t SI4432::getTemperatureValueOffset(){
+inline uint8_t SI4432::getTemperatureValueOffset(){
         return spiRead(0x13);
 }
 
 //look at the functions above for the BIT documentation
-void SI4432::setTemperatureValueOffset(uint8_t data){
+inline void SI4432::setTemperatureValueOffset(uint8_t data){
         spiWrite(0x13, data);
 }
 
@@ -738,12 +738,12 @@ BIT     FUNCTION:
 *Note: The period of the wake-up timer can be calculated as 
 TWUT = (32 x M x 2R-D) / 32.768 ms.
 */
-uint8_t SI4432::getWakeUpTimerPeriod1(){
+inline uint8_t SI4432::getWakeUpTimerPeriod1(){
         return spiRead(0x14);
 }
 
 //look at the functions above for the BIT documentation
-void SI4432::setWakeUpTimerPeriod1(uint8_t data){
+inline void SI4432::setWakeUpTimerPeriod1(uint8_t data){
         spiWrite(0x14, data);
 }
 
@@ -761,12 +761,12 @@ BIT     FUNCTION:
 TWUT = (32 x M x 2R-D) / 32.768 ms.
 
 */
-uint8_t SI4432::getWakeUpTimerPeriod2(){
+inline uint8_t SI4432::getWakeUpTimerPeriod2(){
         return spiRead(0x15);
 }
 
 //look at the functions above for the BIT documentation
-void SI4432::setWakeUpTimerPeriod2(uint8_t data){
+inline void SI4432::setWakeUpTimerPeriod2(uint8_t data){
         spiWrite(0x15, data);
 }
 
@@ -784,12 +784,12 @@ BIT     FUNCTION:
 TWUT = (32 x M x 2R-D) / 32.768 ms.
 
 */
-uint8_t SI4432::getWakeUpTimerPeriod3(){
+inline uint8_t SI4432::getWakeUpTimerPeriod3(){
         return spiRead(0x16);
 }
 
 //look at the functions above for the BIT documentation
-void SI4432::setWakeUpTimerPeriod3(uint8_t data){
+inline void SI4432::setWakeUpTimerPeriod3(uint8_t data){
         spiWrite(0x16, data);
 }
 
@@ -806,7 +806,7 @@ BIT     FUNCTION:
 *Note: The period of the wake-up timer can be calculated as 
 TWUT = (32 x M x 2R-D) / 32.768 ms.
 */
-uint8_t SI4432::getWakeUpTimerValue1(){
+inline uint8_t SI4432::getWakeUpTimerValue1(){
         return spiRead(0x17);
 }
 
@@ -823,7 +823,7 @@ BIT     FUNCTION:
 *Note: The period of the wake-up timer can be calculated as 
 TWUT = (32 x M x 2R-D) / 32.768 ms.
 */
-uint8_t SI4432::getWakeUpTimerValue2(){
+inline uint8_t SI4432::getWakeUpTimerValue2(){
         return spiRead(0x18);
 }
 
@@ -839,12 +839,12 @@ BIT     FUNCTION:
 TLDC_ON = (32 x LDC x 2R-D) / 32.768 [ms] R and D values are the same as in the 
 wake-up timer setting in "Register 14h. Wake-Up Timer Period 1".
 */
-uint8_t SI4432::getLowDutyCycleModeDuration(){
+inline uint8_t SI4432::getLowDutyCycleModeDuration(){
         return spiRead(0x19);
 }
 
 //look at the functions above for the BIT documentation
-void SI4432::setLowDutyCycleModeDuration(uint8_t data){
+inline void SI4432::setLowDutyCycleModeDuration(uint8_t data){
         spiWrite(0x19, data);
 }
 
@@ -863,12 +863,12 @@ BIT     FUNCTION:
 
 *Note: The threshold can be calculated as Vthreshold = 1.7 + lbdt x 50 mV.
 */
-uint8_t SI4432::getLowBatteryDetectorThreshold(){
+inline uint8_t SI4432::getLowBatteryDetectorThreshold(){
         return spiRead(0x1A);
 }
 
 //look at the functions above for the BIT documentation
-void SI4432::setLowBatteryDetectorThreshold(uint8_t data){
+inline void SI4432::setLowBatteryDetectorThreshold(uint8_t data){
         spiWrite(0x1A, data);
 }
 
@@ -884,6 +884,6 @@ BIT     FUNCTION:
         The battery voltage is converted by a 5 bit ADC. In Sleep Mode the 
         register is updated in every 1 s. In other states it measures continuously
 */
-uint8_t SI4432::getBatteryVoltageLevel(){
+inline uint8_t SI4432::getBatteryVoltageLevel(){
         return spiRead(0x1B);
 }
