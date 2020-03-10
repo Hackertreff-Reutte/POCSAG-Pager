@@ -76,6 +76,17 @@ class SI4432{
         inline void setClockRecoveryOversamplingRate(uint8_t data);
         inline uint8_t getClockRecoveryOffset2();
         inline void setClockRecoveryOffset2(uint8_t data);
+        inline uint8_t getClockRecoveryOffset1();
+        inline void setClockRecoveryOffset1(uint8_t data);
+        inline uint8_t getClockRecoveryOffset0();
+        inline void setClockRecoveryOffset0(uint8_t data);
+        inline uint8_t getClockRecoveryTimingLoopGain1();
+        inline void setClockRecoveryTimingLoopGain1(uint8_t data);
+        inline uint8_t getClockRecoveryTimingLoopGain0();
+        inline void setClockRecoveryTimingLoopGain0(uint8_t data);
+        inline uint8_t getReceivedSignalStrengthIndicator();
+
+
         
     private:
         //spi instance

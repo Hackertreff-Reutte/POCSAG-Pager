@@ -105,6 +105,8 @@ BIT     FUNCTION:
 7:0     rxosr[7:0] (R/W) Oversampling Rate.
         3 LSBs are the fraction, default = 0110 0100 = 12.5 clock cycles per 
         data bit
+
+note    look in the datasheet for the formular 
 */
 inline uint8_t SI4432::getClockRecoveryOversamplingRate(){
         return spiRead(0x20);
@@ -127,6 +129,8 @@ BIT     FUNCTION:
 4       stallctrl (R/W) Used for BCR Purposes.
 
 3:0     ncoff[19:16] (R/W) NCO Offset.
+
+note    look in the datasheet for the formular 
 */
 inline uint8_t SI4432::getClockRecoveryOffset2(){
         return spiRead(0x21);
@@ -135,4 +139,90 @@ inline uint8_t SI4432::getClockRecoveryOffset2(){
 //look at the functions above for the BIT documentation
 inline void SI4432::setClockRecoveryOffset2(uint8_t data){
         spiWrite(0x21, data);
+}
+
+
+/*
+REGISTERNAME: Clock Recovery Offset 1
+REGISTER: 0x22 / 22h
+
+BIT     FUNCTION:
+7:0     ncoff[15:8] (R/W) NCO Offset.
+
+note    look in the datasheet for the formular 
+*/
+inline uint8_t SI4432::getClockRecoveryOffset1(){
+        return spiRead(0x22);
+}
+
+//look at the functions above for the BIT documentation
+inline void SI4432::setClockRecoveryOffset1(uint8_t data){
+        spiWrite(0x22, data);
+}
+
+
+/*
+REGISTERNAME: Clock Recovery Offset 0
+REGISTER: 0x23 / 23h
+
+BIT     FUNCTION:
+7:0     ncoff[7:0] (R/W) NCO Offset. 
+
+note    look in the datasheet for the formular 
+*/
+inline uint8_t SI4432::getClockRecoveryOffset0(){
+        return spiRead(0x23);
+}
+
+//look at the functions above for the BIT documentation
+inline void SI4432::setClockRecoveryOffset0(uint8_t data){
+        spiWrite(0x23, data);
+}
+
+
+/*
+REGISTERNAME: Clock Recovery Timing Loop Gain 1
+REGISTER: 0x24 / 24h
+
+BIT     FUNCTION:
+7:3     Reserved (R/W) Reserved.
+
+2:0     crgain[10:8] (R/W) Clock Recovery Timing Loop Gain.
+*/
+inline uint8_t SI4432::getClockRecoveryTimingLoopGain1(){
+        return spiRead(0x24);
+}
+
+//look at the functions above for the BIT documentation
+inline void SI4432::setClockRecoveryTimingLoopGain1(uint8_t data){
+        spiWrite(0x24, data);
+}
+
+
+/*
+REGISTERNAME: Clock Recovery Timing Loop Gain 0
+REGISTER: 0x25 / 25h
+
+BIT     FUNCTION:
+7:0     crgain[7:0] (R/W) Clock Recovery Timing Loop Gain.
+*/
+inline uint8_t SI4432::getClockRecoveryTimingLoopGain0(){
+        return spiRead(0x25);
+}
+
+//look at the functions above for the BIT documentation
+inline void SI4432::setClockRecoveryTimingLoopGain0(uint8_t data){
+        spiWrite(0x25, data);
+}
+
+
+/*
+REGISTERNAME:  Received Signal Strength Indicator
+REGISTER: 0x26 / 26h
+
+BIT     FUNCTION:
+7:0     rssi[7:0] (R) Received Signal Strength Indicator Value.
+*/
+inline uint8_t SI4432::getReceivedSignalStrengthIndicator(){
+        return spiRead(0x26);
 }
