@@ -63,6 +63,8 @@ class SI4432{
         inline uint8_t getLowBatteryDetectorThreshold();
         inline void setLowBatteryDetectorThreshold(uint8_t data);
         inline uint8_t getBatteryVoltageLevel();
+        inline uint8_t getAnalogTestBusSelect();
+        inline void setAnalogTestBusSelect(uint8_t data);
 
         inline uint8_t getIFFilterBandwidth();
         inline void setIFFilterBandwidth(uint8_t data);

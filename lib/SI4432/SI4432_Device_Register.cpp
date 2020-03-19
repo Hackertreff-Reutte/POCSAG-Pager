@@ -887,3 +887,24 @@ BIT     FUNCTION:
 inline uint8_t SI4432::getBatteryVoltageLevel(){
         return spiRead(0x1B);
 }
+
+
+/*
+REGISTERNAME: Analog Test Bus Select
+REGISTER: 0x50 / 50h
+
+BIT     FUNCTION:
+7:5     Reserved (R/W) Reserved.
+
+4:0     atb[4:0] (R/W) Analog Test Bus.
+        The selection of internal analog testpoints that are muxed onto TESTp 
+        and TESTn
+*/
+inline uint8_t SI4432::getAnalogTestBusSelect(){
+        return spiRead(0x50);
+}
+
+//look at the functions above for the BIT documentation
+inline void SI4432::setAnalogTestBusSelect(uint8_t data){
+        spiWrite(0x50, data);
+}
