@@ -256,7 +256,7 @@ inline void SI4432::setSynchronizationWord1(uint8_t data){
 
 
 /*
-REGISTERNAME: Synchronization Word 1
+REGISTERNAME: Synchronization Word 0
 REGISTER: 0x39 / 39h
 
 BIT     FUNCTION:
@@ -270,4 +270,311 @@ inline uint8_t SI4432::getSynchronizationWord0(){
 //look at the functions above for the BIT documentation
 inline void SI4432::setSynchronizationWord0(uint8_t data){
         spiWrite(0x39, data);
+}
+
+
+/*
+REGISTERNAME: Transmit Header 3
+REGISTER: 0x3A / 3Ah
+
+BIT     FUNCTION:
+7:0     txhd[31:24] (R/W) Transmit Header 3.
+        4th byte of the header to be transmitted.
+*/
+inline uint8_t SI4432::getTransmitHeader3(){
+        return spiRead(0x3A);
+}
+
+//look at the functions above for the BIT documentation
+inline void SI4432::setTransmitHeader3(uint8_t data){
+        spiWrite(0x3A, data);
+}
+
+
+/*
+REGISTERNAME: Transmit Header 2
+REGISTER: 0x3B / 3Bh
+
+BIT     FUNCTION:
+7:0     txhd[23:16] (R/W) Transmit Header 2.
+        3rd byte of the header to be transmitted.
+*/
+inline uint8_t SI4432::getTransmitHeader2(){
+        return spiRead(0x3B);
+}
+
+//look at the functions above for the BIT documentation
+inline void SI4432::setTransmitHeader2(uint8_t data){
+        spiWrite(0x3B, data);
+}
+
+
+/*
+REGISTERNAME: Transmit Header 1
+REGISTER: 0x3C / 3Ch
+
+BIT     FUNCTION:
+7:0     txhd[15:8] (R/W) Transmit Header 1.
+        2nd byte of the header to be transmitted.
+*/
+inline uint8_t SI4432::getTransmitHeader1(){
+        return spiRead(0x3C);
+}
+
+//look at the functions above for the BIT documentation
+inline void SI4432::setTransmitHeader1(uint8_t data){
+        spiWrite(0x3C, data);
+}
+
+
+/*
+REGISTERNAME: Transmit Header 0
+REGISTER: 0x3D / 3Dh
+
+BIT     FUNCTION:
+7:0     txhd[7:0] (R/W) Transmit Header 0.
+        1st byte of the header to be transmitted.
+*/
+inline uint8_t SI4432::getTransmitHeader0(){
+        return spiRead(0x3D);
+}
+
+//look at the functions above for the BIT documentation
+inline void SI4432::setTransmitHeader0(uint8_t data){
+        spiWrite(0x3D, data);
+}
+
+
+/*
+REGISTERNAME: Packet Length
+REGISTER: 0x3E / 3Eh
+
+BIT     FUNCTION:
+7:0     pklen[7:0] (R/W) Packet Length.
+        The value in the pklen[7:0] register corresponds directly to the number 
+        of bytes in the Packet. For example pklen[7:0] = ‘00001000’ corresponds 
+        to a packet length of 8 bytes. The maximum packet length is 
+        pklen[7:0] = ‘11111111’, a 255 byte packet. Writing 0 is possible, 
+        in this case we do not send any data in the packet. During RX, 
+        if fixpklen = 1, this will specify also the Packet Length for RX mode.
+*/
+inline uint8_t SI4432::getPacketLength(){
+        return spiRead(0x3E);
+}
+
+//look at the functions above for the BIT documentation
+inline void SI4432::setPacketLength(uint8_t data){
+        spiWrite(0x3E, data);
+}
+
+
+/*
+REGISTERNAME: Check Header 3
+REGISTER: 0x3F / 3Fh
+
+BIT     FUNCTION:
+7:0     chhd[31:24] (R/W) Check Header 3.
+        4th byte of the check header.
+*/
+inline uint8_t SI4432::getCheckHeader3(){
+        return spiRead(0x3F);
+}
+
+//look at the functions above for the BIT documentation
+inline void SI4432::setCheckHeader3(uint8_t data){
+        spiWrite(0x3F, data);
+}
+
+
+/*
+REGISTERNAME: Check Header 2
+REGISTER: 0x40 / 40h
+
+BIT     FUNCTION:
+7:0     chhd[23:16] (R/W) Check Header 2.
+        3rd byte of the check header.
+*/
+inline uint8_t SI4432::getCheckHeader2(){
+        return spiRead(0x40);
+}
+
+//look at the functions above for the BIT documentation
+inline void SI4432::setCheckHeader2(uint8_t data){
+        spiWrite(0x40, data);
+}
+
+
+/*
+REGISTERNAME: Check Header 1
+REGISTER: 0x41 / 41h
+
+BIT     FUNCTION:
+7:0     chhd[15:8] (R/W) Check Header 1.
+        2nd byte of the check header.
+*/
+inline uint8_t SI4432::getCheckHeader1(){
+        return spiRead(0x41);
+}
+
+//look at the functions above for the BIT documentation
+inline void SI4432::setCheckHeader1(uint8_t data){
+        spiWrite(0x41, data);
+}
+
+
+/*
+REGISTERNAME: Check Header 0
+REGISTER: 0x42 / 42h
+
+BIT     FUNCTION:
+7:0     chhd[7:0] (R/W) Check Header 0.
+        1st byte of the check header
+*/
+inline uint8_t SI4432::getCheckHeader0(){
+        return spiRead(0x42);
+}
+
+//look at the functions above for the BIT documentation
+inline void SI4432::setCheckHeader0(uint8_t data){
+        spiWrite(0x42, data);
+}
+
+
+/*
+REGISTERNAME: Header Enable 3
+REGISTER: 0x43 / 43h
+
+BIT     FUNCTION:
+7:0     hden[31:24] (R/W) Header Enable 3.
+        4th byte of the check header.
+*/
+inline uint8_t SI4432::getHeaderEnable3(){
+        return spiRead(0x43);
+}
+
+//look at the functions above for the BIT documentation
+inline void SI4432::setHeaderEnable3(uint8_t data){
+        spiWrite(0x43, data);
+}
+
+
+/*
+REGISTERNAME: Header Enable 2
+REGISTER: 0x44 / 44h
+
+BIT     FUNCTION:
+7:0     hden[23:16] (R/W) Header Enable 2.
+        3rd byte of the check header.
+*/
+inline uint8_t SI4432::getHeaderEnable2(){
+        return spiRead(0x44);
+}
+
+//look at the functions above for the BIT documentation
+inline void SI4432::setHeaderEnable2(uint8_t data){
+        spiWrite(0x44, data);
+}
+
+
+/*
+REGISTERNAME: Header Enable 1
+REGISTER: 0x45 / 45h
+
+BIT     FUNCTION:
+7:0     hden[15:8] (R/W) Header Enable 1.
+        2nd byte of the check header.
+*/
+inline uint8_t SI4432::getHeaderEnable1(){
+        return spiRead(0x45);
+}
+
+//look at the functions above for the BIT documentation
+inline void SI4432::setHeaderEnable1(uint8_t data){
+        spiWrite(0x45, data);
+}
+
+
+/*
+REGISTERNAME: Header Enable 0
+REGISTER: 0x46 / 46h
+
+BIT     FUNCTION:
+7:0     hden[7:0] (R/W) Header Enable 0.
+        1st byte of the check header.
+*/
+inline uint8_t SI4432::getHeaderEnable0(){
+        return spiRead(0x46);
+}
+
+//look at the functions above for the BIT documentation
+inline void SI4432::setHeaderEnable0(uint8_t data){
+        spiWrite(0x46, data);
+}
+
+
+/*
+REGISTERNAME: Received Header 3
+REGISTER: 0x47 / 47h
+
+BIT     FUNCTION:
+7:0     rxhd[31:24] (R) Received Header 3.
+        4th byte of the received header.
+*/
+inline uint8_t SI4432::getReceivedHeader3(){
+        return spiRead(0x47);
+}
+
+
+/*
+REGISTERNAME: Received Header 2
+REGISTER: 0x48 / 48h
+
+BIT     FUNCTION:
+7:0     rxhd[23:16] (R) Received Header 2.
+        3rd byte of the received header.
+*/
+inline uint8_t SI4432::getReceivedHeader2(){
+        return spiRead(0x48);
+}
+
+
+/*
+REGISTERNAME: Received Header 1
+REGISTER: 0x49 / 49h
+
+BIT     FUNCTION:
+7:0     rxhd[15:8] (R) Received Header 1.
+        2nd byte of the received header.
+*/
+inline uint8_t SI4432::getReceivedHeader1(){
+        return spiRead(0x49);
+}
+
+
+/*
+REGISTERNAME: Received Header 0
+REGISTER: 0x4A / 4Ah
+
+BIT     FUNCTION:
+7:0     rxhd[7:0] (R) Received Header 0.
+        1st byte of the received header
+*/
+inline uint8_t SI4432::getReceivedHeader0(){
+        return spiRead(0x4A);
+}
+
+
+/*
+REGISTERNAME: Received Packet Length
+REGISTER: 0x4B / 4Bh
+
+BIT     FUNCTION:
+7:0     rxplen[7:0] (R) Length Byte of the Received Packet during fixpklen = 0.
+        (Specifies the number of Data bytes in the last received packet) 
+        This will be relevant ONLY if fixpklen (address 33h, bit[3]) is low 
+        during the receive time. If fixpklen is high, then the number of 
+        received Data Bytes can be read from the pklen register (address h3E).
+*/
+inline uint8_t SI4432::getReceivedPacketLength(){
+        return spiRead(0x4B);
 }

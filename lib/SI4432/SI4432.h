@@ -109,8 +109,37 @@ class SI4432{
         inline void setSynchronizationWord1(uint8_t data);
         inline uint8_t getSynchronizationWord0();
         inline void setSynchronizationWord0(uint8_t data);
-
-
+        inline uint8_t getTransmitHeader3();
+        inline void setTransmitHeader3(uint8_t data);
+        inline uint8_t getTransmitHeader2();
+        inline void setTransmitHeader2(uint8_t data);
+        inline uint8_t getTransmitHeader1();
+        inline void setTransmitHeader1(uint8_t data);
+        inline uint8_t getTransmitHeader0();
+        inline void setTransmitHeader0(uint8_t data);
+        inline uint8_t getPacketLength();
+        inline void setPacketLength(uint8_t data);
+        inline uint8_t getCheckHeader3();
+        inline void setCheckHeader3(uint8_t data);
+        inline uint8_t getCheckHeader2();
+        inline void setCheckHeader2(uint8_t data);
+        inline uint8_t getCheckHeader1();
+        inline void setCheckHeader1(uint8_t data);
+        inline uint8_t getCheckHeader0();
+        inline void setCheckHeader0(uint8_t data);
+        inline uint8_t getHeaderEnable3();
+        inline void setHeaderEnable3(uint8_t data);
+        inline uint8_t getHeaderEnable2();
+        inline void setHeaderEnable2(uint8_t data);
+        inline uint8_t getHeaderEnable1();
+        inline void setHeaderEnable1(uint8_t data);
+        inline uint8_t getHeaderEnable0();
+        inline void setHeaderEnable0(uint8_t data);
+        inline uint8_t getReceivedHeader3();
+        inline uint8_t getReceivedHeader2();
+        inline uint8_t getReceivedHeader1();
+        inline uint8_t getReceivedHeader0();
+        inline uint8_t getReceivedPacketLength();
         
     private:
         //spi instance
