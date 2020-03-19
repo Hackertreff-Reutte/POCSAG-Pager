@@ -81,3 +81,193 @@ BIT     FUNCTION:
 inline uint8_t SI4432::getEZMACStatus(){
         return spiRead(0x31);
 }
+
+
+/*
+REGISTERNAME: Header Control 1
+REGISTER: 0x32 / 32h
+
+BIT     FUNCTION:
+7:4     bcen[3:0] (R/W) Broadcast Address (FFh) Check Enable.
+        If it is enabled together with Header Byte Check then the header check 
+        is OK if the incoming header byte equals with the appropriate check 
+        byte or FFh). One hot encoding.
+            0000: No broadcast address enable.
+            0001: Broadcast address enable for header byte 0.
+            0010: Broadcast address enable for header byte 1.
+            0011: Broadcast address enable for header bytes 0 & 1.
+            0100: …
+
+3:0     hdch[3:0] (R/W) Received Header Bytes to be Checked Against the Check 
+        Header Bytes.
+        One hot encoding. The receiver will use hdch[2:0] to know the position 
+        of the Header Bytes.
+            0000: No Received Header check
+            0001: Received Header check for byte 0.
+            0010: Received Header check for bytes 1.
+            0011: Received header check for bytes 0 & 1.
+            0100: …
+*/
+inline uint8_t SI4432::getHeaderControl1(){
+        return spiRead(0x32);
+}
+
+//look at the functions above for the BIT documentation
+inline void SI4432::setHeaderControl1(uint8_t data){
+        spiWrite(0x32, data);
+}
+
+
+/*
+REGISTERNAME: Header Control 2
+REGISTER: 0x33 / 33h
+
+BIT     FUNCTION:
+7       Reserved (R) Reserved.
+
+6:4     hdlen[2:0] (R/W) Header Length.
+        Length of header used if packet handler is enabled for TX/RX (enpactx/rx). 
+        Headers are transmitted/received in descending order.
+            000: No TX/RX header
+            001: Header 3
+            010: Header 3 and 2
+            011: Header 3 and 2 and 1
+            100: Header 3 and 2 and 1 and 0
+
+3       fixpklen (R/W) Fix Packet Length.
+        When fixpklen = 1 the packet length (pklen[7:0]) is not included in the 
+        header. When fixpklen = 0 the packet length is included in the header.
+
+2:1     synclen[1:0] (R/W) Synchronization Word Length.
+        The value in this register corresponds to the number of bytes used in 
+        the Synchronization Word. The synchronization word bytes are transmitted 
+        in descending order.
+            00: Synchronization Word 3
+            01: Synchronization Word 3 and 2
+            10: Synchronization Word 3 and 2 and 1
+            11: Synchronization Word 3 and 2 and 1 and 0
+
+0       prealen[8] (R/W) MSB of Preamble Length.
+        See register Preamble Length.
+*/
+inline uint8_t SI4432::getHeaderControl2(){
+        return spiRead(0x33);
+}
+
+//look at the functions above for the BIT documentation
+inline void SI4432::setHeaderControl2(uint8_t data){
+        spiWrite(0x33, data);
+}
+
+
+/*
+REGISTERNAME: Preamble Length
+REGISTER: 0x34 / 34h
+
+BIT     FUNCTION:
+7:0     prealen[7:0] (R/W) Preamble Length.
+        The value in the prealen[8:0] register corresponds to the number of 
+        nibbles (4 bits) in the packet. For example prealen[8:0] = ‘000001000’ 
+        corresponds to a preamble length of 32 bits (8 x 4bits) or 4 bytes. 
+        The maximum preamble length is prealen[8:0] = 111111111 which 
+        corresponds to a 255 bytes Preamble. Writing 0 will hav
+*/
+inline uint8_t SI4432::getPreambleLength(){
+        return spiRead(0x34);
+}
+
+//look at the functions above for the BIT documentation
+inline void SI4432::setPreambleLength(uint8_t data){
+        spiWrite(0x34, data);
+}
+
+
+/*
+REGISTERNAME: Preamble Detection Control 1
+REGISTER: 0x35 / 35h
+
+BIT     FUNCTION:
+7:3     preath[4:0] (R/W) Number of nibbles processed during detection.
+
+2:0     Reserved (R/W) Reserved.
+*/
+inline uint8_t SI4432::getPreambleDetectionControl1(){
+        return spiRead(0x35);
+}
+
+//look at the functions above for the BIT documentation
+inline void SI4432::setPreambleDetectionControl1(uint8_t data){
+        spiWrite(0x35, data);
+}
+
+
+/*
+REGISTERNAME: Synchronization Word 3
+REGISTER: 0x36 / 36h
+
+BIT     FUNCTION:
+7:0     sync[31:24] (R/W) Synchronization Word 3.
+        4th byte of the synchronization word
+*/
+inline uint8_t SI4432::getSynchronizationWord3(){
+        return spiRead(0x36);
+}
+
+//look at the functions above for the BIT documentation
+inline void SI4432::setSynchronizationWord3(uint8_t data){
+        spiWrite(0x36, data);
+}
+
+
+/*
+REGISTERNAME: Synchronization Word 2
+REGISTER: 0x37 / 37h
+
+BIT     FUNCTION:
+7:0     sync[23:16] (R/W) Synchronization Word 2.
+        3rd byte of the synchronization word.
+*/
+inline uint8_t SI4432::getSynchronizationWord2(){
+        return spiRead(0x37);
+}
+
+//look at the functions above for the BIT documentation
+inline void SI4432::setSynchronizationWord2(uint8_t data){
+        spiWrite(0x37, data);
+}
+
+
+/*
+REGISTERNAME: Synchronization Word 1
+REGISTER: 0x38 / 38h
+
+BIT     FUNCTION:
+7:0     sync[15:8] (R/W) Synchronization Word 1.
+        2nd byte of the synchronization word.
+*/
+inline uint8_t SI4432::getSynchronizationWord1(){
+        return spiRead(0x38);
+}
+
+//look at the functions above for the BIT documentation
+inline void SI4432::setSynchronizationWord1(uint8_t data){
+        spiWrite(0x38, data);
+}
+
+
+/*
+REGISTERNAME: Synchronization Word 1
+REGISTER: 0x39 / 39h
+
+BIT     FUNCTION:
+7:0     sync[7:0] (R/W) Synchronization Word 0.
+        1st byte of the synchronization word.
+*/
+inline uint8_t SI4432::getSynchronizationWord0(){
+        return spiRead(0x39);
+}
+
+//look at the functions above for the BIT documentation
+inline void SI4432::setSynchronizationWord0(uint8_t data){
+        spiWrite(0x39, data);
+}

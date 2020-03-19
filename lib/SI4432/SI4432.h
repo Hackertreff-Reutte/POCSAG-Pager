@@ -89,9 +89,27 @@ class SI4432{
         inline void setRSSIThresholdforClearChannelIndicator(uint8_t data);
         inline uint8_t getAntennaDiversity1();
         inline uint8_t getAntennaDiversity2();
+
         inline uint8_t getDataAccessControl();
         inline void setDataAccessControl(uint8_t data);
         inline uint8_t getEZMACStatus();
+        inline uint8_t getHeaderControl1();
+        inline void setHeaderControl1(uint8_t data);
+        inline uint8_t getHeaderControl2();
+        inline void setHeaderControl2(uint8_t data);
+        inline uint8_t getPreambleLength();
+        inline void setPreambleLength(uint8_t data);
+        inline uint8_t getPreambleDetectionControl1();
+        inline void setPreambleDetectionControl1(uint8_t data);
+        inline uint8_t getSynchronizationWord3();
+        inline void setSynchronizationWord3(uint8_t data);
+        inline uint8_t getSynchronizationWord2();
+        inline void setSynchronizationWord2(uint8_t data);
+        inline uint8_t getSynchronizationWord1();
+        inline void setSynchronizationWord1(uint8_t data);
+        inline uint8_t getSynchronizationWord0();
+        inline void setSynchronizationWord0(uint8_t data);
+
 
         
     private:
