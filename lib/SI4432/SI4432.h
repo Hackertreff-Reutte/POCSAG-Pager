@@ -89,7 +89,9 @@ class SI4432{
         inline void setRSSIThresholdforClearChannelIndicator(uint8_t data);
         inline uint8_t getAntennaDiversity1();
         inline uint8_t getAntennaDiversity2();
-
+        inline uint8_t getDataAccessControl();
+        inline void setDataAccessControl(uint8_t data);
+        inline uint8_t getEZMACStatus();
 
         
     private:
