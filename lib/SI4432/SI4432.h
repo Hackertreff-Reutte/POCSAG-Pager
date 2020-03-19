@@ -85,6 +85,10 @@ class SI4432{
         inline uint8_t getClockRecoveryTimingLoopGain0();
         inline void setClockRecoveryTimingLoopGain0(uint8_t data);
         inline uint8_t getReceivedSignalStrengthIndicator();
+        inline uint8_t getRSSIThresholdforClearChannelIndicator();
+        inline void setRSSIThresholdforClearChannelIndicator(uint8_t data);
+        inline uint8_t getAntennaDiversity1();
+        inline uint8_t getAntennaDiversity2();
 
 
         

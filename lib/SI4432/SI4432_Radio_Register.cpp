@@ -217,7 +217,7 @@ inline void SI4432::setClockRecoveryTimingLoopGain0(uint8_t data){
 
 
 /*
-REGISTERNAME:  Received Signal Strength Indicator
+REGISTERNAME: Received Signal Strength Indicator
 REGISTER: 0x26 / 26h
 
 BIT     FUNCTION:
@@ -225,4 +225,46 @@ BIT     FUNCTION:
 */
 inline uint8_t SI4432::getReceivedSignalStrengthIndicator(){
         return spiRead(0x26);
+}
+
+
+/*
+REGISTERNAME: RSSI Threshold for Clear Channel Indicator
+REGISTER: 0x27 / 27h
+
+BIT     FUNCTION:
+7:0     rssith[7:0] (R/W) RSSI Threshold.
+        Interrupt is set if the RSSI value is above this threshold
+*/
+inline uint8_t SI4432::getRSSIThresholdforClearChannelIndicator(){
+        return spiRead(0x27);
+}
+
+//look at the functions above for the BIT documentation
+inline void SI4432::setRSSIThresholdforClearChannelIndicator(uint8_t data){
+        spiWrite(0x27, data);
+}
+
+
+/*
+REGISTERNAME: Antenna Diversity 1
+REGISTER: 0x28 / 28h
+
+BIT     FUNCTION:
+7:0     adrssi[7:0] (R) Measured RSSI Value on Antenna 1.
+*/
+inline uint8_t SI4432::getAntennaDiversity1(){
+        return spiRead(0x28);
+}
+
+
+/*
+REGISTERNAME: Antenna Diversity 2
+REGISTER: 0x29 / 29h
+
+BIT     FUNCTION:
+7:0     adrssi2[7:0] (R) Measured RSSI Value on Antenna 2
+*/
+inline uint8_t SI4432::getAntennaDiversity2(){
+        return spiRead(0x29);
 }
