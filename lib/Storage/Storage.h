@@ -7,6 +7,7 @@ Lib for creating and managing pocsag messages
 
 #include "FS.h"
 #include "SD.h"
+#include "SPIc.h"
 #include "SPI.h"
 #include "string.h"
 #include "ArrayList.h"

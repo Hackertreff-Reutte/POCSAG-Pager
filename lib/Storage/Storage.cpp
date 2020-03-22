@@ -10,17 +10,35 @@ Functions: cardSize(); cardType(); totalBytes(); usedBytes();
 //use the VSPI
 SPIClass SDSPI(VSPI);
 
-#define Storage_SPI_CLK 18
-#define Storage_SPI_MISO 19
-#define Storage_SPI_MOSI 23
+#define VSPI_CLK 18
+#define VSPI_MISO 19
+#define VSPI_MOSI 23
 #define Storage_SPI_SS 5
 
 static bool cardIsMounted = false;
 
+SPIc* spi = nullptr;
+
 //starts the storage and mounts the sd card
 bool Storage::setup(){
-    SDSPI.begin(Storage_SPI_CLK, Storage_SPI_MISO, Storage_SPI_MOSI, -1);
-    cardIsMounted = SD.begin(Storage_SPI_SS, SDSPI);
+
+    if(SPIc::spiExists(VSPI)){
+        //spi is already active
+        spi = SPIc::getSPI(VSPI);
+    }else{
+        spi = SPIc::setupSPI(VSPI, VSPI_CLK, VSPI_MISO, VSPI_MOSI);
+    }
+
+    //setup did not work or spi is already locked!
+    if(spi == nullptr || spi->getLock()){
+        return false;
+    }
+
+    //lock the spi so that nothing other than the storage can use it
+    spi->setLock(true);
+
+   
+    cardIsMounted = SD.begin(Storage_SPI_SS, *spi->getSpiClass());
     return cardIsMounted;
 }
 

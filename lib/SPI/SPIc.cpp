@@ -20,41 +20,144 @@ heavely based on:
 https://github.com/espressif/arduino-esp32/blob/master/libraries/SPI/src/SPI.cpp
 */
 
-SPIClass SPIcSPI(HSPI);
 
-//uses hspi 
-#define SPIc_SPI_CLK 14
-#define SPIc_SPI_MISO 12
-#define SPIc_SPI_MOSI 13
+//some common spi pins 
 
-//ignored at the moment
-#define SPIc_SPI_SS_1 15
+//hspi 
+#define HSPI_CLK 14
+#define HSPI_MISO 12
+#define HSPI_MOSI 13
 
-bool SPIc::initialized = false;
-bool SPIc::transmitting = false;
+//vspi
+#define VSPI_CLK 18
+#define VSPI_MISO 19
+#define VSPI_MOSI 23
 
-void SPIc::setup(uint8_t CSpin){
 
-    pinMode(CSpin, OUTPUT);
-    digitalWrite(CSpin, HIGH);
 
-    //if not initialized do the setup
-    if(!initialized){
-        SPIcSPI.begin(SPIc_SPI_CLK, SPIc_SPI_MISO, SPIc_SPI_MOSI, -1);
-        initialized = true;
+
+//------------------------------------------------------------------------------
+
+
+//list of spis
+ArrayList<SPIc*> SPIc::ListOfSPIs;
+
+//static 
+//check whether a spi exists or not (init)
+bool SPIc::spiExists(uint8_t spi_bus){
+    for(int i = 0; i < ListOfSPIs.getSize(); i++){
+        if(ListOfSPIs.getArray()[i]->getSpiBusCode() == spi_bus){
+            return true;
+        }
     }
+    return false;
 }
 
-bool SPIc::isInitialized(){
-    return initialized;
+//static function that returns the spi if it exists
+SPIc* SPIc::getSPI(uint8_t spi_bus){
+    for(int i = 0; i < ListOfSPIs.getSize(); i++){
+        if(ListOfSPIs.getArray()[i]->getSpiBusCode() == spi_bus){
+            return ListOfSPIs.getArray()[i];
+        }
+    }
+    return nullptr;
+}
+
+//static creates a new instance of the spi bus
+SPIc* SPIc::setupSPI(uint8_t spi_bus, int8_t sck, int8_t miso, int8_t mosi){
+    
+    //the spi should not exist
+    if(spiExists(spi_bus) == true){
+        return nullptr;
+    }
+
+    //create new spiBus
+    SPIc* newSPI = new SPIc(spi_bus);
+
+    //inits the spi
+    newSPI->setup(sck, miso, mosi);
+
+    //set the spi buscode
+    newSPI->spiBusCode = spi_bus;
+
+    ListOfSPIs.add(newSPI);
+
+    return newSPI;
+}
+
+//returns the bus code
+uint8_t SPIc::getSpiBusCode(){
+    return spiBusCode;
+}
+
+//private constructor for kind of singleton usage 
+SPIc::SPIc(uint8_t spi_bus){
+    SPIcSPI = new SPIClass(spi_bus);
+}
+
+//returns the SpiClass instance should only really be used if you need it
+//example: for the SD lib
+SPIClass* SPIc::getSpiClass(){
+    return SPIcSPI;
+}
+
+
+//setsup and spi controller
+void SPIc::setup(int8_t sck, int8_t miso, int8_t mosi){
+    MOSI = mosi;
+    MISO = miso;
+    SCK = sck;
+
+    SPIcSPI->begin(sck, miso, mosi, -1);
+    
+    initialized = true;
 }
 
 void SPIc::close(){
     if(initialized){
-        SPIcSPI.end();
+        SPIcSPI->end();
         initialized = false;
+
+        //remove the SPIc from the SPI list;
+        //IMPORTANT the user should delete the SPIc object
+        for(int i = 0; i < ListOfSPIs.getSize(); i++){
+            if(ListOfSPIs.getArray()[i]->getSpiBusCode() == spiBusCode){
+                ListOfSPIs.remove(i);
+                delete[] SPIcSPI;
+            }
+        }
     }
 }
+
+//sets the state of the lock
+void SPIc::setLock(bool state){
+    lock = state;
+}
+
+//returns the state of the lock
+bool SPIc::getLock(){
+    return lock;
+}
+
+//get the init status of the chip
+bool SPIc::isInitialized(){
+    return initialized;
+}
+
+//get the transmitting status
+bool SPIc::isTransmitting(){
+    return transmitting;
+}
+
+//------------------------------------------------------------------------------
+
+
+//changes a pin to an output pin 
+void SPIc::setChipSelectPin(uint8_t CSpin){
+    pinMode(CSpin, OUTPUT);
+    digitalWrite(CSpin, HIGH);
+}
+
 
 void SPIc::selectChip(uint8_t CSpin){
     
@@ -85,40 +188,81 @@ void SPIc::deselectChip(uint8_t CSpin){
 }
 
 //overloaded function (will call the other one)
-void SPIc::beginTransaction(uint32_t maxSpeed, uint8_t bitOrder, uint8_t spiMode){
-    beginTransaction(SPISettings(maxSpeed, bitOrder, spiMode));
+bool SPIc::beginTransaction(uint32_t maxSpeed, uint8_t bitOrder, uint8_t spiMode){
+    
+    //check if the SPI controller is initialised or locked or the spi is transmitting
+    if(initialized == false || lock == true || transmitting == true){
+        return false;
+    }
+
+    return beginTransaction(SPISettings(maxSpeed, bitOrder, spiMode));
+
 }
 
-void SPIc::beginTransaction(SPISettings settings){
+bool SPIc::beginTransaction(SPISettings settings){
+
+    //check if the SPI controller is initialised or locked  or the spi is transmitting
+    if(initialized == false || lock == true  || transmitting == true){
+        return false;
+    }
+
     transmitting = true;
-    SPIcSPI.beginTransaction(settings);
+    SPIcSPI->beginTransaction(settings);
+
+    return true;
 }
 
-void SPIc::endTransaction(){
-    SPIcSPI.endTransaction();
+bool SPIc::endTransaction(){
+
+    //check if the SPI controller is initialised or locked or the spi is not transmitting
+    if(initialized == false || lock == true || transmitting == false){
+        return false;
+    }
+
+    SPIcSPI->endTransaction();
     transmitting = false;
+
+    return true;
 }
 
 
 //for read writing (sending data to the slave and receiving a response)
 uint8_t SPIc::transfer8(uint8_t data){
+
+    //check if the SPI controller is initialised or locked
+    if(initialized == false || lock == true || transmitting == false){
+        return 0;
+    }
+
     //needs to be volatile so that the compiler does optimize the read 
     //operation of the read register away
-    volatile uint8_t result = SPIcSPI.transfer(data);
+    volatile uint8_t result = SPIcSPI->transfer(data);
     return result;
 }
 
 uint16_t SPIc::transfer16(uint16_t data){
+
+    //check if the SPI controller is initialised or locked
+    if(initialized == false || lock == true || transmitting == false){
+        return 0;
+    }
+
     //needs to be volatile so that the compiler does optimize the read 
     //operation of the read register away
-    volatile uint16_t result = SPIcSPI.transfer16(data);
+    volatile uint16_t result = SPIcSPI->transfer16(data);
     return result;
 }
 
 uint32_t SPIc::transfer32(uint32_t data){
+
+    //check if the SPI controller is initialised or locked
+    if(initialized == false || lock == true || transmitting == false){
+        return 0;
+    }
+
     //needs to be volatile so that the compiler does optimize the read 
     //operation of the read register away
-    volatile uint32_t result = SPIcSPI.transfer32(data);
+    volatile uint32_t result = SPIcSPI->transfer32(data);
     return result;
 }
 
@@ -126,8 +270,14 @@ uint32_t SPIc::transfer32(uint32_t data){
 //do not forget to delete the arrays (data + result) otherwise there will
 //be a mem leak
 uint8_t * SPIc::transferArray8(uint8_t * data, uint32_t size){
+
+    //check if the SPI controller is initialised or locked
+    if(initialized == false || lock == true || transmitting == false){
+        return nullptr;
+    }
+
     uint8_t * result = new uint8_t[size];
-    SPIcSPI.transferBytes(data, result, size);
+    SPIcSPI->transferBytes(data, result, size);
     return result;
 }
 

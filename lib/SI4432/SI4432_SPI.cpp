@@ -6,41 +6,91 @@
 
 
 //the cip select pin (nSEL)
-#define CSpin 15
+//#define CSpin 15
+
+//hspi 
+//#define HSPI_CLK 14
+//#define HSPI_MISO 12
+//#define HSPI_MOSI 13
 
 static const uint32_t spiMaxSpeed = 100000; // 1Mhz = 1000000; 100kHz = 100000 (for testing purpose ozi)
 static const uint8_t spiBitOrder = MSBFIRST;
 static const uint8_t spiMode = SPI_MODE0; //should be MODE 0 but should be checked again
 
-bool SI4432::spiInitialized = false;
+
 static bool si4432Transaction = false;
 
-//setup spi
-void SI4432::spiSetup(){
-    if(!spiInitialized){
-        spi.setup(CSpin);
-        //check wether the spi initialization worked
-        if(spi.isInitialized()){
-            spiInitialized = true;
+
+
+bool SI4432::spiSetup(uint8_t spi_bus, uint8_t cspin){
+
+    if(SPIc::spiExists(spi_bus)){
+        //spi is already active
+        spi = SPIc::getSPI(spi_bus);
+
+        //spi is locked an cannot be used
+        if(spi->getLock()){
+            return false;
         }
+
+        spi->setChipSelectPin(cspin);
+
+        CSpin = cspin;
+        return true;
     }
+
+    //spi is not init or does not exists
+    return false;
 }
 
 
-void SI4432::beginTransaction(){
+bool SI4432::spiSetup(uint8_t spi_bus, int8_t sck, int8_t miso, int8_t mosi, uint8_t cspin){
+
+    if(SPIc::spiExists(spi_bus)){
+        //spi is already active
+        spi = SPIc::getSPI(spi_bus);
+
+        //spi is locked an cannot be used
+        if(spi->getLock()){
+            return false;
+        }
+
+        spi->setChipSelectPin(cspin);
+        CSpin = cspin;
+        return true;
+    }
+
+    spi = SPIc::setupSPI(spi_bus, sck, miso, mosi);
+
+    //setup failed
+    if(spi == nullptr){
+        return false;
+    }
+
+    spi->setChipSelectPin(cspin);
+    CSpin = cspin;
+    return true;
+}
+
+
+bool SI4432::beginTransaction(){
     if(!si4432Transaction){
-        spi.beginTransaction(spiMaxSpeed, spiBitOrder, spiMode);
+        bool success = spi->beginTransaction(spiMaxSpeed, spiBitOrder, spiMode);
         si4432Transaction = true;
+        return success;
     }
+    return false;
 }
 
 
 
-void SI4432::endTransaction(){
+bool SI4432::endTransaction(){
     if(si4432Transaction){
-        spi.endTransaction();
+        bool success = spi->endTransaction();
         si4432Transaction = false;
+        return success;
     }
+    return false;
 }
 
 
@@ -65,25 +115,31 @@ void SI4432::spiWrite(uint8_t address, uint8_t data){
         //if the begin is already executed then just send the data
 
         //enable / select the chip
-        spi.selectChip(CSpin);
+        spi->selectChip(CSpin);
 
         //send the address of the register you want to write to ( MSB - 1 until MSB - 8)
         //plus the data (last 8 bit) (MSB must be 1 (write operation))
-        spi.write16(spiData);
+        spi->write16(spiData);
+
+        //disable / deselect the chip
+        spi->deselectChip(CSpin);
+
     }else{
         //begin and end transaction if nothing is initalized
-        beginTransaction();
+        if(beginTransaction()){
 
-        //enable / select the chip
-        spi.selectChip(CSpin);
+            //enable / select the chip
+            spi->selectChip(CSpin);
 
-        spi.write16(spiData);
-        endTransaction();
+            spi->write16(spiData);
+            endTransaction();
+
+            //disable / deselect the chip
+            spi->deselectChip(CSpin);
+        }
 
     }
 
-    //disable / deselect the chip
-    spi.deselectChip(CSpin);
 
 }
 
@@ -97,37 +153,43 @@ uint8_t SI4432::spiRead(uint8_t address){
 
     uint8_t spiData = address;
 
-    uint8_t spiResponse;
+    uint8_t spiResponse = 0;
 
     if(si4432Transaction){
         //if the begin is already executed then just send the data
 
         //enable / select the chip
-        spi.selectChip(CSpin);
+        spi->selectChip(CSpin);
 
         //send the address of the register you want to read from
-        spi.write8(spiData);
+        spi->write8(spiData);
 
         //get the response of the chip (contents of the register)
-        spiResponse = spi.read8();
+        spiResponse = spi->read8();
+
+        //disable / deselect the chip
+        spi->deselectChip(CSpin);
+
     }else{
         //begin and end transaction if nothing is initalized
-        beginTransaction();
+        if(beginTransaction()){
 
-        //enable / select the chip
-        spi.selectChip(CSpin);
+            //enable / select the chip
+            spi->selectChip(CSpin);
 
-         //send the address of the register you want to read from
-        spi.write8(spiData);
+            //send the address of the register you want to read from
+            spi->write8(spiData);
 
-        //get the response of the chip (contents of the register)
-        spiResponse = spi.read8();
-        endTransaction();
+            //get the response of the chip (contents of the register)
+            spiResponse = spi->read8();
+            endTransaction();
+
+            //disable / deselect the chip
+            spi->deselectChip(CSpin);
+        }
 
     }
 
-    //disable / deselect the chip
-    spi.deselectChip(CSpin);
 
     return spiResponse;
 }
@@ -149,32 +211,36 @@ void SI4432::spiBurstWrite(uint8_t address, uint8_t * data, uint32_t size){
         //if the begin is already executed then just send the data
 
         //enable / select the chip
-        spi.selectChip(CSpin);
+        spi->selectChip(CSpin);
 
         //write the address (register you want to write to (start address))
-        spi.write8(spiData);
+        spi->write8(spiData);
 
         //write the data in the registers
-        spi.writeArray8(data, size);
+        spi->writeArray8(data, size);
+
+        //disable / deselect the chip
+        spi->deselectChip(CSpin);
+
     }else{
         //begin and end transaction if nothing is initalized
-        beginTransaction();
-        
-        //enable / select the chip
-        spi.selectChip(CSpin);
+        if(beginTransaction()){
+            
+            //enable / select the chip
+            spi->selectChip(CSpin);
 
-        //write the address (register you want to write to (start address))
-        spi.write8(spiData); 
+            //write the address (register you want to write to (start address))
+            spi->write8(spiData); 
 
-        //write the data registers
-        spi.writeArray8(data, size);
-        endTransaction();
+            //write the data registers
+            spi->writeArray8(data, size);
+            endTransaction();
+
+            //disable / deselect the chip
+            spi->deselectChip(CSpin);
+        }
 
     }
-
-    //disable / deselect the chip
-    spi.deselectChip(CSpin);
-
 }
 
 
@@ -195,30 +261,35 @@ uint8_t * SI4432::spiBurstRead(uint8_t address, uint32_t size){
         //if the begin is already executed then just send the data
 
         //enable / select the chip
-        spi.selectChip(CSpin);
+        spi->selectChip(CSpin);
 
         //write the address (register you want to read from (start address))
-        spi.write8(spiData);
+        spi->write8(spiData);
 
         //the data that will be read from the registers
-        spiResponse = spi.readArray8(size); //the type and value of the data that is transfered is irrelevant
+        spiResponse = spi->readArray8(size); //the type and value of the data that is transfered is irrelevant
+
+        //disable / deselect the chip
+        spi->deselectChip(CSpin);
+
     }else{
         //begin and end transaction if nothing is initalized
-        beginTransaction();
+        if(beginTransaction()){
 
-        //enable / select the chip
-        spi.selectChip(CSpin);
+            //enable / select the chip
+            spi->selectChip(CSpin);
 
-        //write the address (register you want to read from (start address))
-        spi.write8(spiData);
+            //write the address (register you want to read from (start address))
+            spi->write8(spiData);
 
-        //the data that will be read from the registers
-        spiResponse = spi.readArray8(size); //the type and value of the data that is transfered is irrelevant
-        endTransaction();
+            //the data that will be read from the registers
+            spiResponse = spi->readArray8(size); //the type and value of the data that is transfered is irrelevant
+            endTransaction();
+
+            //disable / deselect the chip
+            spi->deselectChip(CSpin);
+        }
     }
-
-    //disable / deselect the chip
-    spi.deselectChip(CSpin);
 
 
     return spiResponse;

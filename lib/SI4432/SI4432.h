@@ -144,17 +144,17 @@ class SI4432{
         inline uint8_t getReceivedPacketLength();
         
     private:
-        //spi instance
-        SPIc spi;
+        SPIc* spi;
         //to keep track if the spi for the chip is initialized
-        static bool spiInitialized;
-        void spiSetup();
+        bool spiSetup(uint8_t spi_bus, uint8_t cspin);
+        bool spiSetup(uint8_t spi_bus, int8_t sck, int8_t miso, int8_t mosi, uint8_t cspin);
+        uint8_t CSpin = 15; //just an example pin will be changed during setup
         void spiWrite(uint8_t address, uint8_t data);
         uint8_t spiRead(uint8_t address);
         void spiBurstWrite(uint8_t address, uint8_t * data, uint32_t size);
         uint8_t * spiBurstRead(uint8_t address, uint32_t size);
-        void beginTransaction();
-        void endTransaction();
+        bool beginTransaction();
+        bool endTransaction();
 
 };
 
