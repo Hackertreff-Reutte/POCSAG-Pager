@@ -98,7 +98,11 @@ SPIc::SPIc(uint8_t spi_bus){
 //returns the SpiClass instance should only really be used if you need it
 //example: for the SD lib
 SPIClass* SPIc::getSpiClass(){
-    return SPIcSPI;
+    if(lock == false){
+        return SPIcSPI;
+    }
+
+    return nullptr;
 }
 
 
@@ -113,20 +117,26 @@ void SPIc::setup(int8_t sck, int8_t miso, int8_t mosi){
     initialized = true;
 }
 
-void SPIc::close(){
-    if(initialized){
-        SPIcSPI->end();
-        initialized = false;
+bool SPIc::closeSPI(SPIc * spi){
+    if(spi->initialized && spi->lock == false){
+        spi->SPIcSPI->end();
+        spi->initialized = false;
 
         //remove the SPIc from the SPI list;
         //IMPORTANT the user should delete the SPIc object
         for(int i = 0; i < ListOfSPIs.getSize(); i++){
-            if(ListOfSPIs.getArray()[i]->getSpiBusCode() == spiBusCode){
+            if(ListOfSPIs.getArray()[i]->getSpiBusCode() == spi->spiBusCode){
                 ListOfSPIs.remove(i);
-                delete[] SPIcSPI;
+                delete[] spi->SPIcSPI;
             }
         }
+
+        delete[] spi;
+
+        return true;
     }
+
+    return false;
 }
 
 //sets the state of the lock
@@ -153,38 +163,62 @@ bool SPIc::isTransmitting(){
 
 
 //changes a pin to an output pin 
-void SPIc::setChipSelectPin(uint8_t CSpin){
-    pinMode(CSpin, OUTPUT);
-    digitalWrite(CSpin, HIGH);
+bool SPIc::setChipSelectPin(uint8_t CSpin){
+
+    if(initialized == true && lock == false){
+
+        pinMode(CSpin, OUTPUT);
+        digitalWrite(CSpin, HIGH);
+
+        return true;
+    }
+
+    return false;
 }
 
 
-void SPIc::selectChip(uint8_t CSpin){
+bool SPIc::selectChip(uint8_t CSpin){
+
+    if(initialized == true && lock == false){
     
-    digitalWrite(CSpin, LOW);
-    
-    //wait for 2 instructions (20ns setup time)
-    //should normaly not be needed and is just here to be sure
-    __asm("nop");
-    __asm("nop");
+        digitalWrite(CSpin, LOW);
+        
+        //wait for 2 instructions (20ns setup time)
+        //should normaly not be needed and is just here to be sure
+        __asm("nop");
+        __asm("nop");
+
+        return true;
+
+    }
+
+    return false;
 }
 
     
-void SPIc::deselectChip(uint8_t CSpin){
-    
-    digitalWrite(CSpin, HIGH);
+bool SPIc::deselectChip(uint8_t CSpin){
 
-    //8 nops so that the program will have the min high time of
-    //the slave select ping (80ns)
-    //should normaly not be needed and is just here to be sure
-    __asm("nop");
-    __asm("nop");
-    __asm("nop");
-    __asm("nop");
-    __asm("nop");
-    __asm("nop");
-    __asm("nop");
-    __asm("nop");
+    if(initialized == true && lock == false){
+    
+        digitalWrite(CSpin, HIGH);
+
+        //8 nops so that the program will have the min high time of
+        //the slave select ping (80ns)
+        //should normaly not be needed and is just here to be sure
+        __asm("nop");
+        __asm("nop");
+        __asm("nop");
+        __asm("nop");
+        __asm("nop");
+        __asm("nop");
+        __asm("nop");
+        __asm("nop");
+
+        return true;
+
+    }
+
+    return false;
 }
 
 //overloaded function (will call the other one)

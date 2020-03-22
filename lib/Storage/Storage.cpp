@@ -7,26 +7,24 @@ implemented if needed.
 Functions: cardSize(); cardType(); totalBytes(); usedBytes();
 */
 
-//use the VSPI
-SPIClass SDSPI(VSPI);
-
-#define VSPI_CLK 18
-#define VSPI_MISO 19
-#define VSPI_MOSI 23
-#define Storage_SPI_SS 5
+//use the VSPI normaly
+//#define VSPI_CLK 18
+//#define VSPI_MISO 19
+//#define VSPI_MOSI 23
+//#define Storage_SPI_SS 5
 
 static bool cardIsMounted = false;
 
 SPIc* spi = nullptr;
 
 //starts the storage and mounts the sd card
-bool Storage::setup(){
+bool Storage::setup(uint8_t spi_bus, int8_t sck, int8_t miso, int8_t mosi, uint8_t cspin){
 
-    if(SPIc::spiExists(VSPI)){
+    if(SPIc::spiExists(spi_bus)){
         //spi is already active
-        spi = SPIc::getSPI(VSPI);
+        spi = SPIc::getSPI(spi_bus);
     }else{
-        spi = SPIc::setupSPI(VSPI, VSPI_CLK, VSPI_MISO, VSPI_MOSI);
+        spi = SPIc::setupSPI(spi_bus, sck, miso, mosi);
     }
 
     //setup did not work or spi is already locked!
@@ -34,18 +32,21 @@ bool Storage::setup(){
         return false;
     }
 
-    //lock the spi so that nothing other than the storage can use it
+
+    cardIsMounted = SD.begin(cspin, *spi->getSpiClass());
+
+    //lock the spi so that nothing can use it (this spi will only work uver the spiclass)
     spi->setLock(true);
 
-   
-    cardIsMounted = SD.begin(Storage_SPI_SS, *spi->getSpiClass());
     return cardIsMounted;
 }
 
 //stops the storage and unmounts the sd card
 void Storage::close(){
     SD.end();
-    SDSPI.end();
+    spi->setLock(false);
+    SPIc::closeSPI(spi);
+    spi = nullptr;
 }
 
 //normaly you shouldn't use this function (know your directories)

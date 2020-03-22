@@ -19,7 +19,7 @@ class SPIc{
         static bool spiExists(uint8_t spi_bus);
         static SPIc* getSPI(uint8_t spi_bus);
         static SPIc* setupSPI(uint8_t spi_bus, int8_t sck, int8_t miso, int8_t mosi);
-
+        static bool closeSPI(SPIc * spi);
 
         void setLock(bool state);
         bool getLock();
@@ -27,10 +27,9 @@ class SPIc{
         SPIClass* getSpiClass();
         bool isInitialized();
         bool isTransmitting();
-        void close();
-        void setChipSelectPin(uint8_t CSpin);
-        void selectChip(uint8_t CSpin);
-        void deselectChip(uint8_t CSpin);
+        bool setChipSelectPin(uint8_t CSpin);
+        bool selectChip(uint8_t CSpin);
+        bool deselectChip(uint8_t CSpin);
         bool beginTransaction(uint32_t maxSpeed, uint8_t bitOrder, uint8_t spiMode);
         bool beginTransaction(SPISettings settings);
         bool endTransaction();

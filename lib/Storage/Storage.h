@@ -15,7 +15,7 @@ Lib for creating and managing pocsag messages
 class Storage{
 
     public:
-        bool setup();
+        bool setup(uint8_t spi_bus, int8_t sck, int8_t miso, int8_t mosi, uint8_t cspin);
         void close();
         ArrayList<String> * listDir(String path);
         bool mkDir(String path);
