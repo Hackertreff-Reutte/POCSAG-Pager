@@ -88,6 +88,71 @@ closes the SPI instance and return whether the closing procedure was successful.
 Here start the SPI BASIC FUNCTIONS
 -->
 
+### setLock()
+```
+void setLock(bool state);
+```
+sets the lock of the SPI instance. If the lock is set the instance cannot be used. (Transfer, Write, Read). This may only be used when you pass the SPIClass object to another program. For example when you use the SD lib.
+
+#### Arguments: 
+>__bool state__ = true (1) == locked    false (0) == unlocked
+
+<br>
+
+### getLock()
+```
+bool getLock();
+```
+Returns the current state of the lock status. If it returns true (1) the spi instance is locked if it returns false (0) it is unlocked.
+
+#### Return value: 
+>__return bool__ = returns wheter it was successful (1) true or not (0) false
+
+<br>
+
+### getSpiBusCode()
+```
+uint8_t getSpiBusCode();
+```
+returns the code of the spi bus. (example esp32: VSPI HSPI)
+
+#### Return value: 
+>__return bool__ = the spi bus code (eg: HSPI or VSPI (ESP32))
+
+<br>
+
+### getSpiClass()
+```
+SPIClass * getSpiClass();
+```
+returns the pointer that points to the stored spiClass object. This function should only be used if there is no other way. For example when using the SD lib. Do not forget to lock the SPI instance if you pass the spiClass object to another lib.
+
+#### Return value: 
+>__return SPIClass *__ = returns a pointer to the stored spiClass object (Arduino SPI (SPI.h))
+
+<br>
+
+### bool isInitialized()
+```
+bool isInitialized();
+```
+return the status of the spi object true (1) = the object is initalized and false (0) = the object is not or no longer initialized
+
+#### Return value: 
+>__return bool__ = returns the status of the spi true (1) or false (0)
+
+<br>
+
+### bool isTransmitting()
+```
+bool isTransmitting();
+```
+return if the spi is currently transmitting data (in use). only one transaction at a time is allowed per spi bus
+
+#### Return value: 
+>__return bool__ = returns true (1) if the spi is transmitting or false (0) if not
+
+<br>
 
 <!-- 
 Here start the SPI WRITE FUNCTIONS
