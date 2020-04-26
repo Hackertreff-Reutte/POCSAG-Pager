@@ -147,10 +147,72 @@ return the status of the spi object true (1) = the object is initalized and fals
 ```
 bool isTransmitting();
 ```
-return if the spi is currently transmitting data (in use). only one transaction at a time is allowed per spi bus
+returns if the spi is currently transmitting data (in use). only one transaction at a time is allowed per spi bus
 
 #### Return value: 
 >__return bool__ = returns true (1) if the spi is transmitting or false (0) if not
+
+<br>
+
+### bool setChipSelectPin()
+```
+bool setChipSelectPin(uint8_t CSpin);
+```
+This function defines and sets a pin as an output pin. This pin can than be used to select / enable a spi slave
+
+#### Arguments: 
+>__uint8_t CSpin__ = the number of the pin that should be setup (look at the documentation of the microcontroller of those numbers)
+
+#### Return value: 
+>__return bool__ = returns true (1) if the setup of the pin was successful or false (0) if not
+
+<br>
+
+### bool selectChip()
+```
+bool selectChip(uint8_t CSpin);
+```
+This function will select a slave device if nothing prevents it.
+
+#### Arguments: 
+>__uint8_t CSpin__ = the number of the pin where the slave device is attached to and which should be enabled / activated (listen to data over spi)
+
+#### Return value: 
+>__return bool__ = returns true (1) if the chip was selected (chip select pin = HIGH) or false (0) if not (possible reasons for failure: already initialised or locked)
+
+<br>
+
+### bool deselectChip()
+```
+bool deselectChip(uint8_t CSpin);
+```
+This function will deselect a slave device if nothing prevents it. So that it doesn't listen to the signals of the spi bus.
+
+#### Arguments: 
+>__uint8_t CSpin__ = the number of the pin where the slave device is attached to and which should be deselected (set device to standby)
+
+#### Return value: 
+>__return bool__ = returns true (1) if the chip was deselected (chip select pin = LOW) or false (0) if not (possible reasons for failure: not initialised or locked)
+
+<br>
+
+### bool beginTransaction()
+```
+bool beginTransaction(uint32_t maxSpeed, uint8_t bitOrder, uint8_t spiMode);
+```
+This function will initialize a spi transaction with the given parameters.
+For more information regarding the parameters it could be a good idea to visit the following wikipedia page:
+https://en.wikipedia.org/wiki/Serial_Peripheral_Interface
+
+#### Arguments: 
+>__uint32_t maxSpeed__ = The Speed of the SPI clock signal in Hz (eg. 1Mhz = 1000000; 100kHz = 100000)
+
+>__uint8_t bitOrder__ = sets the bit order of the signal MSBFIRST (most significant bit first) or LSBFIRST (least significant bit first)
+
+>__uint8_t spiMode__ = this sets the mode (SPI_MODE1, SPI_MODE1, SPI_MODE1, SPI_MODE1)
+
+#### Return value: 
+>__return bool__ = returns true (1) if a transaction was startet (spi is ready for transfers / sending data) or false (0) if not (reasons for failure include but not limited to: locked spi)
 
 <br>
 
