@@ -199,6 +199,7 @@ This function will deselect a slave device if nothing prevents it. So that it do
 ### bool beginTransaction()
 ```
 bool beginTransaction(uint32_t maxSpeed, uint8_t bitOrder, uint8_t spiMode);
+bool beginTransaction(SPISettings settings);
 ```
 This function will initialize a spi transaction with the given parameters.
 For more information regarding the parameters it could be a good idea to visit the following wikipedia page:
@@ -211,8 +212,21 @@ https://en.wikipedia.org/wiki/Serial_Peripheral_Interface
 
 >__uint8_t spiMode__ = this sets the mode (SPI_MODE1, SPI_MODE1, SPI_MODE1, SPI_MODE1)
 
+>__SPISettings settings__ = this a object that contains all the settings and can also be used to setup a transaction. For more information regarding this option consider visiting: https://www.arduino.cc/en/Reference/SPISettings
+
 #### Return value: 
 >__return bool__ = returns true (1) if a transaction was startet (spi is ready for transfers / sending data) or false (0) if not (reasons for failure include but not limited to: locked spi)
+
+<br>
+
+### bool endTransaction()
+```
+bool endTransaction()
+```
+This function will end a transaction.
+
+#### Return value: 
+>__return bool__ = returns true (1) if the transaction was stopped or false (0) if it could not be stopped (reasons for failure include but not limited to: no running transaction)
 
 <br>
 
